@@ -1,0 +1,242 @@
+* {
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    background: white;
+}
+
+.search-container {
+    top: 0px;
+    height: 3rem;
+    background-color: #07518f;
+    display: flex;
+    flex-direction: row;
+}
+
+::-webkit-input-placeholder {
+    font-size: 12.5px;
+}
+
+:-moz-placeholder {
+    font-size: 12.5px;
+}
+
+::-moz-placeholder {
+    font-size: 12.5px;
+}
+
+:-ms-input-placeholder {
+    font-size: 12.5px;
+}
+
+.logo img {
+    width: 4.5rem;
+    margin-top: .9rem;
+    margin-right: 0.4rem;
+}
+
+.bar .searchbar {
+    margin: 0px;
+    margin-top: 0.8rem;
+    width: calc(100% - 5rem);
+    padding: 0px;
+    background: transparent;
+}
+
+.bar .searchbar .searchbar-cancel {
+    color: white;
+    margin-top: 0.3rem;
+}
+
+.bar .searchbar .search-input input {
+    height: 1.5rem;
+}
+
+.search-input .icon {
+    direction: rtl;
+    color: green;
+    right: .3rem;
+}
+
+.button-container {
+    height: 5rem;
+    width: 100%;
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.margintop {
+    margin-top: 0.6rem;
+}
+
+.marginbottom {
+    margin-bottom: 0.5rem;
+}
+
+.button-container .button-row {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.button {
+    width: 40%;
+    height: 1.6rem;
+    margin-left: 5%;
+    margin-right: 5%;
+    padding-top: 0.18rem;
+    color: white;
+    border: none;
+}
+
+.daily {
+    background: #ffa21f;
+}
+
+.score {
+    background: #ff7043;
+}
+
+.group {
+    background: #4fc3f7;
+}
+
+.feed {
+    background: #72bb38;
+}
+
+.active .tab-label {
+    color: #72bb38;
+}
+
+.iconindex {
+    width: 1.2rem;
+    height: 1.2rem;
+    background: url(/static/img/icon/tab-home.png);
+    background-size: 1.2rem 1.2rem;
+    background-repeat: no-repeat;
+}
+
+.active .iconindex {
+    background: url(/static/img/icon/tab-home-clicked.png);
+    background-size: 1.2rem 1.2rem;
+    background-repeat: no-repeat;
+}
+
+.icondiscover {
+    width: 1.2rem;
+    height: 1.2rem;
+    background: url(/static/img/icon/tab-discovery.png);
+    background-size: 1.2rem 1.2rem;
+    background-repeat: no-repeat;
+}
+
+.active .icondiscover {
+    background: url(/static/img/icon/tab-discovery-clicked.png);
+    background-size: 1.2rem 1.2rem;
+    background-repeat: no-repeat;
+}
+
+.icondiscover {
+    width: 1.2rem;
+    height: 1.2rem;
+    background: url(/static/img/icon/tab-discovery.png);
+    background-size: 1.2rem 1.2rem;
+    background-repeat: no-repeat;
+}
+
+.active .icondiscover {
+    background: url(/static/img/icon/tab-discovery-clicked.png);
+    background-size: 1.2rem 1.2rem;
+    background-repeat: no-repeat;
+}
+
+.icongroup {
+    width: 1.2rem;
+    height: 1.2rem;
+    background: url(/static/img/icon/tab-group.png);
+    background-size: 1.2rem 1.2rem;
+    background-repeat: no-repeat;
+}
+
+.active .icongroup {
+    background: url(/static/img/icon/tab-group-clicked.png);
+    background-size: 1.2rem 1.2rem;
+    background-repeat: no-repeat;
+}
+
+.iconme {
+    width: 1.2rem;
+    height: 1.2rem;
+    background: url(/static/img/icon/tab-user.png);
+    background-size: 1.2rem 1.2rem;
+    background-repeat: no-repeat;
+}
+
+.active .iconme {
+    background: url(/static/img/icon/tab-user-clicked.png);
+    background-size: 1.2rem 1.2rem;
+    background-repeat: no-repeat;
+}
+
+.bar-header-secondary~.content {
+    top: 8rem;
+}
+
+.article {
+    width: 100%;
+    height: calc(100% - 10.5rem);
+    /*border: 1px solid;*/
+    /*overflow-y: auto;*/
+}
+
+.article-item {
+    height: 8rem;
+    /*border: 1px solid;*/
+}
+
+.article-item hr {
+    margin-top: 0.8rem;
+    border: none;
+    border-bottom: 1px solid #bab5b5;
+}
+
+.article-firstimg {
+    width: 5rem;
+    height: 5rem;
+    float: right;
+    margin-left: 0.4rem;
+}
+
+.article-title {
+    font-size: 17px;
+    font-weight: 400;
+    height: 2.5rem;
+}
+
+.article-intro {
+    font-size: 14px;
+    color: #a8a7a7;
+    height: 2.27rem;
+    overflow: hidden;
+    margin-top: 0.23rem;
+}
+
+.article-info {
+    font-size: 13px;
+    color: #a8a7a7;
+    margin-top: 0.6rem;
+}
+
+.article-category {
+    float: right;
+}
+
+.infinite-scroll-preloader {
+    margin-top: -20px;
+}
