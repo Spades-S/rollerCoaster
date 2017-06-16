@@ -29,6 +29,7 @@ header h1.title {
     overflow-x: hidden;
     height: calc(100% - 3rem);
     background: white;
+    -webkit-overflow-scrolling: touch;
 }
 
 .article-title {
