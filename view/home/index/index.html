@@ -45,6 +45,7 @@
 
             <div class="article content infinite-scroll infinite-scroll-bottom" data-distance="5">
                 <div class="article-list" id="article-list">
+
                     <div class="article-item content-padded" v-for="item in articleContent">
                         <div class="article-content">
                             <img src="/static/img/article-img.jpg" class="article-firstimg">
@@ -134,6 +135,9 @@
 
 
         });
+        $(document).on('click', '.article-item', function() {
+            window.location.href = '/article/detail';
+        })
     </script>
 </body>
 

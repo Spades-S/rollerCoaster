@@ -45,6 +45,10 @@ body {
     background: transparent;
 }
 
+.bar:after {
+    background-color: transparent;
+}
+
 .bar .searchbar .searchbar-cancel {
     color: white;
     margin-top: 0.3rem;
@@ -66,6 +70,9 @@ body {
     margin-top: 3rem;
     display: flex;
     flex-direction: column;
+    background: url(/static/img/buttonsbackground.png);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .margintop {

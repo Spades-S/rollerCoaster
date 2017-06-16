@@ -1,0 +1,65 @@
+* {
+    box-sizing: border-box;
+}
+
+.bar {
+    height: 3rem;
+    background-color: #07518f;
+    color: white;
+}
+
+.bar .button-nav.pull-left {
+    color: white;
+    font-size: 27px;
+    font-weight: 900;
+    margin-top: 0.2rem;
+}
+
+header h1.title {
+    color: white;
+    margin-top: 0.3rem;
+    font-size: 23px;
+    font-weight: 400;
+}
+
+.article {
+    margin-top: 3rem;
+    overflow-y: auto;
+    height: calc(100% - 3rem);
+}
+
+.article-title {
+    font-size: 27px;
+    padding-top: 1rem;
+    padding-bottom: 0.8rem;
+}
+
+.article-info {
+    height: 3.5rem;
+}
+
+.article .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    top: 0.2rem;
+    position: relative;
+    top: 0.5rem;
+}
+
+.article .author {
+    font-size: 18px;
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+}
+
+.article .time {
+    font-size: 16px;
+    color: #9e9d9d;
+}
+
+.article-content {
+    font-size: 20px;
+    line-height: 35px;
+    color: #888181;
+}

@@ -9,7 +9,7 @@ export default class extends Base {
      */
     indexAction() {
         //auto render template file index_index.html
-        return this.display('index/index.back.html');
+        return this.display('index/index.html');
         // return this.display();
     }
 }
