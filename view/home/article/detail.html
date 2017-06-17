@@ -89,11 +89,17 @@
             $('.overlay').css({
                 display: 'block',
             })
+            $('.article').css({
+                'overflow-y': 'hidden',
+            })
         })
         $(document).on('click', '.overlay', (event) => {
             if (event.target.id === 'overlay') {
                 $('.overlay').css({
                     display: 'none',
+                })
+                $('.article').css({
+                    'overflow-y': 'auto',
                 })
             }
 
