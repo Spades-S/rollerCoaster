@@ -172,3 +172,38 @@ header h1.title {
     top: 0.17rem;
     margin-left: 0.3rem;
 }
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+
+.comment-form {
+    padding: 1rem;
+}
+
+.comment-form textarea {
+    width: 100%;
+    height: 6rem;
+    border-radius: 0.5rem;
+    border: none;
+    overflow-y: auto;
+    resize: none;
+    autofocus: true;
+}
+
+.submitComment {
+    height: 1.5rem;
+    width: 6rem;
+    float: right;
+    color: white;
+    background: #72bb38;
+    border: none;
+    padding-top: 0.15rem;
+}

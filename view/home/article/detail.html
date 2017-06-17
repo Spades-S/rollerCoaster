@@ -69,13 +69,38 @@
                 <a href="" class="share"></a>
 
             </div>
+            <div class="overlay" id="overlay">
+                <div class="comment-form">
+                    <form action="">
+                        <textarea type="text"></textarea>
+                        <p><a href="#" class="button submitComment">发表评论</a></p>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
+
 
     <script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
     <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
     <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+    <script>
+        $(document).on('focus', '#comment-input', () => {
+            $('.overlay').css({
+                display: 'block',
+            })
+        })
+        $(document).on('click', '.overlay', (event) => {
+            if (event.target.id === 'overlay') {
+                $('.overlay').css({
+                    display: 'none',
+                })
+            }
 
+
+
+        });
+    </script>
 </body>
 
 </html>
