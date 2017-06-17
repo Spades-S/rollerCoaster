@@ -27,7 +27,7 @@ header h1.title {
     margin-top: 3rem;
     overflow-y: auto;
     overflow-x: hidden;
-    height: calc(100% - 3rem);
+    height: calc(100% - 6rem);
     background: white;
     -webkit-overflow-scrolling: touch;
 }
@@ -133,4 +133,42 @@ header h1.title {
     padding-left: 2.3rem;
     font-size: 14px;
     color: #9e9d9d;
+}
+
+.add-comment {
+    height: 3rem;
+    padding: 0.5rem;
+}
+
+#comment-input {
+    height: 2rem;
+    border-radius: 0.5rem;
+    border: none;
+    display: inline-block;
+    padding-left: 0.6rem;
+    width: calc(100% - 5.5rem);
+}
+
+.all-comments {
+    color: #999999;
+    font-size: 21px;
+    margin-left: 0.3rem;
+    width: 1.2rem;
+    font-weight: 600;
+}
+
+.comment-number {
+    color: #999999;
+}
+
+.share {
+    background: url(/static/img/icon/share.png);
+    width: 1rem;
+    height: 1rem;
+    background-size: 1rem 1rem;
+    background-repeat: no-repeat;
+    display: inline-block;
+    position: relative;
+    top: 0.17rem;
+    margin-left: 0.3rem;
 }
