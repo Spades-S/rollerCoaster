@@ -180,11 +180,14 @@ header h1.title {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.45);
     z-index: 10;
 }
 
 .comment-form {
+    position: absolute;
+    width: 100%;
+    bottom: 1.5rem;
     padding: 1rem;
 }
 
@@ -195,7 +198,7 @@ header h1.title {
     border: none;
     overflow-y: auto;
     resize: none;
-    autofocus: true;
+    padding: 0.3rem;
 }
 
 .submitComment {

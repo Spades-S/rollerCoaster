@@ -9,10 +9,10 @@
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-
-    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
-    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/css/articleDetail.css">
+    <script type="text/javascript" src="/static/vue/vue.js"></script>
 
 </head>
 
@@ -25,7 +25,7 @@
                 </a>
                 <h1 class='title'>文章</h1>
             </header>
-            <div class="article">
+            <div class="article" id="article">
                 <div class="article-title content-padded">上海迪士尼首发：最快过山车“极速光轮”体验</div>
                 <div class="article-info content-padded">
                     <img class="avatar" src="/static/img/avatar.jpg">
@@ -72,8 +72,8 @@
             <div class="overlay" id="overlay">
                 <div class="comment-form">
                     <form action="">
-                        <textarea type="text"></textarea>
-                        <p><a href="#" class="button submitComment">发表评论</a></p>
+                        <textarea type="text" id="commentcontent"></textarea>
+                        <p><a href="#" class="button submitComment" id="submitComment">发表评论</a></p>
                     </form>
                 </div>
             </div>
@@ -81,31 +81,76 @@
     </div>
 
 
-    <script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
-    <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
-    <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+
+    <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+    <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+    <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
     <script>
-        $(document).on('focus', '#comment-input', () => {
+        $.init();
+        let $vm = new new Vue({
+            delimiters: ['{$', '$}'],
+            el: '#article',
+            data: {
+                article: {},
+            }
+
+        });
+        $.ajax({
+            url: '/article/getarticlebyarticleid',
+            data: "{{articleid}}",
+            success: function(data) {
+                if (data.errno == 0) {
+                    console.log(data.data);
+                }
+            }
+
+        })
+
+        function overlayShow() {
             $('.overlay').css({
                 display: 'block',
             })
             $('.article').css({
                 'overflow-y': 'hidden',
             })
+        }
+
+        function overlayHide() {
+            $('.overlay').css({
+                display: 'none',
+            })
+            $('.article').css({
+                'overflow-y': 'auto',
+            })
+        }
+        $(document).on('focus', '#comment-input', () => {
+            overlayShow();
         })
         $(document).on('click', '.overlay', (event) => {
             if (event.target.id === 'overlay') {
-                $('.overlay').css({
-                    display: 'none',
-                })
-                $('.article').css({
-                    'overflow-y': 'auto',
-                })
+                overlayHide();
             }
-
-
-
         });
+
+        $('#submitComment').on('click', () => {
+            let formData = new FormData();
+            formData.append('userid', '1');
+            formData.append('articleid', '1');
+            formData.append('timestamp', Date.now().toString());
+            formData.append('content', $('textarea')[0].value);
+            // console.log(formData);
+
+            $.ajax({
+                url: "/article/addcomment",
+                data: formData,
+                method: "POST",
+                contentType: false,
+                processData: false,
+                success: (data) => {
+                    console.log('success');
+                }
+            })
+        })
     </script>
 </body>
 

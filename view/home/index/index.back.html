@@ -10,131 +10,48 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
-    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/css/index.css">
     <script type="text/javascript" src="/static/vue/vue.js"></script>
 
 </head>
 
 <body>
-    <div class="page-group">
-        <div class="page page-current">
-            <div class="bar bar-header-secondary search-container">
-                <div class="logo"><img src="/static/img/icon/logo.png"></div>
-                <div class="searchbar">
-                    <a class="searchbar-cancel">取消</a>
-                    <div class="search-input">
-
-                        <input type="search" id='search' placeholder='过山车  黑暗骑士  show  小组' />
-                        <label class="icon icon-search" for="search"></label>
-                    </div>
-                </div>
-            </div>
-            <div class="button-container">
-                <div class="button-row margintop">
-                    <a href="#" class="button daily">每日一车</a>
-                    <a href="#" class="button score">成就排名</a>
-                </div>
-                <div class="button-row marginbottom">
-                    <a href="#" class="button group">我的小组</a>
-                    <a href="#" class="button feed">意见反馈</a>
-                </div>
-
-            </div>
-
-            <div class="article content infinite-scroll infinite-scroll-bottom" data-distance="5">
-                <div class="article-list" id="article-list">
-                    <div class="article-item content-padded" v-for="item in articleContent">
-                        <div class="article-content">
-                            <img src="/static/img/article-img.jpg" class="article-firstimg">
-                            <div class="article-title">重庆一游乐场为留守儿童提供免费娱乐设施</div>
-                            <div class="article-intro">图为留守儿童正在游乐场玩耍。杨小勇摄 图为留守儿童正在愉快地</div>
-                        </div>
-                        <div class="article-info">
-                            <span class="article-author">作者：黑暗骑士</span>
-                            <span class="article-category">来自：每日一车</span>
-                        </div>
-                        <hr>
-
-                    </div>
-
-
-
-                </div>
-                <div class="infinite-scroll-preloader">
-                    <div class="preloader"></div>
-                </div>
-            </div>
-
-
-            <nav class="bar bar-tab">
-                <a class="tab-item external active" href="#">
-                    <span class="icon iconindex"></span>
-                    <span class="tab-label">首页</span>
-                </a>
-                <a class="tab-item external" href="#">
-                    <span class="icon icondiscover"></span>
-                    <span class="tab-label">发现</span>
-
-                </a>
-                <a class="tab-item external" href="#">
-                    <span class="icon icongroup"></span>
-                    <span class="tab-label">小组</span>
-                </a>
-                <a class="tab-item external" href="#">
-                    <span class="icon iconme"></span>
-                    <span class="tab-label">我的</span>
-                </a>
-
-            </nav>
+    <div class="page">
+        <header class="bar bar-nav">
+            <a class="button button-link button-nav pull-left" href="/demos/card" data-transition='slide-out'>
+                <span class="icon icon-left"></span> 返回
+            </a>
+            <h1 class="title">我的生活</h1>
+        </header>
+        <nav class="bar bar-tab">
+            <a class="tab-item active" href="#">
+                <span class="icon icon-home"></span>
+                <span class="tab-label">首页</span>
+            </a>
+            <a class="tab-item" href="#">
+                <span class="icon icon-me"></span>
+                <span class="tab-label">我</span>
+            </a>
+            <a class="tab-item" href="#">
+                <span class="icon icon-star"></span>
+                <span class="tab-label">收藏</span>
+            </a>
+            <a class="tab-item" href="#">
+                <span class="icon icon-settings"></span>
+                <span class="tab-label">设置</span>
+            </a>
+        </nav>
+        <div class="content">
+            <!-- 这里是页面内容区 -->
         </div>
     </div>
 
-    <script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
-    <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
-    <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
-    <script type="text/javascript">
-        $.init();
-        var $vm = new Vue({
-            el: '#article-list',
-            data: {
-                articleContent: new Array(),
-            }
+    <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+    <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+    <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 
-        })
-        let maxItems = 10;
-        let preLoadNum = 4;
-        let articleLoading = false;
-        let lastLoadIndex = 4;
-        $vm.articleContent.push(1, 2, 3, 4);
-
-        // function addArticleItems(number, lastLoadIndex) {
-        //     // for (let i = lastLoadIndex + )
-
-        // }
-        $(document).on('infinite', '.article', function() {
-            console.log('infinite');
-
-            if (articleLoading) return;
-            articleLoading = true;
-            setTimeout(function() {
-                articleLoading = false;
-                if (lastLoadIndex >= maxItems) {
-                    $.detachInfiniteScroll($('.infinite-scroll'));
-                    $('.infinite-scroll-preloader').remove();
-                    return;
-                }
-                $vm.articleContent.push(1);
-                console.log($vm.articleContent);
-                lastLoadIndex = $vm.articleContent.length;
-                $.refreshScroller();
-            }, 2000);
-
-
-
-        });
-    </script>
 </body>
 
 </html>

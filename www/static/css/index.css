@@ -13,6 +13,7 @@ body {
     background-color: #07518f;
     display: flex;
     flex-direction: row;
+    border: none;
 }
 
 ::-webkit-input-placeholder {
@@ -65,7 +66,7 @@ body {
 }
 
 .button-container {
-    height: 5rem;
+    height: 6rem;
     width: 100%;
     margin-top: 3rem;
     display: flex;
@@ -119,6 +120,10 @@ body {
 
 .active .tab-label {
     color: #72bb38;
+}
+
+.icon {
+    display: inline-block;
 }
 
 .iconindex {
@@ -197,10 +202,11 @@ body {
 
 .article {
     width: 100%;
-    height: calc(100% - 10.5rem);
+    height: calc(100% - 11.5rem);
     background: white;
     /*border: 1px solid;*/
     /*overflow-y: auto;*/
+    position: static;
 }
 
 .article-item {
