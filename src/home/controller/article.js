@@ -2,7 +2,7 @@
 import base from './base.js';
 export default class extends base {
     detailAction() {
-        this.assign('article', this.get('articleid'));
+        this.assign('articleid', this.get('articleid'));
         return this.display('article/detail.html');
     }
     async addcommentAction() {
@@ -26,8 +26,20 @@ export default class extends base {
         return this.success(data);
     }
     async getarticlebyarticleidAction() {
-        let articleid = this.get('article');
-        let articleModel = this.model('article')
+
+        let articleid = this.get('articleid');
+        let articleModel = this.model('article');
+        let data = await articleModel.getArticleItemByid(articleid);
+        return this.success(data);
+
+    }
+    async getrelativearticleAction() {
+        let articleid = this.get('articleid');
+        let articleModel = this.model('article');
+        let authoridRowData = await articleModel.getAuthoridByArticleId(articleid);
+        let authorid = authoridRowData[0].authorid;
+        let relativeArticles = await articleModel.getRelativeArticlesByAuthorId(authorid, articleid);
+        return this.success(relativeArticles);
 
     }
 }

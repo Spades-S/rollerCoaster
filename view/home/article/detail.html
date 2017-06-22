@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
     <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/css/articleDetail.css">
-    <script type="text/javascript" src="/static/vue/vue.js"></script>
+
+
 
 </head>
 
@@ -20,29 +21,31 @@
     <div class="page-group">
         <div class="page page-current">
             <header class="bar bar-nav">
-                <a class="button button-link button-nav pull-left back" href="/index">
+                <a class="button button-link button-nav pull-left back" href="javascript:history.back()">
                     <span class="icon icon-left"></span>
                 </a>
                 <h1 class='title'>文章</h1>
             </header>
             <div class="article" id="article">
-                <div class="article-title content-padded">上海迪士尼首发：最快过山车“极速光轮”体验</div>
+                <template>
+                <div class="article-title content-padded">{$ article.title $}</div>
                 <div class="article-info content-padded">
-                    <img class="avatar" src="/static/img/avatar.jpg">
-                    <span class="author">小茗同学小茗同学小茗同学小茗同学小茗同学</span>
-                    <span class="time">2017-6-12 15:45</span>
+                    <img class="avatar" :src="article.authorAvatar">
+                    <span class="author">{$ article.authorName $}</span>
+                    <span class="time">{$ article.updatetime $}</span>
                 </div>
-                <div class="article-content content-padded">
-                    “迈克·马库拉从来就没想过要当苹果公司的总裁。他喜欢设计自己的新房子，驾驶自己的私人飞机，靠股票期权过着豪华的生活；他并不喜欢裁决纠纷，也不喜欢领导一群很难伺候的自我主义者。他之前被迫赶走了迈克·斯科特，然后很不情愿地当上了总裁，他答应过妻子，这份差事只是暂时的。到1982年底，马库拉已经在这个职位上干了差不多两年，妻子给他下了最后通牒：马上寻找接班人。” “迈克·马库拉从来就没想过要当苹果公司的总裁。他喜欢设计自己的新房子，驾驶自己的私人飞机，靠股票期权过着豪华的生活；他并不喜欢裁决纠纷，也不喜欢领导一群很难伺候的自我主义者。他之前被迫赶走了迈克·斯科特，然后很不情愿地当上了总裁，他答应过妻子，这份差事只是暂时的。到1982年底，马库拉已经在这个职位上干了差不多两年，妻子给他
-                </div>
+                <div class="article-content content-padded" id="article-content"></div>
+                 </template>
                 <div class="relative-part ">
                     <div class="relative-part-name">相关文章</div>
-                    <div class="relative-article content-padded">
-                        <img src="/static/img/article-img.jpg" class="relative-article-firstimg">
-                        <div class="relative-article-title">重庆一游乐场为留守儿童提供免费娱乐设施</div>
-                        <div class="relative-article-intro">图为留守儿童正在游乐场玩耍。杨小勇摄 图为留守儿童正在愉快地玩耍</div>
+                    <template v-for="item in relativeArticles">
+                    <div class="relative-article content-padded" :data-articleid="item.id">
+                        <img :src="item.poster" class="relative-article-firstimg">
+                        <div class="relative-article-title">{$ item.title $}</div>
+                        <div class="relative-article-intro">{$ item.description $}</div>
                         <hr>
                     </div>
+                    </template>
 
                 </div>
                 <div class="comment-part">
@@ -64,16 +67,16 @@
             </div>
             <div class="add-comment">
                 <input type="text" placeholder="写评论" id="comment-input">
-                <a href="" class="all-comments  icon icon-message"></a>
-                <span class="comment-number">4889</span>
-                <a href="" class="share"></a>
+                <a class="all-comments  icon icon-message external"></a>
+                <span class=" comment-number ">4889</span>
+                <a href=" " class="share "></a>
 
             </div>
-            <div class="overlay" id="overlay">
+            <div class="overlay " id="overlay ">
                 <div class="comment-form">
-                    <form action="">
-                        <textarea type="text" id="commentcontent"></textarea>
-                        <p><a href="#" class="button submitComment" id="submitComment">发表评论</a></p>
+                    <form action=" ">
+                        <textarea type="text " id="commentcontent "></textarea>
+                        <p><a href="# " class="button submitComment " id="submitComment ">发表评论</a></p>
                     </form>
                 </div>
             </div>
@@ -81,30 +84,67 @@
     </div>
 
 
-
+    <script type="text/javascript " src="/static/vue/vue.js "></script>
     <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
     <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
     <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
     <script>
         $.init();
-        let $vm = new new Vue({
+        let $vm = new Vue({
             delimiters: ['{$', '$}'],
             el: '#article',
             data: {
                 article: {},
+                relativeArticles: [],
+                comment: {}
             }
 
         });
+
         $.ajax({
             url: '/article/getarticlebyarticleid',
-            data: "{{articleid}}",
+            delimiters: ['{$', '$}'],
+            data: {
+                articleid: "{{articleid}} "
+            },
+            method: 'GET',
             success: function(data) {
                 if (data.errno == 0) {
-                    console.log(data.data);
+                    data.data[0].updatetime = new Date(data.data[0].updatetime).Format("yyyy-MM-dd hh:mm");
+                    console.log(data.data[0]);
+                    $vm.article = data.data[0];
+                    document.getElementById('article-content').innerHTML = data.data[0].content;
+
                 }
             }
 
         })
+        $.ajax({
+            url: '/article/getrelativearticle',
+            data: {
+                articleid: "{{articleid}} "
+            },
+            method: 'GET',
+            success: data => {
+                if (data.errno == 0) {
+                    if (data.data.length >= 2) {
+                        $vm.relativeArticles = data.data.slice(0, 2);
+                    } else if (data.data.length == 1) {
+                        $vm.relativeArticles = data.data.slice(0, 1)
+                    }
+                }
+            }
+        })
+
+        $(document).on('click', '.relative-article', (e) => {
+            let articleid = e.currentTarget.getAttribute('data-articleid');
+
+            window.location.href = "/article/detail?articleid=" + articleid;
+        });
+        $(document).on('click', '.all-comments', () => {
+            window.location.href = " /comments?articleid=" + " {{articleid}} ";
+        })
+
 
         function overlayShow() {
             $('.overlay').css({
@@ -138,12 +178,11 @@
             formData.append('articleid', '1');
             formData.append('timestamp', Date.now().toString());
             formData.append('content', $('textarea')[0].value);
-            // console.log(formData);
 
             $.ajax({
-                url: "/article/addcomment",
+                url: "/article/addcomment ",
                 data: formData,
-                method: "POST",
+                method: "POST ",
                 contentType: false,
                 processData: false,
                 success: (data) => {
@@ -151,6 +190,23 @@
                 }
             })
         })
+
+        Date.prototype.Format = function(fmt) { //author: meizz 
+            var o = {
+                "M+": this.getMonth() + 1, //月份 
+                "d+": this.getDate(), //日 
+                "h+": this.getHours(), //小时 
+                "m+": this.getMinutes(), //分 
+                "s+": this.getSeconds(), //秒 
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+                "S": this.getMilliseconds() //毫秒 
+            };
+
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00 " + o[k]).substr((" " + o[k]).length)));
+            return fmt;
+        }
     </script>
 </body>
 

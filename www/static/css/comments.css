@@ -1,0 +1,76 @@
+* {
+    box-sizing: border-box;
+    margin: 0px;
+}
+
+header h1.title {
+    color: white;
+    margin-top: 0.3rem;
+    font-size: 20px;
+    letter-spacing: 5px;
+    font-weight: 400;
+}
+
+.bar {
+    height: 3rem;
+    background-color: #07518f;
+    color: white;
+}
+
+.bar .button-nav.pull-left {
+    color: white;
+    font-size: 27px;
+    font-weight: 900;
+    margin-top: 0.2rem;
+}
+
+.comments {
+    margin-top: 3rem;
+    background-color: white;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    top: 0.2rem;
+    position: relative;
+    top: 0.5rem;
+}
+
+.author {
+    text-align: center;
+    font-size: 18px;
+    padding-right: 0.3rem;
+    width: 6rem;
+    overflow: hidden;
+    display: inline-block;
+    height: 1.2rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    position: relative;
+    top: 0.17rem;
+}
+
+.time {
+    font-size: 16px;
+    color: #9e9d9d;
+}
+
+.comment-info {
+    height: 3rem;
+}
+
+.comment-content {
+    padding-left: 2.3rem;
+    font-size: 14px;
+    color: #9e9d9d;
+}
+
+.comment-item hr {
+    margin-top: 0.9rem;
+    border: none;
+    border-bottom: 1px solid #aaa0a0;
+}

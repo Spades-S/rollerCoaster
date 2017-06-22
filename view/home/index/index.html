@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
     <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/css/index.css">
-    <script type="text/javascript" src="/static/vue/vue.js"></script>
+
 
 </head>
 
@@ -45,21 +45,21 @@
 
             <div class="article content infinite-scroll infinite-scroll-bottom" data-distance="5">
                 <div class="article-list" id="article-list">
-
-                    <div class="article-item content-padded" v-for="item in articles">
-                        <div class="article-content" :src="'/article/detail?articleid='+item.id">
+                    <template v-for="item in articles">
+                    <div class="article-item content-padded" v-bind:data-articleid="item.id" >
+                        <div class="article-content" >
                             <img :src="item.poster " class="article-firstimg ">
                             <div class="article-title ">{$ item.title $}</div>
                             <div class="article-intro ">{$ item.description $}</div>
                         </div>
-                        <div class="article-info " :src="'/article/detail?articleid='+item.id">
+                        <div class="article-info ">
                             <span class="article-author ">作者：{$ item.authorName $}</span>
                             <span class="article-category ">来自：{$ item.col $}</span>
                         </div>
                         <hr>
 
                     </div>
-
+                    </template>
 
 
                 </div>
@@ -93,6 +93,7 @@
 
         </div>
     </div>
+    <script type="text/javascript" src="/static/vue/vue.js"></script>
     <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
     <script type='text/javascript' src='/static/light7/js/light7.js' charset='utf-8'></script>
     <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
@@ -122,9 +123,12 @@
             articleLoading = true;
             getSomeArticles(perPageItems, false);
         });
-        $(document).on('click', '.article-item', function() {
-            window.location.href = '/article/detail';
+        $(document).on('click', '.article-item', (e) => {
+            let articleid = e.currentTarget.getAttribute('data-articleid');
+
+            window.location.href = "/article/detail?articleid=" + articleid;
         })
+
 
         function getSomeArticles(number, firstFlag) {
             if (firstFlag == true) {
