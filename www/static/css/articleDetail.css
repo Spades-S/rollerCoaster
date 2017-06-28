@@ -78,6 +78,26 @@ header h1.title {
     color: #888181;
 }
 
+.love {
+    text-align: center;
+    height: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid #cac4c4;
+    margin-top: 2rem;
+}
+
+.love img {
+    width: 1.4rem;
+    display: inline-block;
+}
+
+.love-num {
+    display: inline-block;
+    left: 0.5rem;
+    position: relative;
+    top: -0.3rem;
+}
+
 .relative-part-name,
 .comment-part-name {
     height: 3rem;
@@ -144,23 +164,40 @@ header h1.title {
 
 #comment-input {
     height: 2rem;
-    border-radius: 0.5rem;
     border: none;
     display: inline-block;
     padding-left: 0.6rem;
     width: calc(100% - 5.5rem);
+    background: transparent;
+    border-bottom: 1px solid gray;
+    font-size: 15px;
 }
 
 .all-comments {
-    color: #999999;
-    font-size: 21px;
     margin-left: 0.3rem;
     width: 1.2rem;
+    height: 1.2rem;
     font-weight: 600;
+    display: inline-block;
+    background: url(/static/img/icon/comment.png);
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+    top: 0.5rem;
+    position: relative;
+}
+
+.all-comments.checked {
+    background: url(/static/img/icon/comment-checked.png);
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
 }
 
 .comment-number {
     color: #999999;
+}
+
+.comment-number.checked {
+    color: red;
 }
 
 .share {

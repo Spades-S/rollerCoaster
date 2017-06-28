@@ -27,12 +27,56 @@
             </header>
             <div class="rank-content">
                 <div class="rang-bg"></div>
-                <select>
-					<option value ="volvo">Volvo</option>
-					<option value ="saab">Saab</option>
-					<option value="opel">Opel</option>
-					<option value="audi">Audi</option>
-				</select>
+                <div class="picker-container">
+                    <input type="text" id='picker' value="总积分"> <span class="arrow-down"></span></input>
+                </div>
+                <div class="rank-detail">
+                    <div class="rank-detail-title content-padded">
+                        <div class="rank num name"><img src="/static/img/icon/ranking-trophy.png " alt=""></div>
+                        <div class="rank user name"><img src="/static/img/icon/ranking-user.png" alt=""></div>
+                        <div class="rank result name"><img src="/static/img/icon/ranking-heart.png" alt=""></div>
+                    </div>
+                    <div class="rank-detail-item content-padded">
+                        <div class="rank num info"><span>01</span></div>
+                        <div class="rank user info">
+                            <img class="avatar" src="/static/img/article-img.jpg">
+                            <span class="name">黑暗骑士的小黄车黑暗骑士的小黄车</span>
+                        </div>
+                        <div class="rank result info">1234567890</div>
+                    </div>
+                    <div class="rank-detail-item content-padded">
+                        <div class="rank num info"><span>01</span></div>
+                        <div class="rank user info">
+                            <img class="avatar" src="/static/img/article-img.jpg">
+                            <span class="name">黑暗骑士的小黄车黑暗骑士的小黄车</span>
+                        </div>
+                        <div class="rank result info">1234567890</div>
+                    </div>
+                    <div class="rank-detail-item content-padded">
+                        <div class="rank num info"><span>01</span></div>
+                        <div class="rank user info">
+                            <img class="avatar" src="/static/img/article-img.jpg">
+                            <span class="name">黑暗骑士的小黄车黑暗骑士的小黄车</span>
+                        </div>
+                        <div class="rank result info">1234567890</div>
+                    </div>
+                    <div class="rank-detail-item content-padded">
+                        <div class="rank num info"><span>01</span></div>
+                        <div class="rank user info">
+                            <img class="avatar" src="/static/img/article-img.jpg">
+                            <span class="name">黑暗骑士的小黄车黑暗骑士的小黄车</span>
+                        </div>
+                        <div class="rank result info">1234567890</div>
+                    </div>
+                    <div class="rank-detail-item content-padded">
+                        <div class="rank num info"><span>01</span></div>
+                        <div class="rank user info">
+                            <img class="avatar" src="/static/img/article-img.jpg">
+                            <span class="name">黑暗骑士的小黄车黑暗骑士的小黄车</span>
+                        </div>
+                        <div class="rank result info">1234567890</div>
+                    </div>
+                </div>
 
             </div>
 
@@ -49,6 +93,16 @@
     <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
     <script>
         $.init();
+        $("#picker").picker({
+            toolbarTemplate: '<h1 class="title" style="margin:0;margin-top: -0.2rem">排序标准</h1>\
+			<button class="button button-link pull-right close-picker">OK</button>\
+			<hr style="margin-top: 2rem;">\
+				',
+            cols: [{
+                textAlign: 'center',
+                values: ['总积分', '高频成就', '首成就榜']
+            }]
+        });
     </script>
 
 </body>

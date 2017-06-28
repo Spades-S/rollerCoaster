@@ -37,4 +37,128 @@ header h1.title {
 .rank-content {
     height: 100%;
     margin-top: 3rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.picker-header {
+    background: white;
+    height: 1.5rem;
+}
+
+.picker-container {
+    display: block;
+    background: white;
+    width: calc(100% - 0.6rem);
+    text-align: center;
+    border-radius: 1rem;
+    border: none;
+    height: 2rem;
+    margin-left: 0.3rem;
+    margin-top: 0.6rem;
+}
+
+#picker {
+    height: 100%;
+    text-align: center;
+    background: transparent;
+    border: none;
+    z-index: 3;
+    width: 100%;
+    position: relative;
+}
+
+.arrow-down {
+    background: url(/static/img/icon/arrow-down.png);
+    width: 0.7rem;
+    height: 0.4rem;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: 0.7rem 0.4rem;
+    position: absolute;
+    z-index: 0;
+    top: 11.5rem;
+    right: 1rem;
+}
+
+.button-link {
+    border: none;
+    margin-top: 0.2rem;
+    font-size: 20px;
+}
+
+.rank-detail {
+    background: white;
+    margin-top: 0.7rem;
+}
+
+.rank-detail-title {
+    display: flex;
+    flex-direction: row;
+    height: 2rem;
+    align-items: center;
+}
+
+.rank {
+    height: 1rem;
+    padding-left: 0.3rem;
+}
+
+.rank.num {
+    width: 15%;
+}
+
+.rank.user {
+    width: 55%;
+}
+
+.rank.result {
+    width: 30%;
+}
+
+.rank-detail-title img {
+    width: 1rem;
+    margin-left: 0.2rem;
+}
+
+.rank-detail-item {
+    display: flex;
+    flex-direction: row;
+    height: 3.5rem;
+    align-items: center;
+}
+
+.rank.num.info,
+.rank.user.info,
+.rank.result.info {
+    height: 2.5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 14px;
+    color: #403b3b;
+}
+
+.rank.num.info span {
+    display: inline-block;
+    height: 1.2rem;
+    width: 1.2rem;
+    border-radius: 0.65rem;
+    color: white;
+    text-align: center;
+    background: #72bb38;
+    padding-top: 0.1rem;
+}
+
+.rank.user.info .name {
+    margin-left: 0.3rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: calc(100% - 1.8rem);
+}
+
+.avatar {
+    width: 1.5rem;
+    height: 1.5rem;
 }

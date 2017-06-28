@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/css/articleDetail.css">
 
-
+    <script type="text/javascript " src="/static/vue/vue.js "></script>
 
 </head>
 
@@ -36,6 +36,9 @@
                 </div>
                 <div class="article-content content-padded" id="article-content"></div>
                  </template>
+                <div class="love">
+                    <img src="/static/img/icon/love.png" alt=""><span class="love-num"> 180</span>
+                </div>
                 <div class="relative-part ">
                     <div class="relative-part-name">相关文章</div>
                     <template v-for="item in relativeArticles">
@@ -67,16 +70,16 @@
             </div>
             <div class="add-comment">
                 <input type="text" placeholder="写评论" id="comment-input">
-                <a class="all-comments  icon icon-message external"></a>
-                <span class=" comment-number ">4889</span>
+                <a class="all-comments checked"></a>
+                <span class=" comment-number checked ">4889</span>
                 <a href=" " class="share "></a>
 
             </div>
-            <div class="overlay " id="overlay ">
+            <div class="overlay" id="overlay">
                 <div class="comment-form">
                     <form action=" ">
-                        <textarea type="text " id="commentcontent "></textarea>
-                        <p><a href="# " class="button submitComment " id="submitComment ">发表评论</a></p>
+                        <textarea type="text " id="commentcontent"></textarea>
+                        <p><a class="button submitComment" id="submitComment">发表评论</a></p>
                     </form>
                 </div>
             </div>
@@ -84,7 +87,7 @@
     </div>
 
 
-    <script type="text/javascript " src="/static/vue/vue.js "></script>
+
     <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
     <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
     <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
@@ -111,7 +114,6 @@
             success: function(data) {
                 if (data.errno == 0) {
                     data.data[0].updatetime = new Date(data.data[0].updatetime).Format("yyyy-MM-dd hh:mm");
-                    console.log(data.data[0]);
                     $vm.article = data.data[0];
                     document.getElementById('article-content').innerHTML = data.data[0].content;
 
@@ -129,8 +131,8 @@
                 if (data.errno == 0) {
                     if (data.data.length >= 2) {
                         $vm.relativeArticles = data.data.slice(0, 2);
-                    } else if (data.data.length == 1) {
-                        $vm.relativeArticles = data.data.slice(0, 1)
+                    } else {
+                        $vm.relativeArticles = data.data;
                     }
                 }
             }
@@ -142,7 +144,7 @@
             window.location.href = "/article/detail?articleid=" + articleid;
         });
         $(document).on('click', '.all-comments', () => {
-            window.location.href = " /comments?articleid=" + " {{articleid}} ";
+            window.location.href = " /comments?articleid=" + "{{articleid}}";
         })
 
 
@@ -165,6 +167,7 @@
         }
         $(document).on('focus', '#comment-input', () => {
             overlayShow();
+            $('#commentcontent').focus();
         })
         $(document).on('click', '.overlay', (event) => {
             if (event.target.id === 'overlay') {
@@ -172,23 +175,29 @@
             }
         });
 
-        $('#submitComment').on('click', () => {
-            let formData = new FormData();
-            formData.append('userid', '1');
-            formData.append('articleid', '1');
-            formData.append('timestamp', Date.now().toString());
-            formData.append('content', $('textarea')[0].value);
 
-            $.ajax({
-                url: "/article/addcomment ",
-                data: formData,
-                method: "POST ",
-                contentType: false,
-                processData: false,
-                success: (data) => {
-                    console.log('success');
-                }
-            })
+        $(document).on('click', '#submitComment', () => {
+            if ($('textarea')[0].value == "") {
+                $.toast("评论不可为空!");
+            } else {
+                let formData = new FormData();
+                formData.append('userid', '1');
+                formData.append('articleid', '1');
+                formData.append('timestamp', Date.now().toString());
+                formData.append('content', $('textarea')[0].value);
+                $.ajax({
+                    url: "/article/addcomment ",
+                    data: formData,
+                    method: "POST",
+                    contentType: false,
+                    processData: false,
+                    success: (data) => {
+                        $.toast("评论发表成功!");
+                        console.log('success');
+                        overlayHide();
+                    }
+                })
+            }
         })
 
         Date.prototype.Format = function(fmt) { //author: meizz 
