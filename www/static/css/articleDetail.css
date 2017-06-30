@@ -86,9 +86,19 @@ header h1.title {
     margin-top: 2rem;
 }
 
-.love img {
+.love-img {
     width: 1.4rem;
+    height: 1.2rem;
+    background: url(/static/img/icon/love.png);
+    background-size: 1.4rem 1.2rem;
+    background-repeat: no-repeat;
     display: inline-block;
+}
+
+.love-img.checked {
+    background: url(/static/img/icon/love-checked.png);
+    background-size: 1.4rem 1.2rem;
+    background-repeat: no-repeat;
 }
 
 .love-num {
@@ -130,7 +140,7 @@ header h1.title {
 }
 
 .relative-article-intro {
-    height: 2rem;
+    /*height: 2rem;*/
     font-size: 14px;
     color: #9e9c9c;
     overflow: hidden;

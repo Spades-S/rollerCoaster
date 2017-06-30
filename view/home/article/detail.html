@@ -35,10 +35,12 @@
                     <span class="time">{$ article.updatetime $}</span>
                 </div>
                 <div class="article-content content-padded" id="article-content"></div>
-                 </template>
-                <div class="love">
-                    <img src="/static/img/icon/love.png" alt=""><span class="love-num"> 180</span>
+                 
+                <div class="love ">
+                    <span  v-if="likestatus"class="love-img checked" id="love-img"></span>
+                    <span  v-else class="love-img" id="love-img"></span><span class="love-num"> {$ article.likes $}</span>
                 </div>
+                </template>
                 <div class="relative-part ">
                     <div class="relative-part-name">相关文章</div>
                     <template v-for="item in relativeArticles">
@@ -72,7 +74,7 @@
                 <input type="text" placeholder="写评论" id="comment-input">
                 <a class="all-comments checked"></a>
                 <span class=" comment-number checked ">4889</span>
-                <a href=" " class="share "></a>
+                <a href="#" class="share "></a>
 
             </div>
             <div class="overlay" id="overlay">
@@ -99,14 +101,14 @@
             data: {
                 article: {},
                 relativeArticles: [],
-                comment: {}
+                comment: {},
+                likestatus: true,
             }
 
         });
 
         $.ajax({
             url: '/article/getarticlebyarticleid',
-            delimiters: ['{$', '$}'],
             data: {
                 articleid: "{{articleid}} "
             },
@@ -119,6 +121,16 @@
 
                 }
             }
+        })
+        $.ajax({
+            url: '/article/getlikestatus',
+            method: 'GET',
+            data: {
+                articleid: "{{articleid}}",
+            },
+            success: function(data) {
+                $vm.likestatus = data.data;
+            }
 
         })
         $.ajax({
@@ -129,14 +141,12 @@
             method: 'GET',
             success: data => {
                 if (data.errno == 0) {
-                    if (data.data.length >= 2) {
-                        $vm.relativeArticles = data.data.slice(0, 2);
-                    } else {
-                        $vm.relativeArticles = data.data;
-                    }
+                    $vm.relativeArticles = data.data;
+
                 }
             }
         })
+
 
         $(document).on('click', '.relative-article', (e) => {
             let articleid = e.currentTarget.getAttribute('data-articleid');
@@ -145,6 +155,27 @@
         });
         $(document).on('click', '.all-comments', () => {
             window.location.href = " /comments?articleid=" + "{{articleid}}";
+        })
+        $(document).on('click', '.love-img', function() {
+            if ($('#love-img').hasClass('checked')) {
+                $('#love-img').removeClass('checked');
+                $vm.article.likes -= 1;
+            } else {
+                $('#love-img').addClass('checked');
+                $vm.article.likes += 1;
+            }
+            $.ajax({
+                method: 'POST',
+                data: {
+                    likes: $vm.article.likes,
+                    articleid: "{{articleid}}"
+                },
+                url: '/article/refreshlikes',
+                success: function(data) {
+                    console.log('likes refreshes!');
+                }
+            })
+
         })
 
 

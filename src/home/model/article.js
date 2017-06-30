@@ -2,15 +2,15 @@
 class Article extends think.model.base {
     init(...args) {
         super.init(...args);
-        this.tableName = 'T_ARTICLE';
+        this.tableName = 'article';
     }
     async getPerPageItems(number, currentPage) {
-        let data = await this.order('id DESC').page(number, currentPage).countSelect();
+        let data = await this.order('id DESC').where({ type: 0 }).page(number, currentPage).countSelect();
         return data;
     }
     async getArticleItemByid(id) {
         let data = await this.alias('article')
-            .field('title, authorAvatar, authorName, content, updatetime')
+            .field('title, authorAvatar, authorName, content, updatetime, likes')
             .where({ id: id }).select();
         return data;
 
@@ -20,8 +20,13 @@ class Article extends think.model.base {
         return authorid;
     }
     async getRelativeArticlesByAuthorId(authorid, articleid) {
-        let relativeArticles = await this.field('id, title, description, poster').where({ authorid: authorid, id: ['!=', articleid] }).select();
+        let relativeArticles = await this.field('id, title, description, poster').where({ authorid: authorid, id: ['!=', articleid], type: 0 }).select();
         return relativeArticles;
+    }
+    async updateLikesByArticleId(articleid, likes) {
+        let lines = await this.where({ id: articleid }).update({ likes: likes });
+        return lines;
+
     }
 
 }

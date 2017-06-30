@@ -2,7 +2,7 @@
  class Comment extends think.model.base {
      init(...args) {
          super.init(...args);
-         this.tableName = 'T_COMMENT';
+         this.tableName = 'comment';
      }
      async addComment(userid, articleid, content, timestamp) {
          try {
