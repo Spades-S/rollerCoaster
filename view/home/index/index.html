@@ -18,36 +18,34 @@
 </head>
 
 <body>
-    <div class="page-group">
-        <div class="page page-current">
-            <div class="bar bar-header-secondary search-container">
-                <div class="logo"><img src="/static/img/icon/logo.png"></div>
-                <div class="searchbar">
-                    <a class="searchbar-cancel">取消</a>
-                    <div class="search-input">
-
-                        <input type="search" id='search' placeholder='过山车  黑暗骑士  show  小组' />
-                        <label class="icon icon-search" for="search"></label>
-                    </div>
+<div class="page-group">
+    <div class="page page-current" id="index-page">
+        <div class="bar bar-header-secondary search-container">
+            <div class="logo"><img src="/static/img/icon/logo.png"></div>
+            <a class="searchbar no-transition" href="#search-page">
+                <div class="search-input">
+                    <input placeholder='过山车  黑暗骑士  show  小组'/>
+                    <label class="icon icon-search" for="search"></label>
                 </div>
+            </a>
+        </div>
+        <div class="button-container">
+            <div class="button-row margintop">
+                <a href="#" class="button daily">每日一车</a>
+                <a href="/score" class="button score external">成就排名</a>
             </div>
-            <div class="button-container">
-                <div class="button-row margintop">
-                    <a href="#" class="button daily">每日一车</a>
-                    <a href="/score" class="button score external">成就排名</a>
-                </div>
-                <div class="button-row marginbottom">
-                    <a href="#" class="button group">我的小组</a>
-                    <a href="#" class="button feed">意见反馈</a>
-                </div>
-
+            <div class="button-row marginbottom">
+                <a href="#" class="button group">我的小组</a>
+                <a href="#" class="button feed">意见反馈</a>
             </div>
 
-            <div class="article content infinite-scroll infinite-scroll-bottom" data-distance="5">
-                <div class="article-list" id="article-list">
-                    <template v-for="item in articles">
-                    <div class="article-item content-padded" v-bind:data-articleid="item.id" >
-                        <div class="article-content" >
+        </div>
+
+        <div class="article content infinite-scroll infinite-scroll-bottom" data-distance="5">
+            <div class="article-list" id="article-list">
+                <template v-for="item in articles">
+                    <div class="article-item content-padded" v-bind:data-articleid="item.id">
+                        <div class="article-content">
                             <img :src="item.poster " class="article-firstimg ">
                             <div class="article-title ">{$ item.title $}</div>
                             <div class="article-intro ">{$ item.description $}</div>
@@ -59,108 +57,259 @@
                         <hr>
 
                     </div>
-                    </template>
+                </template>
 
 
-                </div>
-                <div class="infinite-scroll-preloader ">
-                    <div class="preloader "></div>
+            </div>
+            <div class="infinite-scroll-preloader ">
+                <div class="preloader "></div>
+            </div>
+        </div>
+
+
+        <nav class="bar bar-tab ">
+            <a class="tab-item active " href="# ">
+                <span class="icon iconindex "></span>
+                <span class="tab-label ">首页</span>
+            </a>
+            <a class="tab-item " href="# ">
+                <span class="icon icondiscover "></span>
+                <span class="tab-label ">发现</span>
+
+            </a>
+            <a class="tab-item " href="# ">
+                <span class="icon icongroup "></span>
+                <span class="tab-label ">小组</span>
+            </a>
+            <a class="tab-item " href="# ">
+                <span class="icon iconme "></span>
+                <span class="tab-label ">我的</span>
+            </a>
+
+        </nav>
+
+
+    </div>
+
+    <div class="page" id="search-page">
+
+        <div class="bar bar-header-secondary search-container">
+            <a class=" button-link button-nav pull-left back" href="/">
+                <span class="icon icon-left"></span>
+            </a>
+            <form action="" class="search-warper">
+                <input type="search" id="search-text" placeholder="过山车  黑暗骑士  show  小组"/>
+
+            </form>
+            <label class="icon icon-search pull-left"></label>
+
+            <a href="" class="location"></a>
+        </div>
+        <div class="search-content">
+            <div class="buttons-tab">
+                <a href="#tab1" class="tab-link active button">过山车</a>
+                <a href="#tab2" class="tab-link button">黑暗骑士</a>
+                <a href="#tab3" class="tab-link button">演出</a>
+            </div>
+            <div class="content-tab">
+                <div class="tabs">
+                    <div id="tab1" class="tab active">
+                        <div class="search-result">
+                            <a class="sr-container">
+                                <img src="/static/img/article-img.jpg" alt="" class="sr-img">
+                                <div class="sr-info">
+                                    <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
+                                    <div class="sr-star"></div>
+
+                                </div>
+                            </a>
+                            <div class="hr"></div>
+                        </div>
+                        <div class="search-result">
+                            <a class="sr-container">
+                                <img src="/static/img/article-img.jpg" alt="" class="sr-img">
+                                <div class="sr-info">
+                                    <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
+                                    <div class="sr-star"></div>
+
+                                </div>
+                            </a>
+                            <div class="hr"></div>
+                        </div>
+                        <div class="search-result">
+                            <a class="sr-container">
+                                <img src="/static/img/article-img.jpg" alt="" class="sr-img">
+                                <div class="sr-info">
+                                    <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
+                                    <div class="sr-star"></div>
+
+                                </div>
+                            </a>
+                            <div class="hr"></div>
+                        </div>
+                    </div>
+                    <div id="tab2" class="tab">
+                        <div class="search-result">
+                            <div class="search-result">
+                                <a class="sr-container">
+                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
+                                    <div class="sr-info">
+                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
+                                        <div class="sr-star"></div>
+
+                                    </div>
+                                </a>
+                                <div class="hr"></div>
+                            </div>
+                            <div class="search-result">
+                                <a class="sr-container">
+                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
+                                    <div class="sr-info">
+                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
+                                        <div class="sr-star"></div>
+
+                                    </div>
+                                </a>
+                                <div class="hr"></div>
+                            </div>
+                            <div class="search-result">
+                                <a class="sr-container">
+                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
+                                    <div class="sr-info">
+                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
+                                        <div class="sr-star"></div>
+
+                                    </div>
+                                </a>
+                                <div class="hr"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="tab3" class="tab">
+                        <div class="search-result">
+                            <div class="search-result">
+                                <a class="sr-container">
+                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
+                                    <div class="sr-info">
+                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
+                                        <div class="sr-star"></div>
+
+                                    </div>
+                                </a>
+                                <div class="hr"></div>
+                            </div>
+                            <div class="search-result">
+                                <a class="sr-container">
+                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
+                                    <div class="sr-info">
+                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
+                                        <div class="sr-star"></div>
+
+                                    </div>
+                                </a>
+                                <div class="hr"></div>
+                            </div>
+                            <div class="search-result">
+                                <a class="sr-container">
+                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
+                                    <div class="sr-info">
+                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
+                                        <div class="sr-star"></div>
+
+                                    </div>
+                                </a>
+                                <div class="hr"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-
-            <nav class="bar bar-tab ">
-                <a class="tab-item active " href="# ">
-                    <span class="icon iconindex "></span>
-                    <span class="tab-label ">首页</span>
-                </a>
-                <a class="tab-item " href="# ">
-                    <span class="icon icondiscover "></span>
-                    <span class="tab-label ">发现</span>
-
-                </a>
-                <a class="tab-item " href="# ">
-                    <span class="icon icongroup "></span>
-                    <span class="tab-label ">小组</span>
-                </a>
-                <a class="tab-item " href="# ">
-                    <span class="icon iconme "></span>
-                    <span class="tab-label ">我的</span>
-                </a>
-
-            </nav>
-
-
         </div>
+
+
     </div>
-    <script type="text/javascript" src="/static/vue/vue.js"></script>
-    <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
-    <script type='text/javascript' src='/static/light7/js/light7.js' charset='utf-8'></script>
-    <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
+</div>
+<script type="text/javascript" src="/static/vue/vue.js"></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script src="/static/js/raty/jquery.raty.js"></script>
+<script type='text/javascript' src='/static/light7/js/light7.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 
-    <script type="text/javascript ">
-        $.init();
-
-        var $vm = new Vue({
-            delimiters: ['{$', '$}'],
-            el: '#article-list',
-            data: {
-                currentPage: '',
-                articles: [],
-            }
-
-        })
-        let articleLoading = false;
-        let perPageItems = 5;
-
-        getSomeArticles(perPageItems, true);
-
-
-
-
-        $(document).on('infinite', '.article', function() {
-            if (articleLoading) return;
-            articleLoading = true;
-            getSomeArticles(perPageItems, false);
-        });
-        $(document).on('click', '.article-item', (e) => {
-            let articleid = e.currentTarget.getAttribute('data-articleid');
-
-            window.location.href = "/article/detail?articleid=" + articleid;
-        })
-
-
-        function getSomeArticles(number, firstFlag) {
-            if (firstFlag == true) {
-                $vm.currentPage = 1;
-            } else {
-                $vm.currentPage = $vm.currentPage + 1;
-            }
-            $.ajax({
-                url: '/article/refresharticles',
-                method: 'GET',
-                data: {
-                    currentPage: $vm.currentPage,
-                    perPageNums: number,
-                },
-                success: function(data) {
-                    if (data.errno == 0) {
-                        for (let item of data.data.data) {
-                            $vm.articles.push(item);
-                        }
-                        if (data.data.currentPage == data.data.totalPages) {
-                            $.detachInfiniteScroll($('.infinite-scroll'));
-                            $('.infinite-scroll-preloader').remove();
-                        }
-                    }
-                    return;
-                }
-
-
-
-            })
+<script type="text/javascript ">
+    $.init();
+    $.fn.raty.defaults.path = '/static/js/raty/img';
+    var $vm = new Vue({
+        delimiters: ['{$', '$}'],
+        el: '#article-list',
+        data: {
+            currentPage: '',
+            articles: [],
         }
-    </script>
+
+    })
+    let articleLoading = false;
+    let perPageItems = 5;
+
+    getSomeArticles(perPageItems, true);
+
+
+    $(document).on('infinite', '.article', function () {
+        if (articleLoading) return;
+        articleLoading = true;
+        getSomeArticles(perPageItems, false);
+    });
+    $(document).on('click', '.article-item', (e) => {
+        let articleid = e.currentTarget.getAttribute('data-articleid');
+
+        window.location.href = "/article/detail?articleid=" + articleid;
+    });
+    $('.sr-star').raty({
+        number: 5,
+        score: 2,
+    });
+    $('#search-text').keypress(function (e) {
+
+        if (e.keyCode === 13) {
+            alert('search start');
+
+            return false;
+        }
+    });
+
+
+    function getSomeArticles(number, firstFlag) {
+        if (firstFlag == true) {
+            $vm.currentPage = 1;
+        } else {
+            $vm.currentPage = $vm.currentPage + 1;
+        }
+        $.ajax({
+            url: '/article/refresharticles',
+            method: 'GET',
+            data: {
+                currentPage: $vm.currentPage,
+                perPageNums: number,
+            },
+            success: function (data) {
+                if (data.errno == 0) {
+                    for (let item of data.data.data) {
+                        $vm.articles.push(item);
+                    }
+                    if (data.data.currentPage == data.data.totalPages) {
+                        $.detachInfiniteScroll($('.infinite-scroll'));
+                        $('.infinite-scroll-preloader').remove();
+                    }
+                }
+                return;
+            }
+
+
+        })
+    }
+
+
+</script>
 </body>
 
 </html>

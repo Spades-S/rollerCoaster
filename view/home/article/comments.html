@@ -12,8 +12,6 @@
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
     <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/css/comments.css">
-
-
 </head>
 
 <body>
@@ -25,7 +23,7 @@
                 </a>
                 <h1 class='title'>所有评论</h1>
             </header>
-            <div class="comments">
+            <div class="comments" id="comments">
                 <!--<template>-->
                 <div class="comment-item content-padded">
                     <div class="comment-info">
@@ -54,6 +52,16 @@
     <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
     <script>
         $.init();
+        let $vm = new Vue({
+            el:'#comments',
+            delimiters:["{$","$}"],
+            data:{
+                comments:{}
+            }
+        });
+        $.ajax({
+            url: '/comment/getcommentbyarticleid'
+        })
     </script>
 
 </body>

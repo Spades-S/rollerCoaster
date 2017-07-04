@@ -18,16 +18,16 @@
 </head>
 
 <body>
-    <div class="page-group">
-        <div class="page page-current">
-            <header class="bar bar-nav">
-                <a class="button button-link button-nav pull-left back" href="javascript:history.back()">
-                    <span class="icon icon-left"></span>
-                </a>
-                <h1 class='title'>文章</h1>
-            </header>
-            <div class="article" id="article">
-                <template>
+<div class="page-group">
+    <div class="page page-current">
+        <header class="bar bar-nav">
+            <a class="button button-link button-nav pull-left back" href="javascript:history.back()">
+                <span class="icon icon-left"></span>
+            </a>
+            <h1 class='title'>文章</h1>
+        </header>
+        <div class="article" id="article">
+            <template>
                 <div class="article-title content-padded">{$ article.title $}</div>
                 <div class="article-info content-padded">
                     <img class="avatar" :src="article.authorAvatar">
@@ -35,219 +35,262 @@
                     <span class="time">{$ article.updatetime $}</span>
                 </div>
                 <div class="article-content content-padded" id="article-content"></div>
-                 
+
                 <div class="love ">
-                    <span  v-if="likestatus"class="love-img checked" id="love-img"></span>
-                    <span  v-else class="love-img" id="love-img"></span><span class="love-num"> {$ article.likes $}</span>
+                    <span v-if="likestatus" class="love-img checked" id="love-img"></span>
+                    <span v-else class="love-img" id="love-img"></span><span
+                        class="love-num"> {$ article.likes $}</span>
                 </div>
-                </template>
-                <div class="relative-part ">
-                    <div class="relative-part-name">相关文章</div>
-                    <template v-for="item in relativeArticles">
+            </template>
+            <div class="relative-part ">
+                <div class="relative-part-name">相关文章</div>
+                <template v-for="item in relativeArticles">
                     <div class="relative-article content-padded" :data-articleid="item.id">
                         <img :src="item.poster" class="relative-article-firstimg">
                         <div class="relative-article-title">{$ item.title $}</div>
                         <div class="relative-article-intro">{$ item.description $}</div>
                         <hr>
                     </div>
-                    </template>
+                </template>
 
-                </div>
-                <div class="comment-part">
-                    <div class="comment-part-name">评论</div>
-                    <div class="comment content-padded">
-                        <div class="comment-info">
-                            <img src="/static/img/article-img.jpg" class="comment avatar">
-                            <span class="author">黑暗骑士黑暗骑士</span>
-                            <span class="time">2017-5-21 17:00</span>
-
-                        </div>
-                        <div class="comment-content">
-                            纯CSS是很不容易做到的。我收藏过一个相当何弃疗的办法，我相信你不想这么做。 老老实实的用js吧 :)
-                            <hr>
-                        </div>
+            </div>
+            <div class="comment-part">
+                <div class="comment-part-name">评论</div>
+                <div class="comment content-padded" v-for="item in comment">
+                    <div class="comment-info">
+                        <img :src=item.authorAvatar class="comment avatar">
+                        <span class="author">{$ item.authorName $}</span>
+                        <span class="time">{$ getTime(item.timestamp)$}</span>
 
                     </div>
-                </div>
-            </div>
-            <div class="add-comment">
-                <input type="text" placeholder="写评论" id="comment-input">
-                <a class="all-comments checked"></a>
-                <span class=" comment-number checked ">4889</span>
-                <a href="#" class="share "></a>
+                    <div class="comment-content">
+                        {$ item.content $}
+                        <hr>
+                    </div>
 
-            </div>
-            <div class="overlay" id="overlay">
-                <div class="comment-form">
-                    <form action=" ">
-                        <textarea type="text " id="commentcontent"></textarea>
-                        <p><a class="button submitComment" id="submitComment">发表评论</a></p>
-                    </form>
                 </div>
             </div>
         </div>
+
+        <div class="add-comment" id="commentinfo">
+            <template>
+                <input type="text" placeholder="写评论" id="comment-input">
+
+                <a v-if="commentNum > 0" class="all-comments checked"></a>
+                <a v-else class="all-comments "></a>
+                <span v-if="commentNum >= 1000" class=" comment-number checked">999+</span>
+                <span v-else-if="commentNum > 0" class=" comment-number checked ">{$ commentNum $}</span>
+                <span v-else class=" comment-number ">{$ commentNum $}</span>
+                <a href="#" class="share "></a>
+            </template>
+
+        </div>
+
+        <div class="overlay" id="overlay">
+            <div class="comment-form">
+                <form action=" ">
+                    <textarea type="text " id="commentcontent"></textarea>
+                    <p><a class="button submitComment" id="submitComment">发表评论</a></p>
+                </form>
+            </div>
+        </div>
     </div>
+</div>
 
 
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
+<script>
+    $.init();
+    let $vm = new Vue({
+        delimiters: ['{$', '$}'],
+        el: '#article',
+        data: {
+            article: {},
+            relativeArticles: [],
+            comment: {},
+            likestatus: true,
+            commentNum: 0,
+        },
+        methods:{
+            getTime:function(time){
+                let timeDisplay = new Date(time).Format("yyyy-MM-dd hh:mm");
+                return timeDisplay;
+            }
+        }
 
-    <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
-    <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
-    <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
-    <script>
-        $.init();
-        let $vm = new Vue({
-            delimiters: ['{$', '$}'],
-            el: '#article',
-            data: {
-                article: {},
-                relativeArticles: [],
-                comment: {},
-                likestatus: true,
+
+    });
+    let $vm_comment = new Vue({
+        delimiters: ['{$', '$}'],
+        el: '#commentinfo',
+        data: {
+            commentNum: 0,
+        }
+    })
+
+    $.ajax({
+        url: '/article/getarticlebyarticleid',
+        data: {
+            articleid: "{{articleid}} "
+        },
+        method: 'GET',
+        success: function (data) {
+            if (data.errno == 0) {
+                data.data[0].updatetime = new Date(data.data[0].updatetime).Format("yyyy-MM-dd hh:mm");
+                $vm.article = data.data[0];
+                document.getElementById('article-content').innerHTML = data.data[0].content;
+
+            }
+        }
+    })
+    $.ajax({
+        url: '/article/getcommentbyarticleid',
+        data: {
+            articleid: "{{articleid}}"
+        },
+        method: 'GET',
+        success: data => {
+            if (data.errno == 0) {
+                $vm.comment = data.data;
+                $vm_comment.commentNum = data.data.commentLength;
+                $vm.comment = data.data.commentContent;
             }
 
-        });
+        }
+    })
+    $.ajax({
+        url: '/article/getlikestatus',
+        method: 'GET',
+        data: {
+            articleid: "{{articleid}}",
+        },
+        success: function (data) {
+            $vm.likestatus = data.data;
+        }
 
+    })
+    $.ajax({
+        url: '/article/getrelativearticle',
+        data: {
+            articleid: "{{articleid}}"
+        },
+        method: 'GET',
+        success: data => {
+            if (data.errno == 0) {
+                $vm.relativeArticles = data.data;
+
+
+            }
+        }
+    })
+
+
+
+    $(document).on('click', '.relative-article', (e) => {
+        let articleid = e.currentTarget.getAttribute('data-articleid');
+
+        window.location.href = "/article/detail?articleid=" + articleid;
+    });
+    $(document).on('click', '.all-comments', () => {
+        window.location.href = " /comments?articleid=" + "{{articleid}}";
+    })
+    $(document).on('click', '.love-img', function () {
+        if ($('#love-img').hasClass('checked')) {
+            $('#love-img').removeClass('checked');
+            $vm.article.likes -= 1;
+        } else {
+            $('#love-img').addClass('checked');
+            $vm.article.likes += 1;
+        }
         $.ajax({
-            url: '/article/getarticlebyarticleid',
+            method: 'POST',
             data: {
-                articleid: "{{articleid}} "
+                likes: $vm.article.likes,
+                articleid: "{{articleid}}"
             },
-            method: 'GET',
-            success: function(data) {
-                if (data.errno == 0) {
-                    data.data[0].updatetime = new Date(data.data[0].updatetime).Format("yyyy-MM-dd hh:mm");
-                    $vm.article = data.data[0];
-                    document.getElementById('article-content').innerHTML = data.data[0].content;
-
-                }
-            }
-        })
-        $.ajax({
-            url: '/article/getlikestatus',
-            method: 'GET',
-            data: {
-                articleid: "{{articleid}}",
-            },
-            success: function(data) {
-                $vm.likestatus = data.data;
-            }
-
-        })
-        $.ajax({
-            url: '/article/getrelativearticle',
-            data: {
-                articleid: "{{articleid}} "
-            },
-            method: 'GET',
-            success: data => {
-                if (data.errno == 0) {
-                    $vm.relativeArticles = data.data;
-
-                }
+            url: '/article/refreshlikes',
+            success: function (data) {
             }
         })
 
+    })
 
-        $(document).on('click', '.relative-article', (e) => {
-            let articleid = e.currentTarget.getAttribute('data-articleid');
 
-            window.location.href = "/article/detail?articleid=" + articleid;
-        });
-        $(document).on('click', '.all-comments', () => {
-            window.location.href = " /comments?articleid=" + "{{articleid}}";
+    function overlayShow() {
+        $('.overlay').css({
+            display: 'block',
         })
-        $(document).on('click', '.love-img', function() {
-            if ($('#love-img').hasClass('checked')) {
-                $('#love-img').removeClass('checked');
-                $vm.article.likes -= 1;
-            } else {
-                $('#love-img').addClass('checked');
-                $vm.article.likes += 1;
-            }
+        $('.article').css({
+            'overflow-y': 'hidden',
+        })
+    }
+
+    function overlayHide() {
+        $('.overlay').css({
+            display: 'none',
+        })
+        $('.article').css({
+            'overflow-y': 'auto',
+        })
+    }
+    $(document).on('focus', '#comment-input', () => {
+        overlayShow();
+        $('#commentcontent').focus();
+    })
+    $(document).on('click', '.overlay', (event) => {
+        if (event.target.id === 'overlay') {
+            overlayHide();
+        }
+    });
+
+
+    $(document).on('click', '#submitComment', () => {
+        if ($('textarea')[0].value == "") {
+            $.toast("评论不可为空!");
+        } else {
+            let formData = new FormData();
+            formData.append('userid', '1');
+            formData.append('articleid', '1');
+            formData.append('timestamp', Date.now().toString());
+            formData.append('content', $('textarea')[0].value);
             $.ajax({
-                method: 'POST',
-                data: {
-                    likes: $vm.article.likes,
-                    articleid: "{{articleid}}"
-                },
-                url: '/article/refreshlikes',
-                success: function(data) {
-                    console.log('likes refreshes!');
+                url: "/article/addcomment ",
+                data: formData,
+                method: "POST",
+                contentType: false,
+                processData: false,
+                success: (data) => {
+                    if (data.errno == 0) {
+                        $.toast("评论发表成功!");
+                        overlayHide();
+                    } else {
+                        $.toast("评论发表失败!");
+                    }
+
                 }
             })
-
-        })
-
-
-        function overlayShow() {
-            $('.overlay').css({
-                display: 'block',
-            })
-            $('.article').css({
-                'overflow-y': 'hidden',
-            })
         }
+    })
 
-        function overlayHide() {
-            $('.overlay').css({
-                display: 'none',
-            })
-            $('.article').css({
-                'overflow-y': 'auto',
-            })
-        }
-        $(document).on('focus', '#comment-input', () => {
-            overlayShow();
-            $('#commentcontent').focus();
-        })
-        $(document).on('click', '.overlay', (event) => {
-            if (event.target.id === 'overlay') {
-                overlayHide();
-            }
-        });
+    Date.prototype.Format = function (fmt) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
 
-
-        $(document).on('click', '#submitComment', () => {
-            if ($('textarea')[0].value == "") {
-                $.toast("评论不可为空!");
-            } else {
-                let formData = new FormData();
-                formData.append('userid', '1');
-                formData.append('articleid', '1');
-                formData.append('timestamp', Date.now().toString());
-                formData.append('content', $('textarea')[0].value);
-                $.ajax({
-                    url: "/article/addcomment ",
-                    data: formData,
-                    method: "POST",
-                    contentType: false,
-                    processData: false,
-                    success: (data) => {
-                        $.toast("评论发表成功!");
-                        console.log('success');
-                        overlayHide();
-                    }
-                })
-            }
-        })
-
-        Date.prototype.Format = function(fmt) { //author: meizz 
-            var o = {
-                "M+": this.getMonth() + 1, //月份 
-                "d+": this.getDate(), //日 
-                "h+": this.getHours(), //小时 
-                "m+": this.getMinutes(), //分 
-                "s+": this.getSeconds(), //秒 
-                "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
-                "S": this.getMilliseconds() //毫秒 
-            };
-
-            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-            for (var k in o)
-                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00 " + o[k]).substr((" " + o[k]).length)));
-            return fmt;
-        }
-    </script>
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00 " + o[k]).substr((" " + o[k]).length)));
+        return fmt;
+    }
+</script>
 </body>
 
 </html>

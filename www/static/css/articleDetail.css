@@ -53,9 +53,8 @@ header h1.title {
 }
 
 .author {
-    text-align: center;
     font-size: 18px;
-    /*padding-left: 0.3rem;*/
+    padding-left: 0.3rem;
     padding-right: 0.3rem;
     width: 6rem;
     overflow: hidden;
@@ -204,6 +203,10 @@ header h1.title {
 
 .comment-number {
     color: #999999;
+    width: 1.9rem;
+    display: inline-block;
+    text-align: center;
+
 }
 
 .comment-number.checked {
