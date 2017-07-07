@@ -25,10 +25,10 @@ header h1.title {
 }
 
 .comments {
-    margin-top: 3rem;
+    /*margin-top: 3rem;*/
     background-color: white;
-    height: 100%;
-    overflow-y: auto;
+    height: calc(100% - 3rem);
+    /*overflow-y: auto;*/
 }
 
 .avatar {
@@ -41,9 +41,9 @@ header h1.title {
 }
 
 .author {
-    text-align: center;
     font-size: 18px;
     padding-right: 0.3rem;
+    padding-left: 0.3rem;
     width: 6rem;
     overflow: hidden;
     display: inline-block;

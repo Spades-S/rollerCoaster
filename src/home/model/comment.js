@@ -23,9 +23,14 @@ class Comment extends think.model.base {
     }
 
 
-
     async getCommentByPostId(postid) {
         let data = await this.field('authorAvatar, authorName, content, timestamp').where({postid: postid}).select();
+        return data;
+    }
+
+    async getPerPageComments(postId, number, currentPage) {
+         let data = await this.field('authorAvatar, authorName, content, timestamp').order('id DESC').where({postId: postId}).page(currentPage, number).countSelect();
+
         return data;
     }
 

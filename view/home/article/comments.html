@@ -15,54 +15,125 @@
 </head>
 
 <body>
-    <div class="page-group">
-        <div class="page page-current">
-            <header class="bar bar-nav">
-                <a class="button button-link button-nav pull-left back" href="javascript:history.back()">
-                    <span class="icon icon-left"></span>
-                </a>
-                <h1 class='title'>所有评论</h1>
-            </header>
-            <div class="comments" id="comments">
-                <!--<template>-->
-                <div class="comment-item content-padded">
-                    <div class="comment-info">
-                        <img src="/static/img/article-img.jpg" class="comment avatar">
-                        <span class="author">黑暗骑士黑暗骑士</span>
-                        <span class="time">2017-5-21 17:00</span>
+<div class="page-group">
+    <div class="page page-current">
+        <header class="bar bar-nav">
+            <a class="button button-link button-nav pull-left back" href="javascript:history.back()">
+                <span class="icon icon-left"></span>
+            </a>
+            <h1 class='title'>所有评论</h1>
+        </header>
+        <div class="comments  content infinite-scroll infinite-scroll-bottom" data-distance="3">
+            <div class="comment-list" id="comments-list">
+                <template>
+                    <div class="comment-item content-padded" v-for="item in comments">
+                        <div class="comment-info">
+                            <img :src=item.authorAvatar class="comment avatar">
+                            <span class="author">{$item.authorName$}</span>
+                            <span class="time">{$getTime(item.timestamp)$}</span>
+
+                        </div>
+                        <div class="comment-content">
+                            {$item.content$}
+                            <hr>
+                        </div>
 
                     </div>
-                    <div class="comment-content">
-                        纯CSS是很不容易做到的。我收藏过一个相当何弃疗的办法，我相信你不想这么做。 老老实实的用js吧 :)
-                        <hr>
-                    </div>
-
-                </div>
-                <!--</template>-->
+                </template>
             </div>
-
-
+            <div class="infinite-scroll-preloader">
+                <div class="preloader"></div>
+            </div>
         </div>
+
+
     </div>
+</div>
 
 
-    <script type="text/javascript" src="/static/vue/vue.js"></script>
-    <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
-    <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
-    <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
-    <script>
-        $.init();
-        let $vm = new Vue({
-            el:'#comments',
-            delimiters:["{$","$}"],
-            data:{
-                comments:{}
+<script type="text/javascript" src="/static/vue/vue.js"></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
+<script>
+    $.init();
+    let commentLoading = false;
+    let perPageNum = 10;
+    let $vm = new Vue({
+        el: '#comments-list',
+        delimiters: ["{$", "$}"],
+        data: {
+            comments: [],
+            currentPage: 0,
+        },
+        methods: {
+            getTime: function (time) {
+                let result = new Date(time).Format("yyyy-MM-dd hh:mm");
+                return result;
             }
-        });
+
+        }
+    });
+
+    $(document).on('infinite', '.comments', function () {
+        if (commentLoading) return;
+        commentLoading = true;
+        getSomeComments(perPageNum, false);
+    });
+
+    getSomeComments(perPageNum, true);
+
+    function getSomeComments(number, firstFlag) {
+        if (firstFlag == true) {
+            $vm.currentPage = 1;
+        } else {
+            $vm.currentPage = $vm.currentPage + 1;
+        }
         $.ajax({
-            url: '/comment/getcommentbyarticleid'
+            url: '/comments/refreshcomments',
+            method: 'GET',
+            data: {
+                currentPage: $vm.currentPage,
+                perPageNums: number,
+                articleid: "{{articleid}}",
+            },
+            success: function (data) {
+                if (data.errno == 0) {
+                    for (let item of data.data.data) {
+                        $vm.comments.push(item);
+                    }
+                    commentLoading = false;
+
+                    if (data.data.currentPage == data.data.totalPages) {
+                        $.detachInfiniteScroll($('.infinite-scroll'));
+                        $('.infinite-scroll-preloader').remove();
+                    }
+                }
+                return;
+
+            }
+
+
         })
-    </script>
+    }
+
+    Date.prototype.Format = function (fmt) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+</script>
 
 </body>
 

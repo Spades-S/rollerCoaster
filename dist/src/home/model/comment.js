@@ -133,6 +133,36 @@ var Comment = function (_think$model$base) {
 
             return getCommentByPostId;
         }()
+    }, {
+        key: 'getPerPageComments',
+        value: function () {
+            var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(postId, number, currentPage) {
+                var data;
+                return _regenerator2.default.wrap(function _callee3$(_context3) {
+                    while (1) {
+                        switch (_context3.prev = _context3.next) {
+                            case 0:
+                                _context3.next = 2;
+                                return this.field('authorAvatar, authorName, content, timestamp').order('id DESC').where({ postId: postId }).page(currentPage, number).countSelect();
+
+                            case 2:
+                                data = _context3.sent;
+                                return _context3.abrupt('return', data);
+
+                            case 4:
+                            case 'end':
+                                return _context3.stop();
+                        }
+                    }
+                }, _callee3, this);
+            }));
+
+            function getPerPageComments(_x8, _x9, _x10) {
+                return _ref3.apply(this, arguments);
+            }
+
+            return getPerPageComments;
+        }()
     }]);
     return Comment;
 }(think.model.base);

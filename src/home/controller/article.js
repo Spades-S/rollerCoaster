@@ -28,7 +28,7 @@ export default class extends base {
         let perPageNum = this.get('perPageNums');
 
         let articleModel = this.model('article');
-        let data = await articleModel.getPerPageItems(currentPage, perPageNum);
+        let data = await articleModel.getPerPageItems(perPageNum ,currentPage);
         return this.success(data);
     }
 
@@ -87,7 +87,7 @@ export default class extends base {
         let comment = await commentModel.getCommentByPostId(parseInt(articleid));
         let commentLength = comment.length;
         if (commentLength >= 2) {
-            comment.splice(0, 2)
+             comment = comment.splice(0, 2)
         }
         return this.success({commentLength:commentLength,commentContent: comment});
     }

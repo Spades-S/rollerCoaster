@@ -12,8 +12,8 @@
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
     <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/css/articleDetail.css">
+    <link rel="stylesheet" href="/static/share/css/share.min.css">
 
-    <script type="text/javascript " src="/static/vue/vue.js "></script>
 
 </head>
 
@@ -81,7 +81,7 @@
                 <span v-if="commentNum >= 1000" class=" comment-number checked">999+</span>
                 <span v-else-if="commentNum > 0" class=" comment-number checked ">{$ commentNum $}</span>
                 <span v-else class=" comment-number ">{$ commentNum $}</span>
-                <a href="#" class="share "></a>
+                <a href="#" class="sharebtn" id="sharebtn"></a>
             </template>
 
         </div>
@@ -93,16 +93,24 @@
                     <p><a class="button submitComment" id="submitComment">发表评论</a></p>
                 </form>
             </div>
+
+        </div>
+        <div class="overlay share" id="overlay-share">
+            <div class="social-share"></div>
         </div>
     </div>
 </div>
 
-
+<script type="text/javascript " src="/static/vue/vue.js "></script>
 <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="/static/share/js/jquery.share.min.js"></script>
+<script type="text/javascript" src="/static/js/clipboard.min.js"></script>
+<script type="text/javascript" src="/static/share/jquery.share.js"></script>
 <script>
     $.init();
+
     let $vm = new Vue({
         delimiters: ['{$', '$}'],
         el: '#article',
@@ -113,8 +121,8 @@
             likestatus: true,
             commentNum: 0,
         },
-        methods:{
-            getTime:function(time){
+        methods: {
+            getTime: function (time) {
                 let timeDisplay = new Date(time).Format("yyyy-MM-dd hh:mm");
                 return timeDisplay;
             }
@@ -187,15 +195,60 @@
     })
 
 
+    let $config = {
+        sites: ['qzone', 'qq', 'weibo', 'wechat', 'douban'],
+    }
+    $('.social-share').share($config);
+    $('.social-share a').addClass('external');
+    $('.social-share a').removeAttr('target');
+    function shareShow() {
+        $('#overlay-share').css({
+            display: 'block',
+        })
+        $('.article').css({
+            'overflow-y': 'hidden',
+        })
+    }
+    function shareHide() {
+        $('#overlay-share').css({
+            display: 'none',
+
+        })
+        $('.article').css({
+            'overflow-y': 'auto',
+        })
+    }
+    $('#sharebtn').on('click', function () {
+        shareShow();
+    })
+    $('#overlay-share').on('click', function (e) {
+        console.log(e.target.id);
+        if (e.target.id === 'overlay-share') {
+            shareHide();
+        }
+    })
+    $('.icon-wechat').on('click', function (e) {
+        $('.icon-wechat').attr('data-clipboard-text', window.location.href);
+        let clipboard = new Clipboard('.icon-wechat');
+        clipboard.on('success', function(e) {
+            $.toast("链接已复制，请前往微信分享");
+        });
+
+
+
+    })
+
 
     $(document).on('click', '.relative-article', (e) => {
         let articleid = e.currentTarget.getAttribute('data-articleid');
 
         window.location.href = "/article/detail?articleid=" + articleid;
     });
+
     $(document).on('click', '.all-comments', () => {
         window.location.href = " /comments?articleid=" + "{{articleid}}";
     })
+
     $(document).on('click', '.love-img', function () {
         if ($('#love-img').hasClass('checked')) {
             $('#love-img').removeClass('checked');
@@ -219,7 +272,7 @@
 
 
     function overlayShow() {
-        $('.overlay').css({
+        $('#overlay').css({
             display: 'block',
         })
         $('.article').css({
@@ -228,7 +281,7 @@
     }
 
     function overlayHide() {
-        $('.overlay').css({
+        $('#overlay').css({
             display: 'none',
         })
         $('.article').css({
@@ -244,7 +297,6 @@
             overlayHide();
         }
     });
-
 
     $(document).on('click', '#submitComment', () => {
         if ($('textarea')[0].value == "") {
@@ -274,6 +326,7 @@
         }
     })
 
+
     Date.prototype.Format = function (fmt) { //author: meizz
         var o = {
             "M+": this.getMonth() + 1, //月份
@@ -284,10 +337,9 @@
             "q+": Math.floor((this.getMonth() + 3) / 3), //季度
             "S": this.getMilliseconds() //毫秒
         };
-
         if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
         for (var k in o)
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00 " + o[k]).substr((" " + o[k]).length)));
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
     }
 </script>

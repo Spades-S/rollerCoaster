@@ -113,7 +113,7 @@ var _class = function (_base) {
                                 perPageNum = this.get('perPageNums');
                                 articleModel = this.model('article');
                                 _context2.next = 5;
-                                return articleModel.getPerPageItems(currentPage, perPageNum);
+                                return articleModel.getPerPageItems(perPageNum, currentPage);
 
                             case 5:
                                 data = _context2.sent;
@@ -305,7 +305,7 @@ var _class = function (_base) {
                                 commentLength = comment.length;
 
                                 if (commentLength >= 2) {
-                                    comment.splice(0, 2);
+                                    comment = comment.splice(0, 2);
                                 }
                                 return _context7.abrupt('return', this.success({ commentLength: commentLength, commentContent: comment }));
 

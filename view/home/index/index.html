@@ -296,6 +296,7 @@
                     for (let item of data.data.data) {
                         $vm.articles.push(item);
                     }
+                    articleLoading = false;
                     if (data.data.currentPage == data.data.totalPages) {
                         $.detachInfiniteScroll($('.infinite-scroll'));
                         $('.infinite-scroll-preloader').remove();
