@@ -48,7 +48,7 @@ export default class extends base {
         let authorid = authoridRowData[0].authorid;
         let relativeArticles = await articleModel.getRelativeArticlesByAuthorId(authorid, articleid);
         if (relativeArticles.length >= 2) {
-            relativeArticles.slice(0, 2);
+           relativeArticles= relativeArticles.slice(0, 2);
         }
         return this.success(relativeArticles);
 

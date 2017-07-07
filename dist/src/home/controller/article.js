@@ -189,7 +189,7 @@ var _class = function (_base) {
                                 relativeArticles = _context4.sent;
 
                                 if (relativeArticles.length >= 2) {
-                                    relativeArticles.slice(0, 2);
+                                    relativeArticles = relativeArticles.slice(0, 2);
                                 }
                                 return _context4.abrupt('return', this.success(relativeArticles));
 

@@ -30,7 +30,7 @@
             <template>
                 <div class="article-title content-padded">{$ article.title $}</div>
                 <div class="article-info content-padded">
-                    <img class="avatar" :src="article.authorAvatar">
+                    <img class="avatar" :src="'/static/img'+article.authorAvatar">
                     <span class="author">{$ article.authorName $}</span>
                     <span class="time">{$ article.updatetime $}</span>
                 </div>
@@ -149,7 +149,7 @@
                 data.data[0].updatetime = new Date(data.data[0].updatetime).Format("yyyy-MM-dd hh:mm");
                 $vm.article = data.data[0];
                 document.getElementById('article-content').innerHTML = data.data[0].content;
-
+                $('#article-content a').addClass('external').removeAttr('target');
             }
         }
     })
@@ -230,10 +230,9 @@
     $('.icon-wechat').on('click', function (e) {
         $('.icon-wechat').attr('data-clipboard-text', window.location.href);
         let clipboard = new Clipboard('.icon-wechat');
-        clipboard.on('success', function(e) {
+        clipboard.on('success', function (e) {
             $.toast("链接已复制，请前往微信分享");
         });
-
 
 
     })
