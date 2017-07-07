@@ -148,7 +148,7 @@
             if (data.errno == 0) {
                 data.data[0].updatetime = new Date(data.data[0].updatetime).Format("yyyy-MM-dd hh:mm");
                 $vm.article = data.data[0];
-                document.getElementById('article-content').innerHTML = data.data[0].content;
+                document.getElementById('article-content').innerHTML = escape2Html(data.data[0].content);
                 $('#article-content a').addClass('external').removeAttr('target');
             }
         }
@@ -340,6 +340,19 @@
         for (var k in o)
             if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
+    }
+
+    function escape2Html(str) {
+        var arrEntities = {
+            'lt': '<',
+            'gt': '>',
+            'nbsp': ' ',
+            'amp': '&',
+            'quot': '"'
+        };
+        return str.replace(/&(lt|gt|nbsp|amp|quot);/ig, function (all, t) {
+            return arrEntities[t];
+        });
     }
 </script>
 </body>
