@@ -46,7 +46,7 @@
                 <template v-for="item in articles">
                     <div class="article-item content-padded" v-bind:data-articleid="item.id">
                         <div class="article-content">
-                            <img :src="item.poster " class="article-firstimg ">
+                            <img :src="'/static/img'+item.poster " class="article-firstimg ">
                             <div class="article-title ">{$ item.title $}</div>
                             <div class="article-intro ">{$ item.description $}</div>
                         </div>
