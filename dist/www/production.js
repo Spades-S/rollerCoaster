@@ -1,3 +1,5 @@
+'use strict';
+
 var thinkjs = require('thinkjs');
 var path = require('path');
 
@@ -16,3 +18,4 @@ var instance = new thinkjs({
 //     plugins: []
 // });
 instance.run(true);
+//# sourceMappingURL=production.js.map

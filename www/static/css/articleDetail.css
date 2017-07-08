@@ -76,7 +76,9 @@ header h1.title {
     line-height: 35px;
     color: #888181;
 }
-
+.article-content img{
+    width: 100%;
+}
 .love {
     text-align: center;
     height: 3rem;

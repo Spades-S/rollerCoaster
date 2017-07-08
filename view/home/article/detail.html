@@ -56,19 +56,20 @@
             </div>
             <div class="comment-part">
                 <div class="comment-part-name">评论</div>
-                <div class="comment content-padded" v-for="item in comment">
-                    <div class="comment-info">
-                        <img :src=item.authorAvatar class="comment avatar">
-                        <span class="author">{$ item.authorName $}</span>
-                        <span class="time">{$ getTime(item.timestamp)$}</span>
+                <template>
+                    <div class="comment content-padded" v-for="item in comment">
+                        <div class="comment-info">
+                            <img :src=item.authorAvatar class="comment avatar">
+                            <span class="author">{$ item.authorName $}</span>
+                            <span class="time">{$ getTime(item.timestamp)$}</span>
 
+                        </div>
+                        <div class="comment-content">
+                            {$ item.content $}
+                            <hr>
+                        </div>
                     </div>
-                    <div class="comment-content">
-                        {$ item.content $}
-                        <hr>
-                    </div>
-
-                </div>
+                </template>
             </div>
         </div>
 
