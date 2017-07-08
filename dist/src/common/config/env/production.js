@@ -1,6 +1,9 @@
 'use strict';
 
-export default {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
     type: 'mysql',
     adapter: {
         mysql: {
@@ -12,8 +15,7 @@ export default {
             prefix: '',
             encoding: 'utf8'
         },
-        mongo: {
-
-        }
+        mongo: {}
     }
 };
+//# sourceMappingURL=production.js.map

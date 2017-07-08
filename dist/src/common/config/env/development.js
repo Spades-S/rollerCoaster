@@ -1,6 +1,9 @@
 'use strict';
 
-export default {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
     type: 'mysql',
     adapter: {
         mysql: {
@@ -8,12 +11,11 @@ export default {
             port: '3306',
             database: 'HUANLEYE',
             user: 'root',
-            password: '654321',
+            password: '203102',
             prefix: '',
             encoding: 'utf8'
         },
-        mongo: {
-
-        }
+        mongo: {}
     }
 };
+//# sourceMappingURL=development.js.map
