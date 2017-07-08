@@ -31,6 +31,6 @@ output/
 output.tar.gz
 
 app/
-www/static/img/
+#www/static/img/
 
 runtime/

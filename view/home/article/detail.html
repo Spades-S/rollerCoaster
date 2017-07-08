@@ -150,6 +150,14 @@
                 $vm.article = data.data[0];
                 document.getElementById('article-content').innerHTML = escape2Html(data.data[0].content);
                 $('#article-content a').addClass('external').removeAttr('target');
+                let imgs = $('.article-content img');
+                for (let i = 0; i < imgs.length; i++) {
+                    if (imgs[i].getAttribute('data-src') != null) {
+                        imgs[i].setAttribute('src', imgs[i].getAttribute('data-src'));
+                    }
+                    imgs[i].setAttribute('src', '/static/img' + imgs[i].getAttribute('src'));
+                }
+
             }
         }
     })
