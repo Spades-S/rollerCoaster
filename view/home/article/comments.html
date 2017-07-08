@@ -18,8 +18,7 @@
 <div class="page-group">
     <div class="page page-current">
         <header class="bar bar-nav">
-            <a class="button button-link button-nav pull-left back" href="javascript:history.back()">
-                <span class="icon icon-left"></span>
+            <a class="arrow-left back " >
             </a>
             <h1 class='title'>所有评论</h1>
         </header>
@@ -104,7 +103,7 @@
                     }
                     commentLoading = false;
 
-                    if (data.data.currentPage == data.data.totalPages) {
+                    if (data.data.currentPage == data.data.totalPages || data.data.totalPages == 0) {
                         $.detachInfiniteScroll($('.infinite-scroll'));
                         $('.infinite-scroll-preloader').remove();
                     }

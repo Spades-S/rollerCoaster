@@ -22,12 +22,17 @@
     <div class="page page-current" id="index-page">
         <div class="bar bar-header-secondary search-container">
             <div class="logo"><img src="/static/img/icon/logo.png"></div>
-            <a class="searchbar no-transition" href="#search-page">
+            <div class="searchbar">
+                <a class="searchbar-cancel">取消</a>
                 <div class="search-input">
-                    <input placeholder='过山车  黑暗骑士  show  小组'/>
-                    <label class="icon icon-search" for="search"></label>
+                    <form action="">
+                        <label class="search-icon"></label>
+                        <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show  小组'/>
+
+                    </form>
+
                 </div>
-            </a>
+            </div>
         </div>
         <div class="button-container">
             <div class="button-row margintop">
@@ -94,15 +99,18 @@
     <div class="page" id="search-page">
 
         <div class="bar bar-header-secondary search-container">
-            <a class=" button-link button-nav pull-left back" href="/">
-                <span class="icon icon-left"></span>
+            <a class="arrow-left" id="back-btn">
             </a>
-            <form action="" class="search-warper">
-                <input type="search" id="search-text" placeholder="过山车  黑暗骑士  show  小组"/>
-
-            </form>
-            <label class="icon icon-search pull-left"></label>
-
+            <div class="searchbar inner">
+                <a class="searchbar-cancel">取消</a>
+                <div class="search-input">
+                    <form action="">
+                        <label class="search-icon"></label>
+                        <input type="search" id='search-inner' class="search" placeholder='过山车  黑暗骑士  show  小组'/>
+                    </form>
+                    <label></label>
+                </div>
+            </div>
             <a href="" class="location"></a>
         </div>
         <div class="search-content">
@@ -268,14 +276,33 @@
         number: 5,
         score: 2,
     });
-    $('#search-text').keypress(function (e) {
+    $('.search').keypress(function (e) {
+        let searchContent;
 
         if (e.keyCode === 13) {
-            alert('search start');
+            if (e.target.id == 'search') {
+                $('#index-page').removeClass('page-current');
+                $('#search-page').addClass('page-current');
+                searchContent = $('#search').val();
+            } else {
+                searchContent = $('#search-inner').val();
+            }
+//            console.log(searchContent.trim());
+//            $.ajax({
+//                url: "/article/search",
+//                method: '’
+//            })
+
 
             return false;
         }
     });
+
+
+    $('#back-btn').on('click', () => {
+        $('#index-page').addClass('page-current');
+        $('#search-page').removeClass('page-current');
+    })
 
 
     function getSomeArticles(number, firstFlag) {
@@ -297,7 +324,7 @@
                         $vm.articles.push(item);
                     }
                     articleLoading = false;
-                    if (data.data.currentPage == data.data.totalPages) {
+                    if (data.data.currentPage == data.data.totalPages || data.data.totalPages == 0) {
                         $.detachInfiniteScroll($('.infinite-scroll'));
                         $('.infinite-scroll-preloader').remove();
                     }

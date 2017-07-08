@@ -3,6 +3,19 @@
     margin: 0px;
 }
 
+.arrow-left {
+    display: inline-block;
+    width: 0.9rem;
+    height: 1.4rem;
+    position: absolute;
+    top: 0.75rem;
+    background: url(/static/img/icon/arrow-left.png);
+    -webkit-background-size: 1rem 1rem;
+    background-size: 1.2rem 1.4rem;
+    background-repeat: no-repeat;
+    z-index: 30;
+}
+
 header h1.title {
     color: white;
     margin-top: 0.3rem;

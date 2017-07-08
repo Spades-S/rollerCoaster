@@ -21,8 +21,7 @@
 <div class="page-group">
     <div class="page page-current">
         <header class="bar bar-nav">
-            <a class="button button-link button-nav pull-left back" href="javascript:history.back()">
-                <span class="icon icon-left"></span>
+            <a class="arrow-left back ">
             </a>
             <h1 class='title'>文章</h1>
         </header>
@@ -46,7 +45,7 @@
                 <div class="relative-part-name">相关文章</div>
                 <template v-for="item in relativeArticles">
                     <div class="relative-article content-padded" :data-articleid="item.id">
-                        <img :src="item.poster" class="relative-article-firstimg">
+                        <img :src="'/static/img'+item.poster" class="relative-article-firstimg">
                         <div class="relative-article-title">{$ item.title $}</div>
                         <div class="relative-article-intro">{$ item.description $}</div>
                         <hr>
@@ -68,6 +67,7 @@
                             {$ item.content $}
                             <hr>
                         </div>
+
                     </div>
                 </template>
             </div>
