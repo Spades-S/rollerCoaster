@@ -7,15 +7,11 @@ body {
     background: white;
 }
 
-.arrow-left {
+.icon-arrow-left {
     display: inline-block;
     width: 0.9rem;
     height: 1.4rem;
     margin-top: 0.8rem;
-    background: url(/static/img/icon/arrow-left.png);
-    -webkit-background-size: 1rem 1rem;
-    background-size: 1.2rem 1.4rem;
-    background-repeat: no-repeat;
 }
 
 .search-container {
@@ -64,7 +60,7 @@ body {
 .searchbar.inner {
     width: calc(100% - 3.6rem);
     margin-left: 0.7rem;
-    margin-right: 1rem;
+    margin-right: 0.7rem;
 }
 
 .bar:after {
@@ -87,13 +83,9 @@ body {
 .search-icon {
     width: 1rem;
     height: 1rem;
-    display: inline-block;
-    background: url(/static/img/icon/search.png);
     position: absolute;
     right: 0.1rem;
     top: 0.2rem;
-    background-size: 1rem 1rem;
-    background-repeat: no-repeat;
 }
 
 .button-container {
@@ -157,74 +149,12 @@ body {
     display: inline-block;
 }
 
-.iconindex {
-    width: 1.2rem;
-    height: 1.2rem;
-    background: url(/static/img/icon/tab-home.png);
-    background-size: 1.2rem 1.2rem;
-    background-repeat: no-repeat;
+.icon-shouye {
+    color: #999999;
 }
 
-.active .iconindex {
-    background: url(/static/img/icon/tab-home-clicked.png);
-    background-size: 1.2rem 1.2rem;
-    background-repeat: no-repeat;
-}
-
-.icondiscover {
-    width: 1.2rem;
-    height: 1.2rem;
-    background: url(/static/img/icon/tab-discovery.png);
-    background-size: 1.2rem 1.2rem;
-    background-repeat: no-repeat;
-}
-
-.active .icondiscover {
-    background: url(/static/img/icon/tab-discovery-clicked.png);
-    background-size: 1.2rem 1.2rem;
-    background-repeat: no-repeat;
-}
-
-.icondiscover {
-    width: 1.2rem;
-    height: 1.2rem;
-    background: url(/static/img/icon/tab-discovery.png);
-    background-size: 1.2rem 1.2rem;
-    background-repeat: no-repeat;
-}
-
-.active .icondiscover {
-    background: url(/static/img/icon/tab-discovery-clicked.png);
-    background-size: 1.2rem 1.2rem;
-    background-repeat: no-repeat;
-}
-
-.icongroup {
-    width: 1.2rem;
-    height: 1.2rem;
-    background: url(/static/img/icon/tab-group.png);
-    background-size: 1.2rem 1.2rem;
-    background-repeat: no-repeat;
-}
-
-.active .icongroup {
-    background: url(/static/img/icon/tab-group-clicked.png);
-    background-size: 1.2rem 1.2rem;
-    background-repeat: no-repeat;
-}
-
-.iconme {
-    width: 1.2rem;
-    height: 1.2rem;
-    background: url(/static/img/icon/tab-user.png);
-    background-size: 1.2rem 1.2rem;
-    background-repeat: no-repeat;
-}
-
-.active .iconme {
-    background: url(/static/img/icon/tab-user-clicked.png);
-    background-size: 1.2rem 1.2rem;
-    background-repeat: no-repeat;
+.active .iconfont {
+    color: #72bb38;
 }
 
 .bar-header-secondary ~ .content {
@@ -319,10 +249,9 @@ label.pull-left {
     display: inline-block;
     width: 0.7rem;
     height: 1.3rem;
-    background: url(/static/img/icon/nearby.png);
-    background-size: 0.7rem 1.3rem;
-    margin-top: 0.9rem;
-    background-repeat: no-repeat;
+    margin-top: 0.75rem;
+    color: #fff;
+
 }
 
 .search-content {

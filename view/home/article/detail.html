@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/css/articleDetail.css">
     <link rel="stylesheet" href="/static/share/css/share.min.css">
-
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
 
 </head>
 
@@ -21,7 +21,7 @@
 <div class="page-group">
     <div class="page page-current">
         <header class="bar bar-nav">
-            <a class="arrow-left back ">
+            <a class=" iconfont icon-arrow-left back ">
             </a>
             <h1 class='title'>文章</h1>
         </header>
@@ -36,8 +36,8 @@
                 <div class="article-content content-padded" id="article-content"></div>
 
                 <div class="love ">
-                    <span v-if="likestatus" class="love-img checked" id="love-img"></span>
-                    <span v-else class="love-img" id="love-img"></span><span
+                    <span v-if="likestatus" class="love-img iconfont icon-xihuan checked" id="love-img"></span>
+                    <span v-else class="love-img iconfont icon-xihuan" id="love-img"></span><span
                         class="love-num"> {$ article.likes $}</span>
                 </div>
             </template>
@@ -77,12 +77,12 @@
             <template>
                 <input type="text" placeholder="写评论" id="comment-input">
 
-                <a v-if="commentNum > 0" class="all-comments checked"></a>
-                <a v-else class="all-comments "></a>
+                <a v-if="commentNum > 0" class=" iconfont icon-pinglun checked"></a>
+                <a v-else class=" iconfont icon-pinglun"></a>
                 <span v-if="commentNum >= 1000" class=" comment-number checked">999+</span>
                 <span v-else-if="commentNum > 0" class=" comment-number checked ">{$ commentNum $}</span>
                 <span v-else class=" comment-number ">{$ commentNum $}</span>
-                <a href="#" class="sharebtn" id="sharebtn"></a>
+                <a href="#" class=" iconfont icon-daochu" id="sharebtn"></a>
             </template>
 
         </div>
@@ -253,7 +253,7 @@
         window.location.href = "/article/detail?articleid=" + articleid;
     });
 
-    $(document).on('click', '.all-comments', () => {
+    $(document).on('click', '.icon-pinglun', () => {
         window.location.href = " /comments?articleid=" + "{{articleid}}";
     })
 
