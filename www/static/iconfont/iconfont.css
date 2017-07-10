@@ -74,6 +74,7 @@
 
 .icon-crown:before {
     content: "\e698";
+    font-size: 47px;
 }
 .icon-jiangbei:before {
     content: "\e820";
@@ -155,6 +156,7 @@
 
 .icon-sousuo:before {
     content: "\e6d1";
+    font-weight: 700;
 }
 
 .icon-tianjia:before {

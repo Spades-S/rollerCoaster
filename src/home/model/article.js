@@ -5,7 +5,7 @@ class Article extends think.model.base {
         this.tableName = 'article';
     }
     async getPerPageItems(number, currentPage) {
-        let data = await this.order('id DESC').where({ type: 0 }).page( currentPage,number).countSelect();
+        let data = await this.order('updateTime DESC').where({ type: 0 }).page( currentPage,number).countSelect();
         return data;
     }
     async getArticleItemByid(id) {

@@ -2,6 +2,25 @@
     box-sizing: border-box;
     margin: 0px;
 }
+::-webkit-input-placeholder {
+    font-size: 14px;
+    color: #afb1b3;
+}
+
+:-moz-placeholder {
+    font-size: 14px;
+    color: #afb1b3;
+}
+
+::-moz-placeholder {
+    font-size: 14px;
+    color: #afb1b3;
+}
+
+:-ms-input-placeholder {
+    font-size: 14px;
+    color: #afb1b3;
+}
 
 .icon-arrow-left {
     display: inline-block;

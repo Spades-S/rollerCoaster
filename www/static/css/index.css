@@ -163,10 +163,8 @@ body {
 
 .article {
     width: 100%;
-    height: calc(100% - 11.5rem);
+    height: calc(100% - 2.5rem);
     background: white;
-    /*border: 1px solid;*/
-    /*overflow-y: auto;*/
     position: static;
 }
 
@@ -262,23 +260,36 @@ label.pull-left {
 .buttons-tab {
     background-color: #eeeeee;
     border: none;
+    overflow: auto;
 }
 
 .buttons-tab .button {
     height: 2.6rem;
+    bottom: 0;
 }
 
 .buttons-tab .button.active {
     color: #07518f;
-    border-color: #72bb38;
-    border-width: 3px;
+    border-bottom: none;
+    border-top: 2px solid #72bb38;
+    border-right-color: #d4cbcb;
+    border-top-width: 3px;
+    background: #fff;
 }
 
 .content-tab {
     background-color: #fff;
     width: 100%;
     height: calc(100% - 2.6rem);
-    /*margin-top: -1rem;*/
+}
+
+.tab-link.button {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 1.3rem;
+    padding-right: 1.3rem;
+    border-right: 1px solid #d4cbcb;
+
 }
 
 .tabs,
@@ -287,15 +298,15 @@ label.pull-left {
 }
 
 .sr-container {
-    display: block;
 
-    padding: 1rem;
-    height: 6rem;
+    display: block;
+    padding: 0.8rem;
+    height: 4.6rem;
 }
 
 .sr-img {
-    width: 4rem;
-    height: 4rem;
+    width: 3rem;
+    height: 3rem;
     float: left;
 
 }
@@ -303,7 +314,7 @@ label.pull-left {
 .sr-info {
     width: 100%;
     height: 100%;
-    padding-left: 5rem;
+    padding-left: 4.3rem;
 
 }
 
@@ -313,7 +324,7 @@ label.pull-left {
     margin-top: .2rem;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 18px;
+    font-size: 16px;
     color: #565252;
 }
 
@@ -321,7 +332,11 @@ label.pull-left {
     margin-top: .4rem;
 }
 
+.sr-star img {
+    width: 10px;
+}
+
 .hr {
     height: 1px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #d4d4d4;
 }
