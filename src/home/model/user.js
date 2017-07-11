@@ -1,5 +1,7 @@
 'use strict'
 
+const rp = require('request-promise')
+
 export default class extends think.model.base {
     init(...args) {
         super.init(...args);
@@ -36,5 +38,22 @@ export default class extends think.model.base {
         let data = await this.field('avatar, nickname').where({id: id}).select();
         return data;
 
+    }
+    
+    async sendMessage(phone, code) {
+        try {
+	        let send_res = await rp({
+		        url: 'https://sms.yunpian.com/v2/sms/single_send.json',
+		        method: 'POST',
+		        form: {
+			        apikey: 'dbbbda824548a83c9976e721ddbf4cb8',
+			        mobile: phone,
+			        text: code + '(欢乐冶手机验证码，请完成验证)，如非本人操作，请忽略本短信'
+		        }
+	        })
+            return send_res
+        } catch (err) {
+            return err
+        }
     }
 }

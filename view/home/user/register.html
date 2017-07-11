@@ -20,19 +20,19 @@
         <header class="bar bar-nav">
             <a class=" iconfont icon-arrow-left back ">
             </a>
-            <h1 class='title'>注册</h1>
+            <h1 class="title">注册</h1>
         </header>
         <div class="content center" id="rg">
             <h1 class="center">欢迎加入欢乐冶</h1>
             <div class="item-input">
-                <input type="number" class="phone" @input="getValue">
+                <input type="number" class="phone" @input="getValue" placeholder="手机号">
             </div>
             <div class="item-input">
-                <input type="number">
-                <button :class="'rt-code button button-small ' + disabled" :disabled="isDisabled" @click="retryAfter">{$ codetext $}</button>
+                <input type="number" class="code" @input="getCode" placeholder="验证码">
+                <button :class="'rt-code button button-small ' + codeButtonClass" :disabled="codeButtonIsDisabled" @click="retryAfter">{$ codetext $}</button>
             </div>
             <div>点击下一步代表您已阅读并同意<a href="/user/agreement.html">用户使用协议</a></div>
-            <button class="button button-big">下一步</button>
+            <button :class="'button button-big ' + submitClass" :disabled="submitDisabled" @click="verifyCode">下一步</button>
         </div>
     </div>
 </div>
@@ -50,18 +50,27 @@
         el: '#rg',
         data: {
             codetext: '获取验证码',
-            disabled: '',
-            isDisabled: false
+            codeButtonClass: '',
+            codeButtonIsDisabled: false,
+            submitClass: 'disabled',
+            submitDisabled: true
         },
         methods: {
             getValue: function (e) {
                 this.value = e.currentTarget.value
             },
+            getCode: function (e) {
+                this.code = e.currentTarget.value
+                if ((/\d{6}/).test(this.code)) {
+                	this.submitClass = ''
+                    this.submitDisabled = false
+                }
+            },
             retryAfter: function () {
                 let _this = this
                 if((/^1[34578]\d{9}$/).test(_this.value)){
-                    _this.isDisabled = 'true'
-                    _this.disabled = 'disabled'
+                    _this.codeButtonIsDisabled = 'true'
+                    _this.codeButtonClass = 'disabled'
                     $.toast("验证码已发送")
                     let i = 60
                     let interval = setInterval(function () {
@@ -69,12 +78,11 @@
                         _this.codetext = i + '秒后重试'
                         if(i == 0){
                             clearInterval(interval)
-                            _this.isDisabled = false
-                            _this.disabled = ''
+                            _this.codeButtonIsDisabled = false
+                            _this.codeButtonClass = ''
                             _this.codetext = '获取验证码'
                         }
                     }, 1000)
-                    console.log(_this.value)
                     $.ajax({
                         url: '/user/getvfcode',
                         data: {
@@ -82,21 +90,41 @@
                         },
                         method: 'POST'
                     })
-                        .success(function (ret) {
-                            console.log(ret)
-                            if(ret.statusCode == 200){
-                                console.log('发送成功')
-                            }
-                        })
-                        .error(function (err) {
-                            console.log(err)
-                        })
-                        .complete(function () {
-                            console.log('done')
-                        })
+                    .success(function (ret) {
+                    	console.log(ret)
+                    })
+                    .error(function (err) {
+                        console.log('err', err)
+                    })
+                    .complete(function () {
+                        console.log('done')
+                    })
                 } else {
                     $.toast('手机号格式不正确，请重新输入')
                 }
+            },
+            verifyCode: function () {
+                $.ajax({
+                    url: '/user/verifycode',
+                    data: {
+                    	code: this.code
+                    }
+                })
+                .success(function (res) {
+                	console.log(res)
+                	if(res.errno != 0){
+		                $.toast('验证码错误，请重新输入')
+                    } else {
+                		window.location.href = "/user/password"
+                    }
+                })
+                .error(function (err) {
+                	console.log(err)
+                    $.toast('出了点小问题，点击重试')
+                })
+                .complete(function (res) {
+                    console.log(res)
+                })
             }
         }
     })
