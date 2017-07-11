@@ -35,19 +35,124 @@ header h1.title {
 }
 
 .rank-bg {
-    height: 7rem;
+    height: 9rem;
     width: 100%;
     background: url(/static/img/ranking-bg.png);
     background-repeat: no-repeat;
-    background-size: 100% 7rem;
+    background-size: 100% 9rem;
 
 }
 
 .rank-content {
     height: 100%;
+    position: relative;
     margin-top: 3rem;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+}
+
+.rank-top {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    top: 5.8rem;
+    left: 1rem;
+    padding-top: 1rem;
+    width: calc(100% - 2rem);
+    height: 8rem;
+    background: #fff;
+    border-top-left-radius: 0.6rem;
+    border-top-right-radius: 0.6rem;
+
+}
+
+.non-first {
+    width: 32%;
+    text-align: center;
+}
+
+.top-first {
+    position: relative;
+    top: -1rem;
+
+    width: 36%;
+    border-top-left-radius: 0.4rem;
+    border-top-right-radius: 0.4rem;
+    text-align: center;
+    background: #fff;
+
+}
+.top-shadow{
+    padding-top: 1rem;
+    text-align: center;
+}
+
+.top-num {
+    position: relative;
+    display: inline-block;
+    top: -4.9rem;
+    left: 1.35rem;
+    padding-top: 0.1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 0.5rem;
+    background: #65a731;
+    font-size: 13px;
+    color: white;
+}
+
+.top-first .top-num {
+    background: #ff9000;
+    left: 1.6rem;
+}
+
+
+.top-avatar {
+    width: 3rem;
+    height: 3rem;
+    -webkit-border-radius: 1.5rem;
+    -moz-border-radius: 1.5rem;
+    border-radius: 1.5rem;
+}
+
+.top-first .top-avatar {
+    width: 4rem;
+    height: 4rem;
+    -webkit-border-radius: 2rem;
+    -moz-border-radius: 2rem;
+    border-radius: 2rem;
+}
+
+.top-name {
+    display: inline-block;
+    width: 80%;
+    margin-top: 0.4rem;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+.top-result {
+    color: #ff9000;
+}
+
+.top-first .top-result {
+    color: red;
+    font-size: 20px;
+}
+
+.crown {
+    position: absolute;
+    top: -0.4rem;
+    color: #ff9000;
+    transform: rotate(42deg);
+    -ms-transform: rotate(42deg);
+    -moz-transform: rotate(42deg);
+    -webkit-transform: rotate(42deg);
+    -o-transform: rotate(42deg);
 }
 
 .picker-header {
@@ -58,23 +163,23 @@ header h1.title {
 .picker-container {
     display: block;
     background: white;
-    width: calc(100% - 0.6rem);
+    /*width: calc(100% - 0.6rem);*/
     text-align: center;
-    border-radius: 1rem;
+    /*border-radius: 1rem;*/
     border: none;
-    height: 2rem;
-    margin-left: 0.3rem;
-    margin-top: 0.6rem;
+    height: 7rem;
+    /*margin-left: 0.3rem;*/
+    /*margin-top: 0.6rem;*/
 }
 
 #picker {
-    height: 100%;
     text-align: center;
     background: transparent;
     border: none;
     z-index: 3;
     width: 100%;
-    position: relative;
+    height: 2rem;
+    margin-top: 5rem;
 }
 
 .icon-arrow-bottom {

@@ -68,7 +68,7 @@ var Article = function (_think$model$base) {
                         switch (_context.prev = _context.next) {
                             case 0:
                                 _context.next = 2;
-                                return this.order('id DESC').where({ type: 0 }).page(currentPage, number).countSelect();
+                                return this.order('updateTime DESC').where({ type: 0 }).page(currentPage, number).countSelect();
 
                             case 2:
                                 data = _context.sent;

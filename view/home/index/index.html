@@ -34,19 +34,20 @@
                 </div>
             </div>
         </div>
-        <div class="button-container">
-            <div class="button-row margintop">
-                <a href="#" class="button daily">每日一车</a>
-                <a href="/score" class="button score external">成就排名</a>
-            </div>
-            <div class="button-row marginbottom">
-                <a href="#" class="button group">我的小组</a>
-                <a href="#" class="button feed">意见反馈</a>
-            </div>
 
-        </div>
 
         <div class="article content infinite-scroll infinite-scroll-bottom" data-distance="5">
+            <div class="button-container">
+                <div class="button-row margintop">
+                    <a href="#" class="button daily">每日一车</a>
+                    <a href="/score" class="button score external">成就排名</a>
+                </div>
+                <div class="button-row marginbottom">
+                    <a href="#" class="button group">我的小组</a>
+                    <a href="#" class="button feed">意见反馈</a>
+                </div>
+
+            </div>
             <div class="article-list" id="article-list">
                 <template v-for="item in articles">
                     <div class="article-item content-padded" v-bind:data-articleid="item.id">
@@ -116,8 +117,10 @@
         <div class="search-content">
             <div class="buttons-tab">
                 <a href="#tab1" class="tab-link active button">过山车</a>
-                <a href="#tab2" class="tab-link button">黑暗骑士</a>
+                <a href="#tab2" class="tab-link button">小组</a>
                 <a href="#tab3" class="tab-link button">演出</a>
+                <a href="#tab4" class="tab-link button">黑暗骑士</a>
+                <a href="#tab5" class="tab-link button">文章</a>
             </div>
             <div class="content-tab">
                 <div class="tabs">
@@ -127,7 +130,9 @@
                                 <img src="/static/img/article-img.jpg" alt="" class="sr-img">
                                 <div class="sr-info">
                                     <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                    <div class="sr-star"></div>
+                                    <div class="sr-star">
+                                        <span>综合评分: </span>
+                                    </div>
 
                                 </div>
                             </a>
@@ -138,7 +143,9 @@
                                 <img src="/static/img/article-img.jpg" alt="" class="sr-img">
                                 <div class="sr-info">
                                     <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                    <div class="sr-star"></div>
+                                    <div class="sr-star">
+                                        <span>综合评分: </span>
+                                    </div>
 
                                 </div>
                             </a>
@@ -149,7 +156,9 @@
                                 <img src="/static/img/article-img.jpg" alt="" class="sr-img">
                                 <div class="sr-info">
                                     <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                    <div class="sr-star"></div>
+                                    <div class="sr-star">
+                                        <span>综合评分: </span>
+                                    </div>
 
                                 </div>
                             </a>
@@ -163,7 +172,9 @@
                                     <img src="/static/img/article-img.jpg" alt="" class="sr-img">
                                     <div class="sr-info">
                                         <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                        <div class="sr-star"></div>
+                                        <div class="sr-star">
+                                            <span>综合评分: </span>
+                                        </div>
 
                                     </div>
                                 </a>
@@ -174,7 +185,9 @@
                                     <img src="/static/img/article-img.jpg" alt="" class="sr-img">
                                     <div class="sr-info">
                                         <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                        <div class="sr-star"></div>
+                                        <div class="sr-star">
+                                            <span>综合评分: </span>
+                                        </div>
 
                                     </div>
                                 </a>
@@ -185,7 +198,9 @@
                                     <img src="/static/img/article-img.jpg" alt="" class="sr-img">
                                     <div class="sr-info">
                                         <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                        <div class="sr-star"></div>
+                                        <div class="sr-star">
+                                            <span>综合评分: </span>
+                                        </div>
 
                                     </div>
                                 </a>
@@ -201,7 +216,9 @@
                                     <img src="/static/img/article-img.jpg" alt="" class="sr-img">
                                     <div class="sr-info">
                                         <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                        <div class="sr-star"></div>
+                                        <div class="sr-star">
+                                            <span>综合评分: </span>
+                                        </div>
 
                                     </div>
                                 </a>
@@ -212,7 +229,9 @@
                                     <img src="/static/img/article-img.jpg" alt="" class="sr-img">
                                     <div class="sr-info">
                                         <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                        <div class="sr-star"></div>
+                                        <div class="sr-star">
+                                            <span>综合评分: </span>
+                                        </div>
 
                                     </div>
                                 </a>
@@ -223,7 +242,95 @@
                                     <img src="/static/img/article-img.jpg" alt="" class="sr-img">
                                     <div class="sr-info">
                                         <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                        <div class="sr-star"></div>
+                                        <div class="sr-star">
+                                            <span>综合评分: </span>
+                                        </div>
+
+                                    </div>
+                                </a>
+                                <div class="hr"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab4" class="tab">
+                        <div class="search-result">
+                            <div class="search-result">
+                                <a class="sr-container">
+                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
+                                    <div class="sr-info">
+                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
+                                        <div class="sr-star">
+                                            <span>综合评分: </span>
+                                        </div>
+
+                                    </div>
+                                </a>
+                                <div class="hr"></div>
+                            </div>
+                            <div class="search-result">
+                                <a class="sr-container">
+                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
+                                    <div class="sr-info">
+                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
+                                        <div class="sr-star">
+                                            <span>综合评分: </span>
+                                        </div>
+
+                                    </div>
+                                </a>
+                                <div class="hr"></div>
+                            </div>
+                            <div class="search-result">
+                                <a class="sr-container">
+                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
+                                    <div class="sr-info">
+                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
+                                        <div class="sr-star">
+                                            <span>综合评分: </span>
+                                        </div>
+
+                                    </div>
+                                </a>
+                                <div class="hr"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab5" class="tab">
+                        <div class="search-result">
+                            <div class="search-result">
+                                <a class="sr-container">
+                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
+                                    <div class="sr-info">
+                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
+                                        <div class="sr-star">
+                                            <span>综合评分: </span>
+                                        </div>
+
+                                    </div>
+                                </a>
+                                <div class="hr"></div>
+                            </div>
+                            <div class="search-result">
+                                <a class="sr-container">
+                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
+                                    <div class="sr-info">
+                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
+                                        <div class="sr-star">
+                                            <span>综合评分: </span>
+                                        </div>
+
+                                    </div>
+                                </a>
+                                <div class="hr"></div>
+                            </div>
+                            <div class="search-result">
+                                <a class="sr-container">
+                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
+                                    <div class="sr-info">
+                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
+                                        <div class="sr-star">
+                                            <span>综合评分: </span>
+                                        </div>
 
                                     </div>
                                 </a>
