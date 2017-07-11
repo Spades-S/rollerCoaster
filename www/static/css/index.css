@@ -330,10 +330,17 @@ label.pull-left {
 
 .sr-star {
     margin-top: .4rem;
+    width:100% !important;
+}
+.sr-star span{
+    color: grey;
+    font-size: 11px;
+    margin-right: 0.2rem;
 }
 
 .sr-star img {
     width: 10px;
+
 }
 
 .hr {
