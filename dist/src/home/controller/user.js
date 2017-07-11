@@ -30,6 +30,8 @@ var _base3 = _interopRequireDefault(_base2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var sendSms = require('node-aliyun-sms');
+
 var _class = function (_base) {
     (0, _inherits3.default)(_class, _base);
 
@@ -42,6 +44,29 @@ var _class = function (_base) {
         key: 'indexAction',
         value: function indexAction() {
             return this.display('user/register.html');
+        }
+    }, {
+        key: 'getvfcodeAction',
+        value: function getvfcodeAction() {
+            console.log(sendSms);
+            if (this.isPost()) {
+                var phone = this.post('phone');
+                var ssp = sendSms({
+                    accessKeyId: 'LTAI6wMOjrC1Y26j',
+                    accessKeySecret: 'gOhm0YgkKdPFEgrPTHmaAxKCLZ0tFE',
+                    signName: '',
+                    templateCode: '',
+                    to: phone,
+                    paramString: {}
+                });
+                ssp.then(function (ret) {
+                    console.log(ret);
+                    return ret;
+                }, function (err) {
+                    console.log(err);
+                    return err;
+                });
+            }
         }
     }]);
     return _class;
