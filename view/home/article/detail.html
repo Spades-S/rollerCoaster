@@ -126,7 +126,8 @@
             getTime: function (time) {
                 let timeDisplay = new Date(time).Format("yyyy-MM-dd hh:mm");
                 return timeDisplay;
-            }
+            },
+
         }
 
 
@@ -150,6 +151,7 @@
                 data.data[0].updatetime = new Date(data.data[0].updatetime).Format("yyyy-MM-dd hh:mm");
                 $vm.article = data.data[0];
                 document.getElementById('article-content').innerHTML = escape2Html(data.data[0].content);
+                $vm.article.title = escape2Html($vm.article.title);
                 $('#article-content a').addClass('external').removeAttr('target');
                 let imgs = $('.article-content img');
                 for (let i = 0; i < imgs.length; i++) {

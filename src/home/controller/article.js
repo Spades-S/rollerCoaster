@@ -44,9 +44,9 @@ export default class extends base {
     async getrelativearticleAction() {
         let articleid = this.get('articleid');
         let articleModel = this.model('article');
-        let authoridRowData = await articleModel.getAuthoridByArticleId(articleid);
-        let authorid = authoridRowData[0].authorid;
-        let relativeArticles = await articleModel.getRelativeArticlesByAuthorId(authorid, articleid);
+        let authoridRowData = await articleModel.getColByArticleId(articleid);
+        let col = authoridRowData[0].col;
+        let relativeArticles = await articleModel.getRelativeArticlesByCol(col, articleid);
         if (relativeArticles.length >= 2) {
            relativeArticles= relativeArticles.slice(0, 2);
         }
