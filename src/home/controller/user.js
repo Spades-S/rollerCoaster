@@ -1,33 +1,40 @@
 import base from './base.js';
 
-const sendSms = require('node-aliyun-sms')
+const msg_send_config = require('../config/config')
+const rp = require('request-promise')
 
 export default class extends base {
     indexAction() {
         return this.display('user/register.html');
     }
 
-    getvfcodeAction() {
-        console.log(sendSms)
-        if (this.isPost()) {
-            let phone = this.post('phone')
-            const ssp = sendSms({
-                accessKeyId: 'LTAI6wMOjrC1Y26j',
-                accessKeySecret: 'gOhm0YgkKdPFEgrPTHmaAxKCLZ0tFE',
-                signName: '',
-                templateCode: '',
-                to: phone,
-                paramString: {
-
-                }
-            })
-            ssp.then(ret => {
-                console.log(ret)
-                return ret
-            }, err => {
-                console.log(err)
-                return err
-            })
-        }
+    async getvfcodeAction() {
+    	try {
+		    let phone = this.post('phone')
+		    let code = generateVerificationCode()
+		    
+		    let userModel = this.model('user')
+		    // let send_res = await userModel.sendMessage(phone, code)
+		
+		    await this.session('phone', phone)
+		    await this.session('verificationCode', Number(code))
+		    
+		    let sessionCode = await this.session('verificationCode')
+		    console.log(sessionCode)
+		    
+		    this.success('123')
+		    // this.success(send_res)
+		    
+	    } catch(err) {
+    		this.fail(err, this.errors())
+	    }
+    }
+	
+	async verifycodeAction() {
+    	return this.success('successfully verified')
+    }
+    
+    async passwordAction() {
+    	return this.display('user/password.html')
     }
 }
