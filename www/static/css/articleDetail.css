@@ -1,7 +1,7 @@
 * {
     box-sizing: border-box;
     margin: 0px;
-    width: 100% !important;
+    max-width: 100% !important;
 }
 
 ::-webkit-input-placeholder {
