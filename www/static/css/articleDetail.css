@@ -1,7 +1,9 @@
 * {
     box-sizing: border-box;
     margin: 0px;
+    width: 100% !important;
 }
+
 ::-webkit-input-placeholder {
     font-size: 14px;
     color: #afb1b3;
@@ -225,12 +227,11 @@ header h1.title {
     color: #999999;
 }
 
-
 .checked {
     color: red;
 }
 
-.comment-tip .comment-number{
+.comment-tip .comment-number {
     background: red;
 }
 
