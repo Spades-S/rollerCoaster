@@ -40,22 +40,22 @@
                     <span v-else class="love-img iconfont icon-xihuan" id="love-img"></span><span
                         class="love-num"> {$ article.likes $}</span>
                 </div>
-            </template>
-            <div class="relative-part ">
-                <div class="relative-part-name">相关文章</div>
-                <template v-for="item in relativeArticles">
-                    <div class="relative-article content-padded" :data-articleid="item.id">
-                        <img :src="'/static/img'+item.poster" class="relative-article-firstimg">
-                        <div class="relative-article-title">{$ item.title $}</div>
-                        <div class="relative-article-intro">{$ item.description $}</div>
-                        <hr>
-                    </div>
-                </template>
 
-            </div>
-            <div class="comment-part">
-                <div class="comment-part-name">评论</div>
-                <template>
+                <div v-if="relativeArticles.length>0" class="relative-part ">
+                    <div class="relative-part-name">相关文章</div>
+                    <div v-for="item in relativeArticles">
+                        <div class="relative-article content-padded" :data-articleid="item.id">
+                            <img :src="'/static/img'+item.poster" class="relative-article-firstimg">
+                            <div class="relative-article-title">{$ item.title $}</div>
+                            <div class="relative-article-intro">{$ item.description $}</div>
+                            <hr>
+                        </div>
+                    </div>
+
+                </div>
+                <div v-if="comment.length>0" class="comment-part">
+                    <div class="comment-part-name">评论</div>
+
                     <div class="comment content-padded" v-for="item in comment">
                         <div class="comment-info">
                             <img :src=item.authorAvatar class="comment avatar">
@@ -69,20 +69,25 @@
                         </div>
 
                     </div>
-                </template>
-            </div>
+
+                </div>
+            </template>
         </div>
 
         <div class="add-comment" id="commentinfo">
             <template>
                 <input type="text" placeholder="写评论" id="comment-input">
-
-                <a v-if="commentNum > 0" class=" iconfont icon-pinglun checked"></a>
-                <a v-else class=" iconfont icon-pinglun"></a>
-                <span v-if="commentNum >= 1000" class=" comment-number checked">999+</span>
-                <span v-else-if="commentNum > 0" class=" comment-number checked ">{$ commentNum $}</span>
-                <span v-else class=" comment-number ">{$ commentNum $}</span>
                 <a href="#" class=" iconfont icon-daochu" id="sharebtn"></a>
+                <div v-if="commentNum > 0" class=" iconfont icon-pinglun comment-tip">
+                    <span v-if="commentNum >= 1000" class=" comment-number ">999+</span>
+                    <span v-else-if="commentNum > 0" class=" comment-number  ">{$ commentNum $}</span>
+                    <span v-else class=" comment-number ">{$ commentNum $}</span>
+                </div>
+                <div v-else class="iconfont icon-pinglun">
+                    <span class=" comment-number ">{$ commentNum $}</span>
+                </div>
+
+
             </template>
 
         </div>
@@ -126,7 +131,8 @@
             getTime: function (time) {
                 let timeDisplay = new Date(time).Format("yyyy-MM-dd hh:mm");
                 return timeDisplay;
-            }
+            },
+
         }
 
 
@@ -150,13 +156,16 @@
                 data.data[0].updatetime = new Date(data.data[0].updatetime).Format("yyyy-MM-dd hh:mm");
                 $vm.article = data.data[0];
                 document.getElementById('article-content').innerHTML = escape2Html(data.data[0].content);
+                $vm.article.title = escape2Html($vm.article.title);
                 $('#article-content a').addClass('external').removeAttr('target');
+                $('.article-content img').attr('style', '');
                 let imgs = $('.article-content img');
                 for (let i = 0; i < imgs.length; i++) {
                     if (imgs[i].getAttribute('data-src') != null) {
                         imgs[i].setAttribute('src', imgs[i].getAttribute('data-src'));
                     }
                     imgs[i].setAttribute('src', '/static/img' + imgs[i].getAttribute('src'));
+                    imgs[i].setAttribute('style', '');
                 }
 
             }
@@ -172,6 +181,7 @@
             if (data.errno == 0) {
                 $vm.comment = data.data;
                 $vm_comment.commentNum = data.data.commentLength;
+//                $vm_comment.commentNum = 2000;
                 $vm.comment = data.data.commentContent;
             }
 
@@ -312,7 +322,7 @@
         } else {
             let formData = new FormData();
             formData.append('userid', '1');
-            formData.append('articleid', '1');
+            formData.append('articleid', '{{articleid}}');
             formData.append('timestamp', Date.now().toString());
             formData.append('content', $('textarea')[0].value);
             $.ajax({
