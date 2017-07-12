@@ -57,7 +57,7 @@
                             <div class="article-intro ">{$ item.description $}</div>
                         </div>
                         <div class="article-info ">
-                            <span class="article-author ">作者：{$ item.authorName $}</span>
+                            <span class="article-author ">作者：{$ getAuthorName(item.authorName, item.col) $}</span>
                             <span class="article-category ">来自：{$ item.col $}</span>
                         </div>
                         <hr>
@@ -360,6 +360,11 @@
         data: {
             currentPage: '',
             articles: [],
+        },
+        methods: {
+            getAuthorName: function (name, col) {
+                return name || col;
+            }
         }
 
     })

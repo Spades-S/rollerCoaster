@@ -30,7 +30,7 @@
                 <div class="article-title content-padded">{$ article.title $}</div>
                 <div class="article-info content-padded">
                     <img class="avatar" :src="'/static/img'+article.authorAvatar">
-                    <span class="author">{$ article.authorName $}</span>
+                    <span class="author">{$ getAuthorName(article.authorName,article.col) $}</span>
                     <span class="time">{$ article.updatetime $}</span>
                 </div>
                 <div class="article-content content-padded" id="article-content"></div>
@@ -132,6 +132,10 @@
                 let timeDisplay = new Date(time).Format("yyyy-MM-dd hh:mm");
                 return timeDisplay;
             },
+            getAuthorName: function (name, col) {
+                let result = name || col;
+                return result;
+            }
 
         }
 
