@@ -119,7 +119,7 @@ var Article = function (_think$model$base) {
             return getArticleItemByid;
         }()
     }, {
-        key: 'getAuthoridByArticleId',
+        key: 'getColByArticleId',
         value: function () {
             var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(articleid) {
                 var authorid;
@@ -128,7 +128,7 @@ var Article = function (_think$model$base) {
                         switch (_context3.prev = _context3.next) {
                             case 0:
                                 _context3.next = 2;
-                                return this.field('authorid').where({ id: articleid }).select();
+                                return this.field('col').where({ id: articleid }).select();
 
                             case 2:
                                 authorid = _context3.sent;
@@ -142,23 +142,23 @@ var Article = function (_think$model$base) {
                 }, _callee3, this);
             }));
 
-            function getAuthoridByArticleId(_x4) {
+            function getColByArticleId(_x4) {
                 return _ref3.apply(this, arguments);
             }
 
-            return getAuthoridByArticleId;
+            return getColByArticleId;
         }()
     }, {
-        key: 'getRelativeArticlesByAuthorId',
+        key: 'getRelativeArticlesByCol',
         value: function () {
-            var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4(authorid, articleid) {
+            var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4(col, articleid) {
                 var relativeArticles;
                 return _regenerator2.default.wrap(function _callee4$(_context4) {
                     while (1) {
                         switch (_context4.prev = _context4.next) {
                             case 0:
                                 _context4.next = 2;
-                                return this.field('id, title, description, poster').where({ authorid: authorid, id: ['!=', articleid], type: 0 }).select();
+                                return this.field('id, title, description, poster').order('updateTime DESC').where({ col: col, id: ['!=', articleid], type: 0 }).select();
 
                             case 2:
                                 relativeArticles = _context4.sent;
@@ -172,11 +172,11 @@ var Article = function (_think$model$base) {
                 }, _callee4, this);
             }));
 
-            function getRelativeArticlesByAuthorId(_x5, _x6) {
+            function getRelativeArticlesByCol(_x5, _x6) {
                 return _ref4.apply(this, arguments);
             }
 
-            return getRelativeArticlesByAuthorId;
+            return getRelativeArticlesByCol;
         }()
     }, {
         key: 'updateLikesByArticleId',

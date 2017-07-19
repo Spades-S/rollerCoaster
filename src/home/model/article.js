@@ -10,17 +10,17 @@ class Article extends think.model.base {
     }
     async getArticleItemByid(id) {
         let data = await this.alias('article')
-            .field('title, authorAvatar, authorName, content, updatetime, likes')
+            .field('title, authorAvatar, authorName, col, content, updatetime, likes')
             .where({ id: id }).select();
         return data;
 
     }
-    async getAuthoridByArticleId(articleid) {
-        let authorid = await this.field('authorid').where({ id: articleid }).select();
+    async getColByArticleId(articleid) {
+        let authorid = await this.field('col').where({ id: articleid }).select();
         return authorid;
     }
-    async getRelativeArticlesByAuthorId(authorid, articleid) {
-        let relativeArticles = await this.field('id, title, description, poster').where({ authorid: authorid, id: ['!=', articleid], type: 0 }).select();
+    async getRelativeArticlesByCol(col, articleid) {
+        let relativeArticles = await this.field('id, title, description, poster').order('updateTime DESC').where({ col: col, id: ['!=', articleid], type: 0 }).select();
         return relativeArticles;
     }
     async updateLikesByArticleId(articleid, likes) {

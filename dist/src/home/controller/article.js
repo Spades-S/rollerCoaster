@@ -169,7 +169,7 @@ var _class = function (_base) {
         key: 'getrelativearticleAction',
         value: function () {
             var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4() {
-                var articleid, articleModel, authoridRowData, authorid, relativeArticles;
+                var articleid, articleModel, authoridRowData, col, relativeArticles;
                 return _regenerator2.default.wrap(function _callee4$(_context4) {
                     while (1) {
                         switch (_context4.prev = _context4.next) {
@@ -177,13 +177,13 @@ var _class = function (_base) {
                                 articleid = this.get('articleid');
                                 articleModel = this.model('article');
                                 _context4.next = 4;
-                                return articleModel.getAuthoridByArticleId(articleid);
+                                return articleModel.getColByArticleId(articleid);
 
                             case 4:
                                 authoridRowData = _context4.sent;
-                                authorid = authoridRowData[0].authorid;
+                                col = authoridRowData[0].col;
                                 _context4.next = 8;
-                                return articleModel.getRelativeArticlesByAuthorId(authorid, articleid);
+                                return articleModel.getRelativeArticlesByCol(col, articleid);
 
                             case 8:
                                 relativeArticles = _context4.sent;

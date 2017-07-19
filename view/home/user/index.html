@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>我的</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
+    <link rel="stylesheet" href="/static/css/articleDetail.css">
+    <link rel="stylesheet" href="/static/share/css/share.min.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <style>
+        .bar.bar-tab{
+            background: #f7f7f8;
+            height: 2.5rem;
+        }
+        .content{
+            padding-top: .8rem;
+        }
+        .md, .btm{
+            line-height: 2rem;
+        }
+        .content{
+            background-color: #F9F9F9;
+            padding-top: .8rem;
+        }
+        .content-padded{
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .content-top{
+            margin: .8rem 0;
+            padding: .5rem;
+            display: flex;
+            align-items: center;
+            line-height: 3rem;
+            font-size: 1.3rem;
+            background-color: #fff;
+            align-items: center;
+            position: relative;
+        }
+        .avatar{
+            height: 3rem;
+            width: 3rem;
+            margin: 0 .5rem;
+            line-height: 0;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .avatar-img{
+            width: 100%;
+            height: 100%;
+        }
+        .nickname{
+            padding-left: 1rem;
+        }
+        .icon-arrow-right:before{
+            color: #CCC;
+            position: absolute;
+            top: .5rem;
+            right: 0;
+        }
+        .md, .btm{
+            line-height: 2rem;
+            border: 1px solid #F9F9F9;
+            background-color: #FFF;
+            padding: .3rem .5rem;
+        }
+        .content-bottom{
+            margin: .8rem 0;
+        }
+        .content .iconfont:before{
+            width: 1.5rem;
+            height: 1.5rem;
+            font-size: .9rem;
+            padding: 0 1rem;
+        }
+        .icon-xihuan{
+            color: #D5162D;
+        }
+        .icon-jiangbei{
+            color: #FD8F25;
+        }
+        .icon-qizhi{
+            color: #1AA1E6;
+        }
+        .icon-iconset0116{
+            color: #50B000;
+        }
+        .icon-yijianfankui{
+            color: #FD9133;
+        }
+        .icon-guanyuwomen{
+            color: #1D568E;
+        }
+
+    </style>
+</head>
+<body>
+<div class="page-group">
+    <div class="page page-current">
+        <header class="bar bar-nav">
+            <h1 class='title'>我的</h1>
+        </header>
+        <div class="content" id="content">
+            <div class="content-top content-padded" v-if="userInfo">
+                <div class="avatar">
+                    <img src="/static/img/thelivingtribunal.jpeg" alt="" class="avatar-img">
+                </div>
+                <div class="nickname">{ userInfo.nickname }</div>
+                <a class="iconfont icon-arrow-right external" href="/user/detail"></a>
+            </div>
+            <div class="content-middle content-padded" v-if="userInfo">
+                <div class="likes md"><span class="iconfont icon-xihuan"></span>喜欢</div>
+                <div class="achieve md"><span class="iconfont icon-jiangbei"></span>成就</div>
+                <div class="activity md"><span class="iconfont icon-qizhi"></span>活动</div>
+                <div class="log md"><span class="iconfont icon-iconset0116"></span>刷车日志</div>
+            </div>
+            <div class="content-bottom content-padded" v-if="userInfo">
+                <div class="auggestion btm"><span class="iconfont icon-yijianfankui"></span>意见反馈</div>
+                <div class="about btm"><span class="iconfont icon-guanyuwomen"></span>关于我们</div>
+            </div>
+        </div>
+    </div>
+    <nav class="bar bar-tab ">
+        <a class="tab-item external" href="/index">
+            <span class="icon iconfont icon-shouye left-negtivedot2"></span>
+            <span class="tab-label ">首页</span>
+        </a>
+        <a class="tab-item external" href="/discovery">
+            <span class="icon iconfont icon-yikeapp15 left-negtivedot2"></span>
+            <span class="tab-label ">发现</span>
+        </a>
+        <a class="tab-item external" href="/group">
+            <span class="icon iconfont icon-xiaozufill left-negtivedot2 "></span>
+            <span class="tab-label ">小组</span>
+        </a>
+        <a class="tab-item active external" href="/user">
+            <span class="icon iconfont icon-wode left-negtivedot2"></span>
+            <span class="tab-label ">我的</span>
+        </a>
+
+    </nav>
+</div>
+
+
+
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="/static/share/js/jquery.share.min.js"></script>
+<script type="text/javascript" src="/static/js/clipboard.min.js"></script>
+<script>
+    $.init();
+
+    new Vue({
+        delimiters: ['{', '}'],
+        data() {
+        	return {
+        		userInfo: ''
+            }
+        },
+        created: function () {
+	        $.ajax({
+		        url: '/user/getuserinfo',
+		        success: (res) => {
+		        	if(res.errno === 0){
+				        this.userInfo = res.data
+                    } else {
+		        		$.toast('登录态失效，请重新登录')
+                        setTimeout(function () {
+                            window.location.href = '/user/login'
+                        }, 1000)
+                    }
+		        },
+                error: (err) => {
+		        	$.toast('出了点小问题，请重试')
+                }
+	        })
+        }
+    }).$mount('#content')
+</script>
+</body>
+</html>
