@@ -6,7 +6,5 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = {
-  //key: value
-};
+exports.default = {};
 //# sourceMappingURL=config.js.map

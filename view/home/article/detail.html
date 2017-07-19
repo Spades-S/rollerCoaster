@@ -21,7 +21,7 @@
 <div class="page-group">
     <div class="page page-current">
         <header class="bar bar-nav">
-            <a class=" iconfont icon-arrow-left back ">
+            <a class=" iconfont icon-arrow-left back " href="javascript:history.go(-1)">
             </a>
             <h1 class='title'>文章</h1>
         </header>
@@ -30,7 +30,9 @@
                 <div class="article-title content-padded">{$ article.title $}</div>
                 <div class="article-info content-padded">
                     <img class="avatar" :src="'/static/img'+article.authorAvatar">
-                    <span class="author">{$ getAuthorName(article.authorName,article.col) $}</span>
+
+                    <span class="author">{$ article.authorName || article.col $}</span>
+
                     <span class="time">{$ article.updatetime $}</span>
                 </div>
                 <div class="article-content content-padded" id="article-content"></div>
@@ -131,12 +133,7 @@
             getTime: function (time) {
                 let timeDisplay = new Date(time).Format("yyyy-MM-dd hh:mm");
                 return timeDisplay;
-            },
-            getAuthorName: function (name, col) {
-                let result = name || col;
-                return result;
             }
-
         }
 
 
@@ -211,8 +208,6 @@
         success: data => {
             if (data.errno == 0) {
                 $vm.relativeArticles = data.data;
-
-
             }
         }
     })

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>我的信息</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/2.3.4/cropper.css" />
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+        .page{
+            background-color: #f9f9f9;
+        }
+        .bar{
+            height: 3rem;
+            background-color: #07518f;
+            border-bottom: none;
+        }
+        h1.title{
+            color: white;
+            line-height: 3rem;
+            letter-spacing: 5px;
+            border-image-width: 0;
+        }
+        .icon-arrow-left {
+            display: inline-block;
+            width: 0.9rem;
+            height: 1.4rem;
+            position: absolute;
+            top: 0.75rem;
+            z-index: 30;
+        }
+        .bar-nav~.content{
+            top: 3rem;
+            padding-top: 1rem;
+            overflow-x: hidden;
+        }
+        .save{
+            font-size: .8rem;
+            position: absolute;
+            line-height: 3rem;
+            right: 1rem;
+            color: #fff;
+        }
+        .edit-avatar, .edit-avatar img, .img-input{
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            position: relative;
+        }
+        .edit-row{
+            padding: .5rem 1rem;
+            background-color: #fff;
+            border-bottom: 1px solid #f9f9f9;
+        }
+        .edit-title{
+            font-size: .8rem;
+            padding-left: .2rem;
+            box-sizing: border-box;
+        }
+        .edit-info{
+            color: #A2A2A2;
+            font-size: .7rem;
+        }
+        .edit-row:first-of-type{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .img-input{
+            position: absolute;
+            top: 0;
+            z-index: 50;
+            opacity: 0;
+        }
+        input, option, select{
+            padding-left: .2rem;
+            border: none;
+            background-color: transparent;
+            appearence: none;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+        }
+        input, textarea{
+            width: 100%;
+        }
+        textarea{
+            outline: none;
+        }
+        select{
+            width: 50%;
+        }
+        .birth-input{
+            padding-left: 0;
+        }
+        /* city picker style */
+        .city-header{
+            background-color: #ababab;
+            color: #232323;
+            height: 2.2rem;
+        }
+        .city-header h1{
+            line-height: 2.2rem;
+        }
+        .city-header-confirm{
+            color: #fff !important;
+        }
+        .picker-columns{
+            height: 9.2rem;
+            background-color: #efefef;
+        }
+        .picker-modal-inner{
+            height: 7rem !important;
+        }
+        .picker-items{
+            font-size: .8rem;
+        }
+        .picker-center-highlight{
+            border-top-color: darkgrey;
+            border-bottom-color: darkgrey;
+        }
+        /*cropper test*/
+        img {
+            max-width: 100%; /* This rule is very important, please do not ignore this! */
+        }
+        .cropContainer{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: rgba(52, 52, 52, 0.8);
+            filter: alpha(opacity=50);
+            overflow: hidden;
+            display: none;
+            z-index: 1000000;
+        }
+        #cropBox{
+            position: absolute;
+            max-width: 100%;
+            max-height: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .avatar-confirm{
+            line-height: 3rem;
+            position: absolute;
+            right: 1rem;
+            color: #fff;
+        }
+        #avatar-preview{
+            position: absolute;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            overflow: hidden;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <header class="bar bar-nav">
+        <a class=" iconfont icon-arrow-left back" href="javascript:history.go(-1)"></a>
+        <h1 class="title">个人详情</h1>
+        <a class="save external">保存</a>
+    </header>
+    <div class="content" id="content">
+        <div class="edit-row">
+            <div class="edit-title">头像</div>
+            <div class="edit-avatar">
+                <img src="/static/img/thelivingtribunal.jpeg">
+                <input name="avatar" type="file" alt="上传头像" class="img-input">
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-title">昵称</div>
+            <div class="edit-info">
+                <div class="item-input">
+                    <input name="nickname" type="text" :value="userDetail.nickname" @input="changeDetail">
+                </div>
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-title">性别</div>
+            <div class="edit-info item-input">
+                <select name="gender" @change="changeDetail">
+                    <option :selected="userDetail.gender == 0" value="0">填写</option>
+                    <option :selected="userDetail.gender == 2" value="2">男</option>
+                    <option :selected="userDetail.gender == 1" value="1">女</option>
+                </select>
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-title">生日</div>
+            <div class="edit-info">
+                <div class="item-input">
+                    <input class="birth-input" name="birth" type="date" :value="userDetail.birth || '1970-01-01'" @input="changeDetail">
+                </div>
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-title">邮箱</div>
+            <div class="edit-info">
+                <div class="item-input">
+                    <input name="mail" type="email" :value="userDetail.mail" @input="changeDetail">
+                </div>
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-title">个人简介</div>
+            <div class="edit-info">
+                <div class="item-input">
+                    <textarea name="introduction" rows="3" :value="userDetail.introduction || '写下你的简介～'" @input="changeDetail"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-title">所在城市</div>
+            <div class="edit-info">
+                <div class="item-input">
+                    <input name="city" id="city-picker" type="text" :value="decodeURI(userDetail.city)">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--cropper test-->
+    <div class="cropContainer">
+        <header class="bar bar-nav">
+            <a class="iconfont icon-arrow-left closeCrop"></a>
+            <div class="avatar-confirm">确定</div>
+        </header>
+        <div id="cropBox">
+            <img id="crop-image" src="">
+        </div>
+        <div id="avatar-preview"></div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="/static/light7/js/light7-city-picker.min.js"></script>
+<script type="text/javascript" src="/static/cropper/cropper.min.js"></script>
+
+<script>
+    $.init();
+
+    let vm = new Vue({
+        delimiters: ['{$', '$}'],
+        data() {
+            return {
+                userDetail: {}
+            }
+        },
+        created: function () {
+            this.getUserDetail()
+        },
+        methods: {
+            getUserDetail: function () {
+                let self = this
+                $.ajax({
+                    url: '/user/getuserdetail',
+                    success: function (ret) {
+                        if(ret.errno === 0){
+                            self.userDetail = ret.data
+                        } else {
+                            $.toast('登录失败，请重新登录')
+                            setTimeout(function () {
+                                window.location.href = '/user/login'
+                            }, 1000)
+                        }
+                    }
+                })
+            },
+            changeDetail: function (e) {
+                this.userDetail[e.target.name] = e.target.value
+            }
+        }
+    }).$mount('#content')
+
+    $("#city-picker").cityPicker({
+        toolbarTemplate: '<header class="bar bar-nav city-header">\
+<button class="button button-link pull-right close-picker city-header-confirm">确定</button>\
+<h1 class="title">选择地址</h1>\
+</header>'
+    });
+
+    $('.closeCrop').on('click', function () {
+        $('.cropContainer').css('display', 'none')
+    })
+
+    $('.img-input').on('change', function () {
+        if (!(window.File || window.FileReader || window.FileList || window.Blob)) {
+            return $.toast('当前浏览器不支持上传头像')
+        }
+        $('#cropBox').css({
+            'height': window.innerWidth + 'px'
+        })
+        console.log(this.files)
+        let file = this.files[0]
+        let reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = function (evt) {
+            let dataUrl= evt.target.result
+            console.log(dataUrl)
+            $('#crop-image').attr('src', dataUrl)
+            $('.cropContainer').css('display', 'block')
+
+            $('#crop-image').cropper({
+                aspectRatio: 1/1,
+                dragMode: 'move',
+                movable: false
+            })
+            /*var cropper = new Cropper($('#crop-image'), {
+                aspectRadio: 1/1,
+                viewMode: 1,
+                dragMode: 'move',
+                movable: false,
+                zoomable: false,
+                zoomOnTouch: false,
+                zoomOnWheel: false
+            })*/
+        }
+    })
+    
+    document.querySelector('.save').addEventListener('click', function() {
+	    let userDetail = vm.userDetail
+	    userDetail.city = $('#city-picker').val()
+	    console.log(userDetail)
+	    $.ajax({
+		    url: '/user/updateuserdetail',
+		    data: userDetail,
+		    method: 'POST',
+		    success: function (ret) {
+			    console.log(ret)
+			    if(ret.errno === 0){
+				    $.toast('修改成功')
+				    setTimeout(function () {
+					    window.location.href = '/user/detail'
+				    }, 1000)
+			    } else {
+				    $.toast('修改失败，请重新提交')
+			    }
+		    },
+		    error: function (err) {
+			    console.log(err)
+			    $.toast('出了点小问题，请重试')
+		    }
+	    })
+    })
+</script>
+</body>
+</html>
