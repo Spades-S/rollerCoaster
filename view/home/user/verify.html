@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>找回密码</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+        .page{
+            background-color: #fff;
+        }
+        .bar{
+            height: 3rem;
+            background-color: #07518f;
+            border-bottom: none;
+            vertical-align: middle;
+        }
+        h1.title{
+            top: 0;
+            color: white;
+            line-height: 3rem;
+            letter-spacing: 5px;
+            border-image-width: 0;
+        }
+        .content{
+            padding-top: 1.8rem;
+            text-align: center;
+        }
+        .icon-arrow-left{
+            top: .9rem;
+        }
+        .bar-nav~.content{
+            top: 3rem;
+        }
+        .green{
+            color: #6EB732;
+        }
+        .item-input{
+            width: 80%;
+            margin: 0 auto;
+            position: relative;
+        }
+        input{
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid darkgray;
+            margin-bottom: 1.5rem;
+            padding: .1rem .5rem;
+            transition: all .2s;
+            font-size: .7rem;
+            line-height: 1.2rem;
+        }
+        input:focus{
+            border-bottom: 1px solid #6EB732;
+        }
+        .rt-code{
+            border: none;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        .rt-code:disabled{
+            color: #c8c9cb;
+        }
+        .next{
+            width: 80%;
+            margin: 1rem auto;
+            margin-bottom: 0;
+            height: 1.8rem;
+            line-height: 1.8rem;
+            border: none;
+        }
+        .next:disabled{
+            border: 1px solid #c8c9cb;
+        }
+        .next:not(:disabled){
+            background-color: #6EB732;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <header class="bar bar-nav">
+        <a class="icon iconfont icon-arrow-left back " href="javascript:history.go(-1)"></a>
+        <h1 class="title">找回密码</h1>
+    </header>
+    <div class="content" id="content">
+        <div class="item-input">
+            <input type="number" class="phone" @input="getValue" placeholder="请输入您的手机号">
+        </div>
+        <div class="item-input">
+            <input type="number" class="code" @input="getCode" placeholder="请输入验证码">
+            <button :class="'rt-code button button-small green' + codeButtonClass" :disabled="codeButtonIsDisabled" @click="retryAfter">{$ codetext $}</button>
+        </div>
+        <button :class="'next button    ' + submitClass" :disabled="submitDisabled" @click="verifyCode">下一步</button>
+    </div>
+</div>
+
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
+<script>
+    $.init();
+
+    new Vue({
+        delimiters: ['{$', '$}'],
+        data() {
+        	return {
+		        codetext: '获取验证码',
+		        codeButtonClass: '',
+		        codeButtonIsDisabled: false,
+		        submitClass: 'disabled',
+		        submitDisabled: true
+            }
+        },
+        methods: {
+	        getValue: function (e) {
+		        this.value = e.currentTarget.value
+	        },
+	        getCode: function (e) {
+		        this.code = e.currentTarget.value
+		        if ((/^\d{6}$/).test(this.code)) {
+			        this.submitClass = ''
+			        this.submitDisabled = false
+		        } else {
+			        this.submitClass = 'disabled',
+                        this.submitDisabled = true
+		        }
+	        },
+	        retryAfter: function () {
+		        let _this = this
+		        if(!(/^1[34578]\d{9}$/).test(_this.value)){
+			        return $.toast('手机号格式不正确，请重新输入')
+		        }
+		        $.ajax({
+			        url: '/user/getvfcode',
+			        data: {
+				        account: _this.value
+			        },
+			        method: 'POST'
+		        })
+			        .success(function (ret) {
+			        	console.log(ret)
+				        if(ret.errno === 0){
+					        _this.codeButtonIsDisabled = 'true'
+					        _this.codeButtonClass = 'disabled'
+					        $.toast("验证码已发送")
+					        this.codetext = '60秒后重试'
+					        let i = 60
+					        let interval = setInterval(function () {
+						        i --
+						        _this.codetext = i + '秒后重试'
+						        if(i == 0){
+							        clearInterval(interval)
+							        _this.codeButtonIsDisabled = false
+							        _this.codeButtonClass = ''
+							        _this.codetext = '获取验证码'
+						        }
+					        }, 1000)
+                        }
+                        else if(ret.errmsg === 'invalid account'){
+				        	$.toast('用户不存在')
+                        }
+			        })
+			        .error(function (err) {
+				        $.toast('出了点小问题，请重试')
+			        })
+	        },
+	        verifyCode: function () {
+		        $.ajax({
+			        url: '/user/verifycode',
+			        data: {
+				        code: this.code
+			        }
+		        })
+                .success(function (res) {
+                    console.log(res)
+                    if(res.errno != 0){
+                        $.toast('验证码错误，请重新输入')
+                    } else {
+                        window.location.href = "/user/reset"
+                    }
+                })
+                .error(function (err) {
+                    console.log(err)
+                    $.toast('出了点小问题，请重试')
+                })
+	        }
+        }
+    }).$mount('#content')
+</script>
+</body>
+</html>

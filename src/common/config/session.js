@@ -10,7 +10,7 @@ export default {
   timeout: 24 * 3600,
   cookie: { // cookie options
     length: 32,
-    httponly: true
+	httponly: true
   },
   adapter: {
     file: {

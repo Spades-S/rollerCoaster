@@ -73,31 +73,30 @@
         </div>
 
 
-        <nav class="bar bar-tab ">
-            <a class="tab-item active " href="# ">
-                <span class="icon iconfont icon-shouye left-negtivedot2"></span>
-                <span class="tab-label ">首页</span>
-            </a>
-            <a class="tab-item " href="# ">
-                <span class="icon iconfont icon-yikeapp15 left-negtivedot2"></span>
-                <span class="tab-label ">发现</span>
-
-            </a>
-            <a class="tab-item " href="# ">
-                <span class="icon iconfont icon-xiaozufill left-negtivedot2 "></span>
-                <span class="tab-label ">小组</span>
-            </a>
-            <a class="tab-item " href="# ">
-                <span class="icon iconfont icon-wode left-negtivedot2"></span>
-                <span class="tab-label ">我的</span>
-            </a>
-
-        </nav>
-
-
     </div>
 
-    <div class="page" id="search-page">
+
+    <nav class="bar bar-tab ">
+        <a class="tab-item active external" href="/index">
+            <span class="icon iconfont icon-shouye left-negtivedot2"></span>
+            <span class="tab-label ">首页</span>
+        </a>
+        <a class="tab-item external" href="#discovery">
+            <span class="icon iconfont icon-yikeapp15 left-negtivedot2"></span>
+            <span class="tab-label ">发现</span>
+        </a>
+        <a class="tab-item external" href="#group">
+            <span class="icon iconfont icon-xiaozufill left-negtivedot2 "></span>
+            <span class="tab-label ">小组</span>
+        </a>
+        <a class="tab-item external" href="/user">
+            <span class="icon iconfont icon-wode left-negtivedot2"></span>
+            <span class="tab-label ">我的</span>
+        </a>
+
+    </nav>
+
+    <div class="page no-tabbar" id="search-page">
 
         <div class="bar bar-header-secondary search-container">
             <a class="iconfont icon-arrow-left" id="back-btn">
@@ -119,7 +118,7 @@
                 <a href="#tab1" class="tab-link active button">过山车</a>
                 <a href="#tab2" class="tab-link button">小组</a>
                 <a href="#tab3" class="tab-link button">演出</a>
-                <a href="#tab4" class="tab-link button">黑暗骑士</a>
+                <a href="#tab4" class="tab-link button">黑暗乘骑</a>
                 <a href="#tab5" class="tab-link button">文章</a>
             </div>
             <div class="content-tab">
@@ -345,8 +344,8 @@
 
     </div>
 </div>
-<script type="text/javascript" src="/static/vue/vue.js"></script>
 <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript" src="/static/vue/vue.js"></script>
 <script src="/static/js/raty/jquery.raty.js"></script>
 <script type='text/javascript' src='/static/light7/js/light7.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
@@ -405,11 +404,15 @@
         }
     });
 
-
+    // switch inline pages
     $('#back-btn').on('click', () => {
         $('#index-page').addClass('page-current');
         $('#search-page').removeClass('page-current');
     })
+    /*$('#user').on('click', () => {
+    	$('.page').removeClass('page-current')
+        $('#user').addClass('page-current')
+    })*/
 
 
     function getSomeArticles(number, firstFlag) {
@@ -438,11 +441,8 @@
                 }
                 return;
             }
-
-
         })
     }
-
 
 </script>
 </body>

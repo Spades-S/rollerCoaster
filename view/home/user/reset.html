@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>重设密码</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+        .page{
+            background-color: #fff;
+        }
+        .bar{
+            height: 3rem;
+            background-color: #07518f;
+            border-bottom: none;
+            vertical-align: middle;
+        }
+        h1.title{
+            top: 0;
+            color: white;
+            line-height: 3rem;
+            letter-spacing: 5px;
+            border-image-width: 0;
+        }
+        .content{
+            padding-top: 1.8rem;
+            text-align: center;
+        }
+        .icon-arrow-left{
+            top: .9rem;
+        }
+        .bar-nav~.content{
+            top: 3rem;
+        }
+        .green{
+            color: #6EB732;
+        }
+        .item-input{
+            width: 80%;
+            margin: 0 auto;
+            position: relative;
+        }
+        input{
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid darkgray;
+            margin-bottom: 1.5rem;
+            padding: .1rem .5rem;
+            transition: all .2s;
+            font-size: .7rem;
+            line-height: 1.2rem;
+        }
+        input:focus{
+            border-bottom: 1px solid #6EB732;
+        }
+        .next{
+            width: 80%;
+            margin: 1rem auto;
+            margin-bottom: 0;
+            height: 1.8rem;
+            line-height: 1.8rem;
+            border: none;
+        }
+        .next:disabled{
+            border: 1px solid #c8c9cb;
+        }
+        .next:not(:disabled){
+            background-color: #6EB732;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <header class="bar bar-nav">
+        <a class="icon iconfont icon-arrow-left back "></a>
+        <h1 class="title">重设密码</h1>
+    </header>
+    <div class="content" id="content">
+        <div class="item-input">
+            <input type="password" class="nickname" @input="getPsd" placeholder="请输入密码" required="true">
+        </div>
+        <div class="item-input">
+            <input type="password" class="psd" @input="getPsdCopy" placeholder="重复密码" required="true">
+        </div>
+        <button :class="'next button green ' + button.class" :disabled="button.disabled" @click="submitInfo">下一步</button>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
+<script>
+	$.init();
+
+	var vm = new Vue({
+		el: '#content',
+		data: {
+			psd: '',
+            psdCopy: ''
+		},
+		methods: {
+			getPsd: function(e) {
+				this.psd = e.currentTarget.value
+			},
+			getPsdCopy: function (e) {
+				this.psdCopy = e.currentTarget.value
+			},
+			submitInfo: function () {
+				let psd = this.psd, psdCopy = this.psdCopy
+				if(!(/^[\w\/\!\@\#\$\%\^\&]{5,14}$/).test(psd)){
+					$('.nickname').trigger('focus')
+					return $.toast('密码只能包含数字、字母、下划线和/!@#$%^&等字符')
+				}
+				if(psd !== psdCopy){
+					return $.toast('两次输入的密码不一致')
+                }
+				$.ajax({
+					url: '/user/resetpassword',
+					method: 'POST',
+					data: {
+						psd: psd
+					}
+				}).success(function (res) {
+					console.log(res)
+					if(res.errno === 0){
+						$.toast('修改成功')
+						setTimeout(function () {
+							window.location.href = '/user/login'
+						}, 1000)
+                    } else {
+						$.toast('修改失败，请重试')
+                    }
+				}).error(function () {
+					$.toast('出了点问题，请重试')
+				})
+			}
+		},
+		computed: {
+			button: function () {
+				if(this.psd&&this.psdCopy){
+					return {
+						class: '',
+						disabled: false
+					}
+				} else {
+					return  {
+						class: 'disabled',
+						disabled: true
+					}
+				}
+			}
+		}
+	})
+</script>
+</body>
+</html>

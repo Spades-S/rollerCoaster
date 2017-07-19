@@ -1,24 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>登录</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
+    <link rel="stylesheet" href="/static/css/articleDetail.css">
+    <link rel="stylesheet" href="/static/share/css/share.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <style>
+        *{
+            -webkit-font-smoothing: antialiased;
+        }
+        .page{
+             background-color: #fff;
+        }
+        .bar.bar-nav{
+            background-color: transparent;
+            border: none;
+        }
+        .content{
+            padding-top: 1.8rem;
+            text-align: center;
+        }
+        .green, .green:before{
+            color: #6EB732;
+        }
+        h1{
+            text-align: center;
+        }
+        .input-area{
+            width: 80%;
+            margin: 0 auto;
+        }
+        input{
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid darkgray;
+            margin-bottom: 1.5rem;
+            padding: .1rem .5rem;
+            transition: all .2s;
+        }
+        input:focus{
+            border-bottom: 1px solid #6EB732;
+        }
+        .login{
+            width: 80%;
+            margin: 1rem auto;
+            margin-bottom: 0;
+            height: 1.8rem;
+            line-height: 1.8rem;
+            border: none;
+        }
+        .login:not(:disabled){
+            background-color: #6EB732;
+            color: #fff;
+        }
+        .add-bottom{
+            padding: .2rem 0;
+            display: table;
+            margin: .4rem auto;
+            line-height: .6rem;
+        }
+        .inline{
+            display: table-cell;
+            font-size: .6rem;
+            padding: 0 .3rem;
+        }
+        .reg{
+            border-right: 1px solid lightgray;
+        }
+        .rt-psd{
+            border-left: 1px solid lightgray;
+        }
+        .rt-psd a{
+            color: #B3B5B7;
+        }
+    </style>
 </head>
 <body>
-<header class="bar bar-nav">
-    <a class=" iconfont icon-arrow-left back ">
-    </a>
-    <h1 class='title'>登录</h1>
-</header>
-<div>
-    <div class="">
-        <input type="text" class="" placeholder="请输入您的用户名">
+<div class="page page-current">
+    <header class="bar bar-nav">
+        <a class=" iconfont icon-arrow-left back green" href="javascript:history.go(-1)">
+        </a>
+        <!--<h1 class='title'>登录</h1>-->
+    </header>
+    <div class="content" id="content">
+        <h1 class="green">欢迎来到欢乐冶</h1>
+        <div class="input-area">
+            <input type="text" class="account" placeholder="用户名" required="true" @input="getAccount">
+            <input type="password" class="password" placeholder="密码" required="true" @input="getPsd">
+        </div>
+        <button :class="'button login ' + login.class" :disabled="login.disabled" @click="login">登录</button>
+        <div class="add-bottom">
+            <a class="reg green inline" href="register">注册欢乐冶</a>
+            <div class="rt-psd inline"><a href="/user/verify">忘记密码？</a></div>
+        </div>
     </div>
-    <div class="">
-        <input type="password" class="" placeholder="请输入您的密码">
-    </div>
-    <div class="">登录</div>
-    <div>忘记密码 && 新用户注册</div>
 </div>
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+
+<script>
+    $.config = {
+    	router: false
+    }
+</script>
+
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="/static/share/js/jquery.share.min.js"></script>
+<script type="text/javascript" src="/static/js/clipboard.min.js"></script>
+<script>
+    $.init();
+
+    new Vue({
+        data() {
+        	return {
+        		account: '',
+        		psd: ''
+            }
+        },
+        methods: {
+        	getAccount: function (e) {
+        		this.account = e.currentTarget.value
+            },
+            getPsd: function(e) {
+        		this.psd = e.currentTarget.value
+            },
+            login: function () {
+                $.ajax({
+                    url: '/user/logintosystem',
+                    method: 'POST',
+                    data: {
+                        account: this.account,
+                        psd: this.psd
+                    }
+                }).success(function (res) {
+                	if(res.errno === 0){
+		                $.toast('登录成功')
+		                window.location.href = '/user/index'
+                    } else {
+		                $.toast('登录失败')
+                    }
+                }).error(function (error) {
+                    $.toast('登录失败')
+                })
+            }
+        },
+        computed: {
+	        login: function () {
+                if(this.psd&&this.account){
+                	return {
+                		class: '',
+                        disabled: false
+                    }
+                } else {
+                	return {
+                		class: 'disabled',
+                        disabled: true
+                    }
+                }
+	        }
+        }
+    }).$mount('#content')
+
+</script>
 </body>
 </html>
