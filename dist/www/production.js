@@ -12,10 +12,10 @@ var instance = new thinkjs({
   RESOURCE_PATH: __dirname,
   env: 'production'
 });
-// instance.compile({
-//     log: true,
-//     presets: [],
-//     plugins: []
-// });
+instance.compile({
+  log: true,
+  presets: [],
+  plugins: []
+});
 instance.run(true);
 //# sourceMappingURL=production.js.map

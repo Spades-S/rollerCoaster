@@ -451,7 +451,7 @@ var _class = function (_think$model$base) {
             return resetPassword;
         }()
     }, {
-        key: 'isExist',
+        key: 'isPhoneNumExist',
         value: function () {
             var _ref11 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee11(account) {
                 var res;
@@ -483,11 +483,50 @@ var _class = function (_think$model$base) {
                 }, _callee11, this);
             }));
 
-            function isExist(_x18) {
+            function isPhoneNumExist(_x18) {
                 return _ref11.apply(this, arguments);
             }
 
-            return isExist;
+            return isPhoneNumExist;
+        }()
+    }, {
+        key: 'isNickNameExist',
+        value: function () {
+            var _ref12 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee12(nickName) {
+                var res;
+                return _regenerator2.default.wrap(function _callee12$(_context12) {
+                    while (1) {
+                        switch (_context12.prev = _context12.next) {
+                            case 0:
+                                _context12.next = 2;
+                                return this.where({ nickname: nickName }).find();
+
+                            case 2:
+                                res = _context12.sent;
+
+                                if (!think.isEmpty(res)) {
+                                    _context12.next = 7;
+                                    break;
+                                }
+
+                                return _context12.abrupt('return', false);
+
+                            case 7:
+                                return _context12.abrupt('return', true);
+
+                            case 8:
+                            case 'end':
+                                return _context12.stop();
+                        }
+                    }
+                }, _callee12, this);
+            }));
+
+            function isNickNameExist(_x19) {
+                return _ref12.apply(this, arguments);
+            }
+
+            return isNickNameExist;
         }()
     }]);
     return _class;
