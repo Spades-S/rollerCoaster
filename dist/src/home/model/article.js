@@ -61,20 +61,43 @@ var Article = function (_think$model$base) {
     }, {
         key: 'getPerPageItems',
         value: function () {
-            var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(number, currentPage) {
+            var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(number, currentPage, invisibleList) {
                 var data;
                 return _regenerator2.default.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
-                                _context.next = 2;
-                                return this.order('updateTime DESC').where({ type: 0 }).page(currentPage, number).countSelect();
+                                data = void 0;
 
-                            case 2:
-                                data = _context.sent;
-                                return _context.abrupt('return', data);
+                                if (!(invisibleList.length === 0)) {
+                                    _context.next = 7;
+                                    break;
+                                }
+
+                                _context.next = 4;
+                                return this.order('updateTime DESC').where({
+                                    type: 0
+                                }).page(currentPage, number).countSelect();
 
                             case 4:
+                                data = _context.sent;
+                                _context.next = 10;
+                                break;
+
+                            case 7:
+                                _context.next = 9;
+                                return this.order('updateTime DESC').where({
+                                    type: 0,
+                                    id: ['NOTIN', invisibleList]
+                                }).page(currentPage, number).countSelect();
+
+                            case 9:
+                                data = _context.sent;
+
+                            case 10:
+                                return _context.abrupt('return', data);
+
+                            case 11:
                             case 'end':
                                 return _context.stop();
                         }
@@ -82,7 +105,7 @@ var Article = function (_think$model$base) {
                 }, _callee, this);
             }));
 
-            function getPerPageItems(_x, _x2) {
+            function getPerPageItems(_x, _x2, _x3) {
                 return _ref.apply(this, arguments);
             }
 
@@ -112,7 +135,7 @@ var Article = function (_think$model$base) {
                 }, _callee2, this);
             }));
 
-            function getArticleItemByid(_x3) {
+            function getArticleItemByid(_x4) {
                 return _ref2.apply(this, arguments);
             }
 
@@ -142,7 +165,7 @@ var Article = function (_think$model$base) {
                 }, _callee3, this);
             }));
 
-            function getColByArticleId(_x4) {
+            function getColByArticleId(_x5) {
                 return _ref3.apply(this, arguments);
             }
 
@@ -176,7 +199,7 @@ var Article = function (_think$model$base) {
                 }, _callee4, this);
             }));
 
-            function getRelativeArticlesByCol(_x5, _x6) {
+            function getRelativeArticlesByCol(_x6, _x7) {
                 return _ref4.apply(this, arguments);
             }
 
@@ -206,7 +229,7 @@ var Article = function (_think$model$base) {
                 }, _callee5, this);
             }));
 
-            function updateLikesByArticleId(_x7, _x8) {
+            function updateLikesByArticleId(_x8, _x9) {
                 return _ref5.apply(this, arguments);
             }
 

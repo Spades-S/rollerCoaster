@@ -5,8 +5,18 @@ class Article extends think.model.base {
         this.tableName = 'article';
     }
 
-    async getPerPageItems(number, currentPage) {
-        let data = await this.order('updateTime DESC').where({type: 0}).page(currentPage, number).countSelect();
+    async getPerPageItems(number, currentPage, invisibleList) {
+        let data;
+        if (invisibleList.length === 0) {
+            data = await this.order('updateTime DESC').where({
+                type: 0,
+            }).page(currentPage, number).countSelect();
+        } else {
+            data = await this.order('updateTime DESC').where({
+                type: 0,
+                id: ['NOTIN', invisibleList],
+            }).page(currentPage, number).countSelect();
+        }
         return data;
     }
 
