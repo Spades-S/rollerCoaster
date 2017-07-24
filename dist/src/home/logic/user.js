@@ -4,7 +4,7 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+    value: true
 });
 
 var _regenerator = require('babel-runtime/regenerator');
@@ -38,311 +38,326 @@ var _inherits3 = _interopRequireDefault(_inherits2);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _class = function (_think$logic$base) {
-	(0, _inherits3.default)(_class, _think$logic$base);
+    (0, _inherits3.default)(_class, _think$logic$base);
 
-	function _class() {
-		(0, _classCallCheck3.default)(this, _class);
-		return (0, _possibleConstructorReturn3.default)(this, (_class.__proto__ || (0, _getPrototypeOf2.default)(_class)).apply(this, arguments));
-	}
+    function _class() {
+        (0, _classCallCheck3.default)(this, _class);
+        return (0, _possibleConstructorReturn3.default)(this, (_class.__proto__ || (0, _getPrototypeOf2.default)(_class)).apply(this, arguments));
+    }
 
-	(0, _createClass3.default)(_class, [{
-		key: 'indexAction',
-		value: function indexAction() {}
-	}, {
-		key: 'getvfcodeAction',
-		value: function () {
-			var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
-				var userModel, account, isExist;
-				return _regenerator2.default.wrap(function _callee$(_context) {
-					while (1) {
-						switch (_context.prev = _context.next) {
-							case 0:
-								if (!/verify/.test(this.header('Referer'))) {
-									_context.next = 13;
-									break;
-								}
+    (0, _createClass3.default)(_class, [{
+        key: 'indexAction',
+        value: function indexAction() {}
+    }, {
+        key: 'getvfcodeAction',
+        value: function () {
+            var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
+                var userModel, account, isExist;
+                return _regenerator2.default.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                userModel = this.model('user');
+                                account = this.post('account');
+                                _context.next = 4;
+                                return userModel.isPhoneNumExist(account);
 
-								userModel = this.model('user');
-								account = this.post('account');
-								_context.next = 5;
-								return userModel.isExist(account);
+                            case 4:
+                                isExist = _context.sent;
 
-							case 5:
-								isExist = _context.sent;
+                                if (!/verify/.test(this.header('Referer'))) {
+                                    _context.next = 14;
+                                    break;
+                                }
 
-								console.log(isExist);
+                                if (isExist) {
+                                    _context.next = 10;
+                                    break;
+                                }
 
-								if (isExist) {
-									_context.next = 11;
-									break;
-								}
+                                return _context.abrupt('return', this.fail('invalid account'));
 
-								return _context.abrupt('return', this.fail('invalid account'));
+                            case 10:
+                                _context.next = 12;
+                                return this.session('reset', true);
 
-							case 11:
-								_context.next = 13;
-								return this.session('reset', true);
+                            case 12:
+                                _context.next = 17;
+                                break;
 
-							case 13:
-							case 'end':
-								return _context.stop();
-						}
-					}
-				}, _callee, this);
-			}));
+                            case 14:
+                                if (!/register/.test(this.header('Referer'))) {
+                                    _context.next = 17;
+                                    break;
+                                }
 
-			function getvfcodeAction() {
-				return _ref.apply(this, arguments);
-			}
+                                if (!isExist) {
+                                    _context.next = 17;
+                                    break;
+                                }
 
-			return getvfcodeAction;
-		}()
-	}, {
-		key: 'verifycodeAction',
-		value: function () {
-			var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
-				var sessionCode;
-				return _regenerator2.default.wrap(function _callee2$(_context2) {
-					while (1) {
-						switch (_context2.prev = _context2.next) {
-							case 0:
-								this.allowMethods = 'get';
-								_context2.next = 3;
-								return this.session('code');
+                                return _context.abrupt('return', this.fail(1000, 'phone number exists!'));
 
-							case 3:
-								sessionCode = _context2.sent;
+                            case 17:
+                            case 'end':
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, this);
+            }));
 
-								if (!(Number(this.get('code')) !== Number(sessionCode))) {
-									_context2.next = 6;
-									break;
-								}
+            function getvfcodeAction() {
+                return _ref.apply(this, arguments);
+            }
 
-								return _context2.abrupt('return', this.fail('validate error', this.errors()));
+            return getvfcodeAction;
+        }()
+    }, {
+        key: 'verifycodeAction',
+        value: function () {
+            var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
+                var sessionCode;
+                return _regenerator2.default.wrap(function _callee2$(_context2) {
+                    while (1) {
+                        switch (_context2.prev = _context2.next) {
+                            case 0:
+                                this.allowMethods = 'get';
+                                _context2.next = 3;
+                                return this.session('code');
 
-							case 6:
-							case 'end':
-								return _context2.stop();
-						}
-					}
-				}, _callee2, this);
-			}));
+                            case 3:
+                                sessionCode = _context2.sent;
 
-			function verifycodeAction() {
-				return _ref2.apply(this, arguments);
-			}
+                                if (!(Number(this.get('code')) !== Number(sessionCode))) {
+                                    _context2.next = 6;
+                                    break;
+                                }
 
-			return verifycodeAction;
-		}()
-	}, {
-		key: 'passwordAction',
-		value: function () {
-			var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3() {
-				var code;
-				return _regenerator2.default.wrap(function _callee3$(_context3) {
-					while (1) {
-						switch (_context3.prev = _context3.next) {
-							case 0:
-								_context3.next = 2;
-								return this.session('code');
+                                return _context2.abrupt('return', this.fail('validate error', this.errors()));
 
-							case 2:
-								code = _context3.sent;
+                            case 6:
+                            case 'end':
+                                return _context2.stop();
+                        }
+                    }
+                }, _callee2, this);
+            }));
 
-								console.log(code);
+            function verifycodeAction() {
+                return _ref2.apply(this, arguments);
+            }
 
-								if (code) {
-									_context3.next = 6;
-									break;
-								}
+            return verifycodeAction;
+        }()
+    }, {
+        key: 'passwordAction',
+        value: function () {
+            var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3() {
+                var code;
+                return _regenerator2.default.wrap(function _callee3$(_context3) {
+                    while (1) {
+                        switch (_context3.prev = _context3.next) {
+                            case 0:
+                                _context3.next = 2;
+                                return this.session('code');
 
-								return _context3.abrupt('return', this.redirect('/user/index'));
+                            case 2:
+                                code = _context3.sent;
 
-							case 6:
-							case 'end':
-								return _context3.stop();
-						}
-					}
-				}, _callee3, this);
-			}));
+                                console.log(code);
 
-			function passwordAction() {
-				return _ref3.apply(this, arguments);
-			}
+                                if (code) {
+                                    _context3.next = 6;
+                                    break;
+                                }
 
-			return passwordAction;
-		}()
-	}, {
-		key: 'registerAction',
-		value: function () {
-			var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4() {
-				return _regenerator2.default.wrap(function _callee4$(_context4) {
-					while (1) {
-						switch (_context4.prev = _context4.next) {
-							case 0:
-								if (!this.cookie('uid')) {
-									_context4.next = 2;
-									break;
-								}
+                                return _context3.abrupt('return', this.redirect('/user/index'));
 
-								return _context4.abrupt('return', this.redirect('/user/index'));
+                            case 6:
+                            case 'end':
+                                return _context3.stop();
+                        }
+                    }
+                }, _callee3, this);
+            }));
 
-							case 2:
-								this.allowMethods = 'get,post';
+            function passwordAction() {
+                return _ref3.apply(this, arguments);
+            }
 
-							case 3:
-							case 'end':
-								return _context4.stop();
-						}
-					}
-				}, _callee4, this);
-			}));
+            return passwordAction;
+        }()
+    }, {
+        key: 'registerAction',
+        value: function () {
+            var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4() {
+                return _regenerator2.default.wrap(function _callee4$(_context4) {
+                    while (1) {
+                        switch (_context4.prev = _context4.next) {
+                            case 0:
+                                if (!this.cookie('uid')) {
+                                    _context4.next = 2;
+                                    break;
+                                }
 
-			function registerAction() {
-				return _ref4.apply(this, arguments);
-			}
+                                return _context4.abrupt('return', this.redirect('/user/index'));
 
-			return registerAction;
-		}()
-	}, {
-		key: 'loginAction',
-		value: function () {
-			var _ref5 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5() {
-				return _regenerator2.default.wrap(function _callee5$(_context5) {
-					while (1) {
-						switch (_context5.prev = _context5.next) {
-							case 0:
-								this.allowMethods = 'get';
+                            case 2:
+                                this.allowMethods = 'get,post';
 
-							case 1:
-							case 'end':
-								return _context5.stop();
-						}
-					}
-				}, _callee5, this);
-			}));
+                            case 3:
+                            case 'end':
+                                return _context4.stop();
+                        }
+                    }
+                }, _callee4, this);
+            }));
 
-			function loginAction() {
-				return _ref5.apply(this, arguments);
-			}
+            function registerAction() {
+                return _ref4.apply(this, arguments);
+            }
 
-			return loginAction;
-		}()
-	}, {
-		key: 'loginintosystemAction',
-		value: function () {
-			var _ref6 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6() {
-				return _regenerator2.default.wrap(function _callee6$(_context6) {
-					while (1) {
-						switch (_context6.prev = _context6.next) {
-							case 0:
-								this.allowMethods = 'post';
+            return registerAction;
+        }()
+    }, {
+        key: 'loginAction',
+        value: function () {
+            var _ref5 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5() {
+                return _regenerator2.default.wrap(function _callee5$(_context5) {
+                    while (1) {
+                        switch (_context5.prev = _context5.next) {
+                            case 0:
+                                this.allowMethods = 'get';
 
-							case 1:
-							case 'end':
-								return _context6.stop();
-						}
-					}
-				}, _callee6, this);
-			}));
+                            case 1:
+                            case 'end':
+                                return _context5.stop();
+                        }
+                    }
+                }, _callee5, this);
+            }));
 
-			function loginintosystemAction() {
-				return _ref6.apply(this, arguments);
-			}
+            function loginAction() {
+                return _ref5.apply(this, arguments);
+            }
 
-			return loginintosystemAction;
-		}()
-	}, {
-		key: 'verifyAction',
-		value: function () {
-			var _ref7 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7() {
-				return _regenerator2.default.wrap(function _callee7$(_context7) {
-					while (1) {
-						switch (_context7.prev = _context7.next) {
-							case 0:
-								if (!this.cookie('uid')) {
-									_context7.next = 2;
-									break;
-								}
+            return loginAction;
+        }()
+    }, {
+        key: 'loginintosystemAction',
+        value: function () {
+            var _ref6 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6() {
+                return _regenerator2.default.wrap(function _callee6$(_context6) {
+                    while (1) {
+                        switch (_context6.prev = _context6.next) {
+                            case 0:
+                                this.allowMethods = 'post';
 
-								return _context7.abrupt('return', this.redirect('/user/index'));
+                            case 1:
+                            case 'end':
+                                return _context6.stop();
+                        }
+                    }
+                }, _callee6, this);
+            }));
 
-							case 2:
-							case 'end':
-								return _context7.stop();
-						}
-					}
-				}, _callee7, this);
-			}));
+            function loginintosystemAction() {
+                return _ref6.apply(this, arguments);
+            }
 
-			function verifyAction() {
-				return _ref7.apply(this, arguments);
-			}
+            return loginintosystemAction;
+        }()
+    }, {
+        key: 'verifyAction',
+        value: function () {
+            var _ref7 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7() {
+                return _regenerator2.default.wrap(function _callee7$(_context7) {
+                    while (1) {
+                        switch (_context7.prev = _context7.next) {
+                            case 0:
+                                if (!this.cookie('uid')) {
+                                    _context7.next = 2;
+                                    break;
+                                }
 
-			return verifyAction;
-		}()
-	}, {
-		key: 'resetAction',
-		value: function () {
-			var _ref8 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8() {
-				var reset;
-				return _regenerator2.default.wrap(function _callee8$(_context8) {
-					while (1) {
-						switch (_context8.prev = _context8.next) {
-							case 0:
-								_context8.next = 2;
-								return this.session('reset');
+                                return _context7.abrupt('return', this.redirect('/user/index'));
 
-							case 2:
-								reset = _context8.sent;
+                            case 2:
+                            case 'end':
+                                return _context7.stop();
+                        }
+                    }
+                }, _callee7, this);
+            }));
 
-								if (reset) {
-									_context8.next = 5;
-									break;
-								}
+            function verifyAction() {
+                return _ref7.apply(this, arguments);
+            }
 
-								return _context8.abrupt('return', this.redirect('/user/index'));
+            return verifyAction;
+        }()
+    }, {
+        key: 'resetAction',
+        value: function () {
+            var _ref8 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8() {
+                var reset;
+                return _regenerator2.default.wrap(function _callee8$(_context8) {
+                    while (1) {
+                        switch (_context8.prev = _context8.next) {
+                            case 0:
+                                _context8.next = 2;
+                                return this.session('reset');
 
-							case 5:
-							case 'end':
-								return _context8.stop();
-						}
-					}
-				}, _callee8, this);
-			}));
+                            case 2:
+                                reset = _context8.sent;
 
-			function resetAction() {
-				return _ref8.apply(this, arguments);
-			}
+                                if (reset) {
+                                    _context8.next = 5;
+                                    break;
+                                }
 
-			return resetAction;
-		}()
-	}, {
-		key: 'resetpasswordAction',
-		value: function () {
-			var _ref9 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee9() {
-				return _regenerator2.default.wrap(function _callee9$(_context9) {
-					while (1) {
-						switch (_context9.prev = _context9.next) {
-							case 0:
-								this.allowMethods = 'post';
+                                return _context8.abrupt('return', this.redirect('/user/index'));
 
-							case 1:
-							case 'end':
-								return _context9.stop();
-						}
-					}
-				}, _callee9, this);
-			}));
+                            case 5:
+                            case 'end':
+                                return _context8.stop();
+                        }
+                    }
+                }, _callee8, this);
+            }));
 
-			function resetpasswordAction() {
-				return _ref9.apply(this, arguments);
-			}
+            function resetAction() {
+                return _ref8.apply(this, arguments);
+            }
 
-			return resetpasswordAction;
-		}()
-	}]);
-	return _class;
+            return resetAction;
+        }()
+    }, {
+        key: 'resetpasswordAction',
+        value: function () {
+            var _ref9 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee9() {
+                return _regenerator2.default.wrap(function _callee9$(_context9) {
+                    while (1) {
+                        switch (_context9.prev = _context9.next) {
+                            case 0:
+                                this.allowMethods = 'post';
+
+                            case 1:
+                            case 'end':
+                                return _context9.stop();
+                        }
+                    }
+                }, _callee9, this);
+            }));
+
+            function resetpasswordAction() {
+                return _ref9.apply(this, arguments);
+            }
+
+            return resetpasswordAction;
+        }()
+    }]);
+    return _class;
 }(think.logic.base);
 
 exports.default = _class;

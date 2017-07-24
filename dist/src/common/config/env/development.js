@@ -18,7 +18,8 @@ exports.default = {
             },
             mongo: {}
         }
-    }
+    },
+    avatarBasePath: '/Users/spades/Documents/PROJECT/roller coaster/rollerCoaster/www/static/img'
 
 };
 //# sourceMappingURL=development.js.map

@@ -328,7 +328,7 @@ var _class = function (_think$model$base) {
                         switch (_context7.prev = _context7.next) {
                             case 0:
                                 _context7.next = 2;
-                                return this.field('nickname, avatar').where({ uid: uid }).find();
+                                return this.field('id,nickname, avatar').where({ uid: uid }).find();
 
                             case 2:
                                 userInfo = _context7.sent;
@@ -499,7 +499,7 @@ var _class = function (_think$model$base) {
                         switch (_context12.prev = _context12.next) {
                             case 0:
                                 _context12.next = 2;
-                                return this.where({ nickname: nickName }).find();
+                                return this.where({ nickname: account }).find();
 
                             case 2:
                                 res = _context12.sent;

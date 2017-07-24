@@ -36,6 +36,10 @@ var _base2 = require('./base.js');
 
 var _base3 = _interopRequireDefault(_base2);
 
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _class = function (_base) {
@@ -84,62 +88,46 @@ var _class = function (_base) {
         key: 'getvfcodeAction',
         value: function () {
             var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
-                var account, userModel, accountExist, code, sessionCode;
+                var account, code, sessionCode;
                 return _regenerator2.default.wrap(function _callee2$(_context2) {
                     while (1) {
                         switch (_context2.prev = _context2.next) {
                             case 0:
                                 _context2.prev = 0;
                                 account = this.post('account');
-                                userModel = this.model('user');
-                                _context2.next = 5;
-                                return userModel.isPhoneNumExist(account);
-
-                            case 5:
-                                accountExist = _context2.sent;
-
-                                if (!accountExist) {
-                                    _context2.next = 8;
-                                    break;
-                                }
-
-                                return _context2.abrupt('return', this.fail(1000, 'phone number exists!'));
-
-                            case 8:
                                 code = generateVerificationCode();
-
                                 // let userModel = this.model('user')
                                 // let send_res = await userModel.sendMessage(phone, code)
 
-                                _context2.next = 11;
+                                _context2.next = 5;
                                 return this.session('account', account);
 
-                            case 11:
-                                _context2.next = 13;
+                            case 5:
+                                _context2.next = 7;
                                 return this.session('code', Number(code));
 
-                            case 13:
-                                _context2.next = 15;
+                            case 7:
+                                _context2.next = 9;
                                 return this.session('code');
 
-                            case 15:
+                            case 9:
                                 sessionCode = _context2.sent;
 
                                 console.log(sessionCode);
 
                                 return _context2.abrupt('return', this.success(true));
 
-                            case 20:
-                                _context2.prev = 20;
+                            case 14:
+                                _context2.prev = 14;
                                 _context2.t0 = _context2['catch'](0);
                                 return _context2.abrupt('return', this.fail(_context2.t0, this.errors()));
 
-                            case 23:
+                            case 17:
                             case 'end':
                                 return _context2.stop();
                         }
                     }
-                }, _callee2, this, [[0, 20]]);
+                }, _callee2, this, [[0, 14]]);
             }));
 
             function getvfcodeAction() {
@@ -506,14 +494,30 @@ var _class = function (_base) {
         key: 'updateuserdetailAction',
         value: function () {
             var _ref12 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee12() {
-                var userDetail, uid, userModel, updateRes;
+                var avatarCropped, avatarBase64, avatarBinary, userModel, uid, userRowData, basePath, detailPath, userDetail, updateRes;
                 return _regenerator2.default.wrap(function _callee12$(_context12) {
                     while (1) {
                         switch (_context12.prev = _context12.next) {
                             case 0:
+                                avatarCropped = this.post('avatarCropped');
+                                avatarBase64 = avatarCropped.split(',')[1];
+                                avatarBinary = new Buffer(avatarBase64, 'base64').toString('binary');
+                                userModel = this.model('user');
+                                uid = this.cookie('uid');
+                                _context12.next = 7;
+                                return userModel.getUserInfo(uid);
+
+                            case 7:
+                                userRowData = _context12.sent;
+                                basePath = this.config('avatarBasePath');
+                                detailPath = '/avatar/' + userRowData.id + '.png';
+
+                                _fs2.default.writeFileSync(basePath + detailPath, avatarBinary, 'binary', function (err) {
+                                    console.log(err);
+                                });
                                 userDetail = {
                                     nickname: this.post('nickname'),
-                                    avatar: this.post('avatar'),
+                                    avatar: detailPath,
                                     gender: this.post('gender'),
                                     birth: this.post('birth'),
                                     mail: this.post('mail'),
@@ -522,25 +526,24 @@ var _class = function (_base) {
                                 };
 
                                 console.log(userDetail);
-                                uid = this.cookie('uid');
-                                userModel = this.model('user');
-                                _context12.next = 6;
+
+                                _context12.next = 15;
                                 return userModel.updateUserDetail(userDetail, uid);
 
-                            case 6:
+                            case 15:
                                 updateRes = _context12.sent;
 
                                 if (think.isEmpty(updateRes)) {
-                                    _context12.next = 11;
+                                    _context12.next = 20;
                                     break;
                                 }
 
                                 return _context12.abrupt('return', this.success('successfully update'));
 
-                            case 11:
+                            case 20:
                                 return _context12.abrupt('return', this.fail('update failed'));
 
-                            case 12:
+                            case 21:
                             case 'end':
                                 return _context12.stop();
                         }

@@ -18,7 +18,8 @@ exports.default = {
             },
             mongo: {}
         }
-    }
+    },
+    avatarBasePath: '/opt/rollerCoaster/www/static/img'
 
 };
 //# sourceMappingURL=production.js.map

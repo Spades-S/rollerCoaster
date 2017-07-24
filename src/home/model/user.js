@@ -84,7 +84,7 @@ export default class extends think.model.base {
     }
 
     async getUserInfo(uid) {
-        let userInfo = await this.field('nickname, avatar').where({uid: uid}).find()
+        let userInfo = await this.field('id,nickname, avatar').where({uid: uid}).find()
         return userInfo
     }
 
@@ -126,7 +126,7 @@ export default class extends think.model.base {
         }
     }
     async isNickNameExist(nickName){
-        let res = await this.where({nickname: nickName}).find()
+        let res = await this.where({nickname: account}).find()
 
         if (think.isEmpty(res)) {
 

@@ -8,8 +8,10 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-
+    <meta name="mobile-web-app-status-bar-style" content="black">
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
     <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/css/index.css">
@@ -347,12 +349,19 @@
 <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
 <script type="text/javascript" src="/static/vue/vue.js"></script>
 <script src="/static/js/raty/jquery.raty.js"></script>
-<script type='text/javascript' src='/static/light7/js/light7.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 
 <script type="text/javascript ">
     $.init();
     $.fn.raty.defaults.path = '/static/js/raty/img';
+    //    window.onload = function(){
+    //        $(window).css('height', screen.height);
+    //        alert($(window).height());
+    //        alert(screen.height);
+    //    }
+
+
     var $vm = new Vue({
         delimiters: ['{$', '$}'],
         el: '#article-list',
@@ -368,7 +377,7 @@
             getClass: function (id, list) {
                 if (list.indexOf(id) < 0) {
                     return "article-item";
-                }else{
+                } else {
                     return "article-item readed";
                 }
             }
@@ -459,6 +468,7 @@
             }
         })
     }
+
 
 </script>
 </body>

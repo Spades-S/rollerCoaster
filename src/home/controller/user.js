@@ -1,5 +1,5 @@
 import base from './base.js';
-
+import fs from 'fs';
 export default class extends base {
     indexAction() {
         if (checkLogin(this)) {
@@ -18,13 +18,7 @@ export default class extends base {
         try {
 
             let account = this.post('account')
-            let userModel = this.model('user');
-            let accountExist = await userModel.isPhoneNumExist(account);
-            if (accountExist) {
-                return this.fail(1000, 'phone number exists!')
-            }
             let code = generateVerificationCode();
-
             // let userModel = this.model('user')
             // let send_res = await userModel.sendMessage(phone, code)
 
@@ -62,8 +56,8 @@ export default class extends base {
                 psd = this.post('psd')
             let userModel = this.model('user')
             let nicknameExist = await userModel.isNickNameExist(nickname);
-            if(nicknameExist){
-                return this.fail(1000,'nickname has already existed!');
+            if (nicknameExist) {
+                return this.fail(1000, 'nickname has already existed!');
             }
 
             let ck = generateUid()
@@ -145,9 +139,20 @@ export default class extends base {
     }
 
     async updateuserdetailAction() {
+        let avatarCropped = this.post('avatarCropped');
+        let avatarBase64 = avatarCropped.split(',')[1];
+        let avatarBinary = new Buffer(avatarBase64, 'base64').toString('binary');
+        let userModel = this.model('user');
+        let uid = this.cookie('uid')
+        let userRowData = await userModel.getUserInfo(uid);
+        let basePath = this.config('avatarBasePath');
+        let detailPath = '/avatar/'+userRowData.id+'.png';
+        fs.writeFileSync(basePath+detailPath, avatarBinary,'binary',function(err){
+            console.log(err);
+        });
         let userDetail = {
             nickname: this.post('nickname'),
-            avatar: this.post('avatar'),
+            avatar: detailPath,
             gender: this.post('gender'),
             birth: this.post('birth'),
             mail: this.post('mail'),
@@ -155,8 +160,8 @@ export default class extends base {
             city: this.post('city')
         }
         console.log(userDetail)
-        let uid = this.cookie('uid')
-        let userModel = this.model('user')
+
+
         let updateRes = await userModel.updateUserDetail(userDetail, uid)
         if (!think.isEmpty(updateRes)) {
             return this.success('successfully update')

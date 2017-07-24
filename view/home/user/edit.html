@@ -11,26 +11,53 @@
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
     <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/iconfont/iconfont.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/2.3.4/cropper.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/2.3.4/cropper.css"/>
     <style>
         * {
             box-sizing: border-box;
             -webkit-font-smoothing: antialiased;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
         }
-        .page{
+
+        ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+            color: #A2A2A2;
+            font-size: .7rem;
+        }
+
+        ::-moz-placeholder { /* Firefox 19+ */
+            color: #A2A2A2;
+            font-size: .7rem;
+        }
+
+        :-ms-input-placeholder { /* IE 10+ */
+            color: #A2A2A2;
+            font-size: .7rem;
+        }
+
+        :-moz-placeholder { /* Firefox 18- */
+            color: #A2A2A2;
+            font-size: .7rem;
+        }
+
+        .page {
             background-color: #f9f9f9;
         }
-        .bar{
+
+        .bar {
             height: 3rem;
             background-color: #07518f;
             border-bottom: none;
         }
-        h1.title{
+
+        h1.title {
             color: white;
             line-height: 3rem;
             letter-spacing: 5px;
             border-image-width: 0;
         }
+
         .icon-arrow-left {
             display: inline-block;
             width: 0.9rem;
@@ -39,50 +66,59 @@
             top: 0.75rem;
             z-index: 30;
         }
-        .bar-nav~.content{
+
+        .bar-nav ~ .content {
             top: 3rem;
             padding-top: 1rem;
             overflow-x: hidden;
         }
-        .save{
+
+        .save {
             font-size: .8rem;
             position: absolute;
             line-height: 3rem;
             right: 1rem;
             color: #fff;
         }
-        .edit-avatar, .edit-avatar img, .img-input{
+
+        .edit-avatar, .edit-avatar img, .img-input {
             width: 2.5rem;
             height: 2.5rem;
             border-radius: 50%;
             position: relative;
         }
-        .edit-row{
+
+        .edit-row {
             padding: .5rem 1rem;
             background-color: #fff;
             border-bottom: 1px solid #f9f9f9;
         }
-        .edit-title{
+
+        .edit-title {
             font-size: .8rem;
             padding-left: .2rem;
             box-sizing: border-box;
         }
-        .edit-info{
+
+        .edit-info {
             color: #A2A2A2;
             font-size: .7rem;
         }
-        .edit-row:first-of-type{
+
+        .edit-row:first-of-type {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .img-input{
+
+        .img-input {
             position: absolute;
             top: 0;
             z-index: 50;
             opacity: 0;
         }
-        input, option, select{
+
+        input, option, select {
             padding-left: .2rem;
             border: none;
             background-color: transparent;
@@ -90,49 +126,63 @@
             -moz-appearance: none;
             -webkit-appearance: none;
         }
-        input, textarea{
+
+        input, textarea {
             width: 100%;
         }
-        textarea{
+
+        textarea {
             outline: none;
+            border: none;
         }
-        select{
+
+        select {
             width: 50%;
         }
-        .birth-input{
+
+        .birth-input {
             padding-left: 0;
         }
+
         /* city picker style */
-        .city-header{
+        .city-header {
             background-color: #ababab;
             color: #232323;
             height: 2.2rem;
         }
-        .city-header h1{
+
+        .city-header h1 {
             line-height: 2.2rem;
         }
-        .city-header-confirm{
+
+        .city-header-confirm {
             color: #fff !important;
         }
-        .picker-columns{
+
+        .picker-columns {
             height: 9.2rem;
             background-color: #efefef;
         }
-        .picker-modal-inner{
+
+        .picker-modal-inner {
             height: 7rem !important;
         }
-        .picker-items{
+
+        .picker-items {
             font-size: .8rem;
         }
-        .picker-center-highlight{
+
+        .picker-center-highlight {
             border-top-color: darkgrey;
             border-bottom-color: darkgrey;
         }
+
         /*cropper test*/
         img {
             max-width: 100%; /* This rule is very important, please do not ignore this! */
         }
-        .cropContainer{
+
+        .cropContainer {
             width: 100%;
             height: 100%;
             position: absolute;
@@ -144,20 +194,23 @@
             display: none;
             z-index: 1000000;
         }
-        #cropBox{
+
+        #cropBox {
             position: absolute;
             max-width: 100%;
             max-height: 100%;
             top: 50%;
             transform: translateY(-50%);
         }
-        .avatar-confirm{
+
+        .avatar-confirm {
             line-height: 3rem;
             position: absolute;
             right: 1rem;
             color: #fff;
         }
-        #avatar-preview{
+
+        #avatar-preview {
             position: absolute;
             width: 2rem;
             height: 2rem;
@@ -178,8 +231,8 @@
         <div class="edit-row">
             <div class="edit-title">头像</div>
             <div class="edit-avatar">
-                <img src="/static/img/thelivingtribunal.jpeg">
-                <input name="avatar" type="file" alt="上传头像" class="img-input">
+                <img :src="getAvatar">
+                <input name="avatar" type="file" alt="上传头像" class="img-input" id="img-input">
             </div>
         </div>
         <div class="edit-row">
@@ -204,7 +257,8 @@
             <div class="edit-title">生日</div>
             <div class="edit-info">
                 <div class="item-input">
-                    <input class="birth-input" name="birth" type="date" :value="userDetail.birth || '1970-01-01'" @input="changeDetail">
+                    <input class="birth-input" name="birth" type="date" :value="userDetail.birth || '1970-01-01'"
+                           @input="changeDetail">
                 </div>
             </div>
         </div>
@@ -220,7 +274,8 @@
             <div class="edit-title">个人简介</div>
             <div class="edit-info">
                 <div class="item-input">
-                    <textarea name="introduction" rows="3" :value="userDetail.introduction || '写下你的简介～'" @input="changeDetail"></textarea>
+                    <textarea name="introduction" rows="3" :value="userDetail.introduction" placeholder="写下你的简介~"
+                              @input="changeDetail"></textarea>
                 </div>
             </div>
         </div>
@@ -228,7 +283,7 @@
             <div class="edit-title">所在城市</div>
             <div class="edit-info">
                 <div class="item-input">
-                    <input name="city" id="city-picker" type="text" :value="decodeURI(userDetail.city)">
+                    <input name="city" id="city-picker" type="text" :value="userDetail.city">
                 </div>
             </div>
         </div>
@@ -247,18 +302,16 @@
 </div>
 
 
-
-
 <script type="text/javascript " src="/static/vue/vue.js "></script>
 <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
-<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 <script type="text/javascript" src="/static/light7/js/light7-city-picker.min.js"></script>
+<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 <script type="text/javascript" src="/static/cropper/cropper.min.js"></script>
 
 <script>
     $.init();
-
+    $.fn.cropper;
     let vm = new Vue({
         delimiters: ['{$', '$}'],
         data() {
@@ -275,7 +328,7 @@
                 $.ajax({
                     url: '/user/getuserdetail',
                     success: function (ret) {
-                        if(ret.errno === 0){
+                        if (ret.errno === 0) {
                             self.userDetail = ret.data
                         } else {
                             $.toast('登录失败，请重新登录')
@@ -289,6 +342,12 @@
             changeDetail: function (e) {
                 this.userDetail[e.target.name] = e.target.value
             }
+        },
+        computed: {
+            getAvatar: function () {
+                let avatarSubAddr = this.userDetail.avatar || '/systemAvatar.jpeg';
+                return '/static/img' + avatarSubAddr;
+            }
         }
     }).$mount('#content')
 
@@ -300,67 +359,79 @@
     });
 
     $('.closeCrop').on('click', function () {
-        $('.cropContainer').css('display', 'none')
+        $('.cropContainer').css('display', 'none');
+        $('#img-input').val(null);
     })
 
     $('.img-input').on('change', function () {
         if (!(window.File || window.FileReader || window.FileList || window.Blob)) {
             return $.toast('当前浏览器不支持上传头像')
         }
+        let file = this.files[0];
+        let allowTypeList = ['jpg', 'jpeg', 'png'];
+        let lowerFileType = file.name.split('.').pop().toLowerCase();
+        if (allowTypeList.indexOf(lowerFileType) < 0) {
+            return $.toast('图片格式不正确!');
+        }
+
         $('#cropBox').css({
             'height': window.innerWidth + 'px'
         })
-        console.log(this.files)
-        let file = this.files[0]
+
         let reader = new FileReader()
+
         reader.readAsDataURL(file)
         reader.onload = function (evt) {
-            let dataUrl= evt.target.result
-            console.log(dataUrl)
-            $('#crop-image').attr('src', dataUrl)
-            $('.cropContainer').css('display', 'block')
+            let options = {
+                aspectRatio: 1 / 1,
+                dragMode: 'move',
+                movable: true,
+            };
+            let dataUrl = evt.target.result;
+            $('#crop-image').attr('src', dataUrl);
+            $('.cropContainer').css('display', 'block');
 
-            $('#crop-image').cropper({
-                aspectRatio: 1/1,
-                dragMode: 'move',
-                movable: false
+            $('#crop-image').cropper(options).cropper('replace', dataUrl);;
+
+
+            $('#crop-image').on('ready', function () {
+                $('.avatar-confirm').on('click', function () {
+                    let avatarCropped = $('#crop-image').cropper('getCroppedCanvas').toDataURL();
+                    vm.userDetail.avatarCropped = avatarCropped;
+                    $('.edit-avatar img').attr('src', avatarCropped);
+                    $('.cropContainer').css('display', 'none');
+                    $('#img-input').val('');
+                    $('#crop-image').cropper('destroy');
+
+                })
             })
-            /*var cropper = new Cropper($('#crop-image'), {
-                aspectRadio: 1/1,
-                viewMode: 1,
-                dragMode: 'move',
-                movable: false,
-                zoomable: false,
-                zoomOnTouch: false,
-                zoomOnWheel: false
-            })*/
         }
     })
-    
-    document.querySelector('.save').addEventListener('click', function() {
-	    let userDetail = vm.userDetail
-	    userDetail.city = $('#city-picker').val()
-	    console.log(userDetail)
-	    $.ajax({
-		    url: '/user/updateuserdetail',
-		    data: userDetail,
-		    method: 'POST',
-		    success: function (ret) {
-			    console.log(ret)
-			    if(ret.errno === 0){
-				    $.toast('修改成功')
-				    setTimeout(function () {
-					    window.location.href = '/user/detail'
-				    }, 1000)
-			    } else {
-				    $.toast('修改失败，请重新提交')
-			    }
-		    },
-		    error: function (err) {
-			    console.log(err)
-			    $.toast('出了点小问题，请重试')
-		    }
-	    })
+
+    document.querySelector('.save').addEventListener('click', function () {
+        let userDetail = vm.userDetail;
+        userDetail.city = $('#city-picker').val()
+        console.log(userDetail)
+        $.ajax({
+            url: '/user/updateuserdetail',
+            data: userDetail,
+            method: 'POST',
+            success: function (ret) {
+                console.log(ret)
+                if (ret.errno === 0) {
+                    $.toast('修改成功')
+                    setTimeout(function () {
+                        window.location.href = '/user/detail'
+                    }, 1000)
+                } else {
+                    $.toast('修改失败，请重新提交')
+                }
+            },
+            error: function (err) {
+                console.log(err)
+                $.toast('出了点小问题，请重试')
+            }
+        })
     })
 </script>
 </body>
