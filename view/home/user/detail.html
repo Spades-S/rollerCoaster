@@ -113,17 +113,19 @@
         <a class="edit iconfont icon-bianji external" href="/user/edit"></a>
     </header>
     <div class="content" id="content">
-        <div class="basicInfo" id="basicInfo">
-            <div class="avatar"><img :src="getAvatar" alt="" class="avatar-img"></div>
-            <div class="nickname">{$ userDetail.nickname $}</div>
-        </div>
-        <div class="detail">
-            <div class="detail-row" v-for="detail, index in details">
-                <div class="detail-title">{$ detail.title $}</div>
-                <div class="detail-info" v-if="detail.value">{$ detail.value $}</div>
-                <div class="detail-edit" v-else><a class="external" href="/user/edit">填写</a></div>
+        <template>
+            <div class="basicInfo" id="basicInfo">
+                <div class="avatar"><img :src="getAvatar" alt="" class="avatar-img"></div>
+                <div class="nickname">{$ userDetail.nickname $}</div>
             </div>
-        </div>
+            <div class="detail">
+                <div class="detail-row" v-for="detail, index in details">
+                    <div class="detail-title">{$ detail.title $}</div>
+                    <div class="detail-info" v-if="detail.value">{$ detail.value $}</div>
+                    <div class="detail-edit" v-else><a class="external" href="/user/edit">填写</a></div>
+                </div>
+            </div>
+        </template>
     </div>
 </div>
 
@@ -153,7 +155,7 @@
         methods: {
             getUserDetail: function () {
                 let self = this;
-                let gender = [null,'女','男'];
+                let gender = [null, '女', '男'];
                 $.ajax({
                     url: '/user/getuserdetail',
                     success: function (ret) {
@@ -161,7 +163,7 @@
                             let data = ret.data
                             self.details = [{
                                 title: '性别',
-                                value:gender[data.gender]
+                                value: gender[data.gender]
                             }, {
                                 title: '生日',
                                 value: data.birth

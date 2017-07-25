@@ -250,28 +250,50 @@ var _class = function (_base) {
         key: 'refreshlikesAction',
         value: function () {
             var _ref5 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5() {
-                var likes, articleid, articleModel, art_lines, userModel, data;
+                var likes, uid, articleid, articleModel, art_lines, userModel, data, likecookie, newlikearray;
                 return _regenerator2.default.wrap(function _callee5$(_context5) {
                     while (1) {
                         switch (_context5.prev = _context5.next) {
                             case 0:
                                 likes = this.post('likes');
-                                articleid = this.post('articleid');
+                                uid = this.cookie('uid');
+                                articleid = parseInt(this.post('articleid'));
                                 articleModel = this.model('article');
-                                _context5.next = 5;
+                                _context5.next = 6;
                                 return articleModel.updateLikesByArticleId(articleid, likes);
 
-                            case 5:
+                            case 6:
                                 art_lines = _context5.sent;
-                                userModel = this.model('user');
-                                _context5.next = 9;
-                                return userModel.updateLikes(articleid);
 
-                            case 9:
+                                if (!uid) {
+                                    _context5.next = 15;
+                                    break;
+                                }
+
+                                userModel = this.model('user');
+                                _context5.next = 11;
+                                return userModel.updateLikes(articleid, uid);
+
+                            case 11:
                                 data = _context5.sent;
                                 return _context5.abrupt('return', this.success(data));
 
-                            case 11:
+                            case 15:
+                                likecookie = this.cookie('likecookie');
+                                newlikearray = [];
+
+                                if (likecookie) {
+                                    newlikearray = JSON.parse(likecookie);
+                                    if (newlikearray.indexOf(articleid) < 0) {
+                                        newlikearray.push(articleid);
+                                    }
+                                } else {
+                                    newlikearray.push(articleid);
+                                }
+                                this.cookie('likecookie', (0, _stringify2.default)(newlikearray));
+                                return _context5.abrupt('return', this.success());
+
+                            case 20:
                             case 'end':
                                 return _context5.stop();
                         }
@@ -289,19 +311,37 @@ var _class = function (_base) {
         key: 'getlikestatusAction',
         value: function () {
             var _ref6 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6() {
-                var articleid, userModel, rowdata, likes, data;
+                var uid, articleid, likes, userModel, rowdata, data;
                 return _regenerator2.default.wrap(function _callee6$(_context6) {
                     while (1) {
                         switch (_context6.prev = _context6.next) {
                             case 0:
-                                articleid = this.get('articleid');
-                                userModel = this.model('user');
-                                _context6.next = 4;
-                                return userModel.getLikes();
+                                uid = this.cookie('uid');
+                                articleid = parseInt(this.get('articleid'));
+                                likes = [];
 
-                            case 4:
+                                if (!uid) {
+                                    _context6.next = 11;
+                                    break;
+                                }
+
+                                userModel = this.model('user');
+                                _context6.next = 7;
+                                return userModel.getLikes(uid);
+
+                            case 7:
                                 rowdata = _context6.sent;
+
                                 likes = JSON.parse(rowdata[0].likes);
+                                _context6.next = 12;
+                                break;
+
+                            case 11:
+                                if (this.cookie('likecookie')) {
+                                    likes = JSON.parse(this.cookie('likecookie'));
+                                }
+
+                            case 12:
                                 data = void 0;
 
                                 if (likes.indexOf(articleid) >= 0) {
@@ -311,7 +351,7 @@ var _class = function (_base) {
                                 }
                                 return _context6.abrupt('return', this.success(data));
 
-                            case 9:
+                            case 15:
                             case 'end':
                                 return _context6.stop();
                         }

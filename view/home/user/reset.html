@@ -122,13 +122,17 @@
 			},
 			submitInfo: function () {
 				let psd = this.psd, psdCopy = this.psdCopy
+                if(psd !== psdCopy){
+                    return $.toast('两次输入的密码不一致')
+                }
+                if(psd.length < 5){
+                    return $.toast('请保证密码长度大于5!');
+                }
 				if(!(/^[\w\/\!\@\#\$\%\^\&]{5,14}$/).test(psd)){
 					$('.nickname').trigger('focus')
 					return $.toast('密码只能包含数字、字母、下划线和/!@#$%^&等字符')
 				}
-				if(psd !== psdCopy){
-					return $.toast('两次输入的密码不一致')
-                }
+
 				$.ajax({
 					url: '/user/resetpassword',
 					method: 'POST',

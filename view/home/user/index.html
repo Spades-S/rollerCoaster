@@ -7,7 +7,7 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
     <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/css/articleDetail.css">
@@ -75,6 +75,11 @@
             right: 0;
         }
 
+        a.md, a.btm {
+            display: block;
+            color: #444;
+        }
+
         .md, .btm {
             line-height: 2rem;
             border: 1px solid #F9F9F9;
@@ -136,14 +141,14 @@
                 <a class="iconfont icon-arrow-right external" href="/user/detail"></a>
             </div>
             <div class="content-middle content-padded" v-if="userInfo">
-                <div class="likes md"><span class="iconfont icon-xihuan"></span>喜欢</div>
-                <div class="achieve md"><span class="iconfont icon-jiangbei"></span>成就</div>
-                <div class="activity md"><span class="iconfont icon-qizhi"></span>活动</div>
-                <div class="log md"><span class="iconfont icon-iconset0116"></span>刷车日志</div>
+                <a class="likes md external" href="/user/like"><span class="iconfont icon-xihuan"></span>喜欢</a>
+                <a class="achieve md"><span class="iconfont icon-jiangbei"></span>成就</a>
+                <a class="activity md"><span class="iconfont icon-qizhi"></span>活动</a>
+                <a class="log md"><span class="iconfont icon-iconset0116"></span>刷车日志</a>
             </div>
             <div class="content-bottom content-padded" v-if="userInfo">
-                <div class="auggestion btm"><span class="iconfont icon-yijianfankui"></span>意见反馈</div>
-                <div class="about btm"><span class="iconfont icon-guanyuwomen"></span>关于我们</div>
+                <a class="auggestion btm"><span class="iconfont icon-yijianfankui"></span>意见反馈</a>
+                <a class="about btm"><span class="iconfont icon-guanyuwomen"></span>关于我们</a>
             </div>
         </div>
     </div>

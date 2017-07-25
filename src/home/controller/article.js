@@ -86,19 +86,44 @@ export default class extends base {
 
     async refreshlikesAction() {
         let likes = this.post('likes');
-        let articleid = this.post('articleid');
+        let uid = this.cookie('uid');
+        let articleid = parseInt(this.post('articleid'));
         let articleModel = this.model('article');
         let art_lines = await articleModel.updateLikesByArticleId(articleid, likes);
-        let userModel = this.model('user');
-        let data = await userModel.updateLikes(articleid);
-        return this.success(data);
+        if (uid) {
+            let userModel = this.model('user');
+            let data = await userModel.updateLikes(articleid, uid);
+            return this.success(data);
+        } else {
+            let likecookie = this.cookie('likecookie');
+            let newlikearray = [];
+            if (likecookie) {
+                newlikearray = JSON.parse(likecookie);
+                if (newlikearray.indexOf(articleid) < 0) {
+                    newlikearray.push(articleid);
+                }
+            } else {
+                newlikearray.push(articleid);
+            }
+            this.cookie('likecookie', JSON.stringify(newlikearray));
+            return this.success();
+        }
+
     }
 
     async getlikestatusAction() {
-        let articleid = this.get('articleid');
-        let userModel = this.model('user');
-        let rowdata = await userModel.getLikes();
-        let likes = JSON.parse(rowdata[0].likes);
+        let uid = this.cookie('uid');
+        let articleid = parseInt(this.get('articleid'));
+        let likes = [];
+        if (uid) {
+            let userModel = this.model('user');
+            let rowdata = await userModel.getLikes(uid);
+            likes = JSON.parse(rowdata[0].likes);
+        } else {
+            if (this.cookie('likecookie')) {
+                likes = JSON.parse(this.cookie('likecookie'));
+            }
+        }
         let data;
         if (likes.indexOf(articleid) >= 0) {
             data = true;
@@ -106,7 +131,6 @@ export default class extends base {
             data = false;
         }
         return this.success(data);
-
     }
 
     async getcommentbyarticleidAction() {

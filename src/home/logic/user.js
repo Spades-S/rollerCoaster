@@ -25,6 +25,14 @@ export default class extends think.logic.base {
 
         }
     }
+    async registerinAction(){
+        let userModel = this.model('user');
+        let nickname = this.post('nickname');
+        let nicknameExist = await userModel.isNickNameExist(nickname);
+        if (nicknameExist) {
+            return this.fail(1000, 'nickname has already existed!');
+        }
+    }
 
     async verifycodeAction() {
         this.allowMethods = 'get'
@@ -73,4 +81,11 @@ export default class extends think.logic.base {
     async resetpasswordAction() {
         this.allowMethods = 'post'
     }
+    async likeAction(){
+        let uid = this.cookie('uid');
+        if(!uid){
+            return this.redirect('/user/index');
+        }
+    }
+
 }

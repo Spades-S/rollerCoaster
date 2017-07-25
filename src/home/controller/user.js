@@ -10,7 +10,35 @@ export default class extends base {
         }
     }
 
-    async registerAction() {
+    agreementAction() {
+        return this.display('user/agreement.html')
+    }
+
+    likeAction() {
+        return this.display('user/like.html');
+    }
+
+    async getlikesAction() {
+        let uid = this.cookie('uid');
+        let userModel = this.model('user');
+        let articleModel = this.model('article');
+        let likeArticleIdsRowData = await userModel.getLikes(uid);
+
+        let likeArticleIds = JSON.parse(likeArticleIdsRowData[0].likes);
+        let likeArticles = await articleModel.getLikeArticles(likeArticleIds);
+        return this.success(likeArticles);
+    }
+
+    async canclelikeAction() {
+        let articleid = this.post('articleid');
+        console.log(articleid);
+        let uid = this.cookie('uid');
+        let userModel = this.model('user');
+        let lines = await userModel.updateLikes(parseInt(articleid),uid);
+        return this.success(lines);
+    }
+
+    registerAction() {
         return this.display('user/register.html')
     }
 
@@ -55,11 +83,6 @@ export default class extends base {
                 nickname = this.post('nickname'),
                 psd = this.post('psd')
             let userModel = this.model('user')
-            let nicknameExist = await userModel.isNickNameExist(nickname);
-            if (nicknameExist) {
-                return this.fail(1000, 'nickname has already existed!');
-            }
-
             let ck = generateUid()
             let data = await userModel.register(phone, nickname, psd, ck)
 
@@ -146,8 +169,8 @@ export default class extends base {
         let uid = this.cookie('uid')
         let userRowData = await userModel.getUserInfo(uid);
         let basePath = this.config('avatarBasePath');
-        let detailPath = '/avatar/'+userRowData.id+'.png';
-        fs.writeFileSync(basePath+detailPath, avatarBinary,'binary',function(err){
+        let detailPath = '/avatar/' + userRowData.id + '.png';
+        fs.writeFileSync(basePath + detailPath, avatarBinary, 'binary', function (err) {
             console.log(err);
         });
         let userDetail = {

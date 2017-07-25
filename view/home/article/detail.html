@@ -333,7 +333,10 @@
                     if (data.errno == 0) {
                         $.toast("评论发表成功!");
                         overlayHide();
-                    } else {
+                    } else if (data.errno === 1000) {
+                        $.toast("请先登录!");
+                    }
+                    else {
                         $.toast("评论发表失败!");
                     }
 

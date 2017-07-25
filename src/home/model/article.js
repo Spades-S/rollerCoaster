@@ -49,6 +49,10 @@ class Article extends think.model.base {
         return lines;
 
     }
+    async getLikeArticles(ids){
+        let articles = await this.field('id, title, poster, authorAvatar, authorName, col, description, updateTime').where({id: ['IN', ids]}).select();
+        return articles;
+    }
 
 }
 

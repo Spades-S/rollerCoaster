@@ -235,6 +235,36 @@ var Article = function (_think$model$base) {
 
             return updateLikesByArticleId;
         }()
+    }, {
+        key: 'getLikeArticles',
+        value: function () {
+            var _ref6 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6(ids) {
+                var articles;
+                return _regenerator2.default.wrap(function _callee6$(_context6) {
+                    while (1) {
+                        switch (_context6.prev = _context6.next) {
+                            case 0:
+                                _context6.next = 2;
+                                return this.field('id, title, poster, authorAvatar, authorName, col, description, updateTime').where({ id: ['IN', ids] }).select();
+
+                            case 2:
+                                articles = _context6.sent;
+                                return _context6.abrupt('return', articles);
+
+                            case 4:
+                            case 'end':
+                                return _context6.stop();
+                        }
+                    }
+                }, _callee6, this);
+            }));
+
+            function getLikeArticles(_x10) {
+                return _ref6.apply(this, arguments);
+            }
+
+            return getLikeArticles;
+        }()
     }]);
     return Article;
 }(think.model.base);
