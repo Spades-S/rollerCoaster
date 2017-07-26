@@ -57,6 +57,9 @@
             line-height: 1.8rem;
             border: none;
         }
+        .login:disabled{
+            border: 1px solid #c8c9cb;
+        }
         .login:not(:disabled){
             background-color: #6EB732;
             color: #fff;
@@ -96,7 +99,7 @@
             <input type="text" class="account" placeholder="用户名或手机号" required="true" @input="getAccount">
             <input type="password" class="password" placeholder="密码" required="true" @input="getPsd">
         </div>
-        <button :class="'button login ' + login.class" :disabled="login.disabled" @click="login">登录</button>
+        <button :class="'button login ' + loginStatus.class" :disabled="loginStatus.disabled" @click="login">登录</button>
         <div class="add-bottom">
             <a class="reg green inline" href="register">注册欢乐冶</a>
             <div class="rt-psd inline"><a href="/user/verify">忘记密码？</a></div>
@@ -154,7 +157,8 @@
             }
         },
         computed: {
-	        login: function () {
+	        loginStatus: function () {
+	        	console.log(this.psd)
                 if(this.psd&&this.account){
                 	return {
                 		class: '',

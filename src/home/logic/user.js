@@ -9,15 +9,20 @@ export default class extends think.logic.base {
 	}
 	
 	async getvfcodeAction() {
+		let userModel = this.model('user')
+		let account = this.post('account')
+		
 		if((/verify/).test(this.header('Referer'))){
-			let userModel = this.model('user')
-			let account = this.post('account')
-			let isExist = await userModel.isExist(account)
-			console.log(isExist)
-			if(!isExist){
+			let isPhoneNumExist = await userModel.isPhoneNumExist(account)
+			if(think.isEmpty(isPhoneNumExist)){
 				return this.fail('invalid account')
 			} else {
 				await this.session('reset', true)
+			}
+		} else {
+			let isPhoneNumExist = await userModel.isPhoneNumExist(account);
+			if (!think.isEmpty(isPhoneNumExist)) {
+				return this.fail('phone number exists!')
 			}
 		}
 	}

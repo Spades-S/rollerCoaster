@@ -177,7 +177,7 @@ body {
     /*border: 1px solid;*/
 }
 .readed{
-    background: rgba(0, 0, 0, 0.11);
+    opacity: .6;
 }
 
 .article-list hr {

@@ -23,7 +23,7 @@ class Article extends think.model.base {
     async getArticleItemByid(id) {
         let data = await this.alias('article')
 
-            .field('title, authorAvatar, authorName, content, updatetime, likes, col')
+            .field('title, authorAvatar, authorName, content, updateTime, likes, col')
             .where({id: id}).select();
 
         return data;

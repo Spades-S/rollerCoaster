@@ -16,13 +16,7 @@ export default class extends base {
 
     async getvfcodeAction() {
         try {
-
-            let account = this.post('account')
-            let userModel = this.model('user');
-            let accountExist = await userModel.isPhoneNumExist(account);
-            if (accountExist) {
-                return this.fail(1000, 'phone number exists!')
-            }
+	        let account = this.post('account')
             let code = generateVerificationCode();
 
             // let userModel = this.model('user')
@@ -65,7 +59,7 @@ export default class extends base {
             if(nicknameExist){
                 return this.fail(1000,'nickname has already existed!');
             }
-
+            // set cookie uid
             let ck = generateUid()
             let data = await userModel.register(phone, nickname, psd, ck)
 
@@ -186,5 +180,38 @@ export default class extends base {
         } else {
             return this.fail('update failed')
         }
+    }
+    
+    async feedbackAction () {
+    	return this.display('user/feedback.html')
+    }
+    
+    async sendfeedbackAction() {
+	    let uid = this.cookie('uid')
+	    let userModel = this.model('user')
+	    let feedbackModel = this.model('feedback')
+	    let nickname, userId, phoneNumber
+	    
+	    if (uid) {
+    		let userInfo = await userModel.getUserDetail(uid)
+		    userId = userInfo.id
+		    nickname = userInfo.nickname
+		    phoneNumber = userInfo.phoneNumber
+	    }
+	    
+	    let res = await feedbackModel.storeFeedback({
+		    type: this.post('type'),
+		    content: this.post('content'),
+		    contact: this.post('contact'),
+		    userId: userId,
+		    nickname: nickname,
+		    phoneNumber: phoneNumber
+	    })
+	    
+	    if (!think.isEmpty(res)) {
+		    return this.success('feedback sent')
+    	} else {
+    		return this.fail('feedback error')
+	    }
     }
 }
