@@ -49,20 +49,20 @@
 
             </div>
             <div class="article-list" id="article-list">
-                <template v-for="item in articles">
-                    <div class="article-item content-padded" v-bind:data-articleid="item.id">
-                        <div class="article-content">
+                <template v-for="item, index in articles">
+                    <div :class="'article-item ' + item.readClass" :data-index="index" v-bind:data-articleid="item.id"> <!-- getClass(item.id, greyList) -->
+                        <div class="article-content padded">
                             <img :src="'/static/img'+item.poster " class="article-firstimg ">
                             <div class="article-title ">{$ item.title $}</div>
                             <div class="article-intro ">{$ item.description $}</div>
                         </div>
-                        <div class="article-info ">
-                            <span class="article-author ">作者：{$ item.authorName $}</span>
+                        <div class="article-info padded">
+                            <span class="article-author ">作者：{$ item.authorName || item.col $}</span>
                             <span class="article-category ">来自：{$ item.col $}</span>
                         </div>
-                        <hr>
 
                     </div>
+                    <hr>
                 </template>
 
 
@@ -81,11 +81,11 @@
             <span class="icon iconfont icon-shouye left-negtivedot2"></span>
             <span class="tab-label ">首页</span>
         </a>
-        <a class="tab-item external" href="#discovery">
+        <a class="tab-item external" href="/discovery">
             <span class="icon iconfont icon-yikeapp15 left-negtivedot2"></span>
             <span class="tab-label ">发现</span>
         </a>
-        <a class="tab-item external" href="#group">
+        <a class="tab-item external" href="/group">
             <span class="icon iconfont icon-xiaozufill left-negtivedot2 "></span>
             <span class="tab-label ">小组</span>
         </a>
@@ -353,17 +353,23 @@
 <script type="text/javascript ">
     $.init();
     $.fn.raty.defaults.path = '/static/js/raty/img';
+
+    let readList = window.localStorage.getItem('readList') || []
+    console.log(readList)
+
     var $vm = new Vue({
         delimiters: ['{$', '$}'],
         el: '#article-list',
         data: {
             currentPage: '',
             articles: [],
+            greyList: [],
+        },
+        methods: {
         }
-
     })
     let articleLoading = false;
-    let perPageItems = 5;
+    let perPageItems = 10;
 
     getSomeArticles(perPageItems, true);
 
@@ -375,6 +381,10 @@
     });
     $(document).on('click', '.article-item', (e) => {
         let articleid = e.currentTarget.getAttribute('data-articleid');
+	    let index = e.currentTarget.getAttribute('data-index');
+
+	    $vm.articles[index].readClass = "readed"
+        e.currentTarget.setAttribute('class', 'article-item readed');
 
         window.location.href = "/article/detail?articleid=" + articleid;
     });
@@ -410,12 +420,12 @@
         $('#search-page').removeClass('page-current');
     })
     /*$('#user').on('click', () => {
-    	$('.page').removeClass('page-current')
-        $('#user').addClass('page-current')
-    })*/
+     $('.page').removeClass('page-current')
+     $('#user').addClass('page-current')
+     })*/
 
 
-    function getSomeArticles(number, firstFlag) {
+    function getSomeArticles(number, firstFlag, articleList) {
         if (firstFlag == true) {
             $vm.currentPage = 1;
         } else {
@@ -427,10 +437,16 @@
             data: {
                 currentPage: $vm.currentPage,
                 perPageNums: number,
+                articleList: articleList
             },
             success: function (data) {
+            	console.log(data)
                 if (data.errno == 0) {
+                    // $vm.greyList = data.data.greyList;
                     for (let item of data.data.data) {
+                    	if(readList.indexOf(item.id)>=0){
+                    		item.readClass += ' readed'
+                        }
                         $vm.articles.push(item);
                     }
                     articleLoading = false;
@@ -443,7 +459,6 @@
             }
         })
     }
-
 </script>
 </body>
 

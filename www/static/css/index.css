@@ -7,10 +7,14 @@ body {
     background: white;
 }
 
+.padded {
+    padding: 0.6rem;
+}
+
 .icon-arrow-left {
     display: inline-block;
-    width: 0.9rem;
-    height: 1.4rem;
+    width: 2rem;
+    height: 2rem;
     margin-top: 0.8rem;
 }
 
@@ -172,9 +176,11 @@ body {
     height: 8rem;
     /*border: 1px solid;*/
 }
+.readed{
+    opacity: .6;
+}
 
-.article-item hr {
-    margin-top: 0.8rem;
+.article-list hr {
     border: none;
     border-bottom: 1px solid #bab5b5;
 }
@@ -201,7 +207,7 @@ body {
     font-size: 14px;
     color: #a8a7a7;
     height: 2.27rem;
-    line-height: 1.3rem;
+    line-height: 1.135rem;
     margin-top: 0.23rem;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -212,7 +218,7 @@ body {
 .article-info {
     font-size: 13px;
     color: #a8a7a7;
-    margin-top: 0.6rem;
+    margin-top: -0.5rem;
 }
 
 .article-category {
@@ -330,9 +336,10 @@ label.pull-left {
 
 .sr-star {
     margin-top: .4rem;
-    width:100% !important;
+    width: 100% !important;
 }
-.sr-star span{
+
+.sr-star span {
     color: grey;
     font-size: 11px;
     margin-right: 0.2rem;

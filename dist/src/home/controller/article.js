@@ -12,6 +12,10 @@ var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
 var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
@@ -49,7 +53,27 @@ var _class = function (_base) {
     (0, _createClass3.default)(_class, [{
         key: 'detailAction',
         value: function detailAction() {
-            this.assign('articleid', this.get('articleid'));
+            var articleId = this.get('articleid');
+
+            if (checkLogin(this)) {
+                console.log('Login checked!');
+
+                // to be finished
+            } else {
+                if (!this.cookie('readList')) {
+                    var readList = new Array();
+                    readList.push(parseInt(articleId));
+
+                    this.cookie('readList', (0, _stringify2.default)(readList));
+                } else {
+                    var _readList = JSON.parse(this.cookie('readList'));
+                    if (_readList.indexOf(parseInt(articleId)) < 0) {
+                        _readList.push(parseInt(articleId));
+                        this.cookie('readList', (0, _stringify2.default)(_readList));
+                    }
+                }
+            }
+            this.assign('articleid', articleId);
             return this.display('article/detail.html');
         }
     }, {
@@ -104,22 +128,37 @@ var _class = function (_base) {
         key: 'refresharticlesAction',
         value: function () {
             var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
-                var currentPage, perPageNum, articleModel, data;
+                var greyList, invisibleList, readList, currentPage, perPageNum, articleModel, data;
                 return _regenerator2.default.wrap(function _callee2$(_context2) {
                     while (1) {
                         switch (_context2.prev = _context2.next) {
                             case 0:
+                                greyList = [];
+                                invisibleList = [];
+
+                                if (this.cookie('readList') !== '') {
+                                    readList = JSON.parse(this.cookie('readList'));
+
+                                    if (readList.length > 5) {
+                                        greyList = readList.splice(-5, 5);
+                                        invisibleList = readList;
+                                    } else {
+                                        greyList = readList;
+                                    }
+                                }
                                 currentPage = this.get('currentPage');
                                 perPageNum = this.get('perPageNums');
                                 articleModel = this.model('article');
-                                _context2.next = 5;
-                                return articleModel.getPerPageItems(perPageNum, currentPage);
+                                _context2.next = 8;
+                                return articleModel.getPerPageItems(perPageNum, currentPage, invisibleList);
 
-                            case 5:
+                            case 8:
                                 data = _context2.sent;
+
+                                data.greyList = greyList;
                                 return _context2.abrupt('return', this.success(data));
 
-                            case 7:
+                            case 11:
                             case 'end':
                                 return _context2.stop();
                         }

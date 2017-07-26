@@ -1,8 +1,22 @@
 'use strict'
 import base from './base.js';
 export default class extends base {
-    detailAction() {
-        this.assign('articleid', this.get('articleid'));
+    async detailAction() {
+        let articleId = this.get('articleid');
+
+        if (checkLogin(this)) {
+            console.log('Login checked!');
+
+            // to be finished
+
+        } else {
+        	let readList = (await this.session('readList')) || []
+	        if (readList.indexOf(parseInt(articleId)) < 0) {
+		        readList.push(parseInt(articleId));
+	        }
+	        await this.session('readList', readList)
+        }
+        this.assign('articleid', articleId);
         return this.display('article/detail.html');
     }
 
@@ -23,17 +37,33 @@ export default class extends base {
     }
 
     async refresharticlesAction() {
+        let greyList = [];
+        let invisibleList = [];
+        let readList = await this.session('readList')
+        if (readList) {
+         /* if (readList.length > 5) { */
+		        greyList = readList // .splice(-5, 5);
+		        // console.log('greyList', greyList)
+		        invisibleList = readList;
+         /* } else {
+                greyList = readList;
+            } */
+        }
         let currentPage = this.get('currentPage');
-
         let perPageNum = this.get('perPageNums');
-
         let articleModel = this.model('article');
-        let data = await articleModel.getPerPageItems(perPageNum ,currentPage);
+        let data = await articleModel.getPerPageItems(perPageNum, currentPage, invisibleList);
+        data.data.forEach(el => {
+        	if (greyList.indexOf(el.id) >= 0) {
+        		el.readClass = "readed"
+	        } else {
+		        el.readClass = ""
+	        }
+        })
         return this.success(data);
     }
 
     async getarticlebyarticleidAction() {
-
         let articleid = this.get('articleid');
         let articleModel = this.model('article');
         let data = await articleModel.getArticleItemByid(articleid);
@@ -48,7 +78,7 @@ export default class extends base {
         let col = authoridRowData[0].col;
         let relativeArticles = await articleModel.getRelativeArticlesByCol(col, articleid);
         if (relativeArticles.length >= 2) {
-           relativeArticles= relativeArticles.slice(0, 2);
+            relativeArticles = relativeArticles.slice(0, 2);
         }
         return this.success(relativeArticles);
 
@@ -68,7 +98,7 @@ export default class extends base {
         let articleid = this.get('articleid');
         let userModel = this.model('user');
         let rowdata = await userModel.getLikes();
-        let likes = JSON.parse(rowdata[0].likes);
+        let likes = JSON.parse(rowdata[0].likes) || [];
         let data;
         if (likes.indexOf(articleid) >= 0) {
             data = true;
@@ -79,16 +109,14 @@ export default class extends base {
 
     }
 
-
-
     async getcommentbyarticleidAction() {
         let articleid = this.get('articleid');
         let commentModel = this.model('comment');
         let comment = await commentModel.getCommentByPostId(parseInt(articleid));
         let commentLength = comment.length;
         if (commentLength >= 2) {
-             comment = comment.splice(0, 2)
+            comment = comment.splice(0, 2)
         }
-        return this.success({commentLength:commentLength,commentContent: comment});
+        return this.success({commentLength: commentLength, commentContent: comment});
     }
 }
