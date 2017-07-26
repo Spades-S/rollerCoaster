@@ -74,7 +74,7 @@ var _class = function (_base) {
         key: 'getlikesAction',
         value: function () {
             var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
-                var uid, userModel, articleModel, likeArticleIdsRowData, likeArticleIds, likeArticles;
+                var uid, userModel, articleModel, likeArticleIdsRowData, likeArticleIds, currentPage, num, likeArticles;
                 return _regenerator2.default.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
@@ -88,14 +88,25 @@ var _class = function (_base) {
                             case 5:
                                 likeArticleIdsRowData = _context.sent;
                                 likeArticleIds = JSON.parse(likeArticleIdsRowData[0].likes);
-                                _context.next = 9;
-                                return articleModel.getLikeArticles(likeArticleIds);
+
+                                if (!(likeArticleIds == null || likeArticleIds.length == 0)) {
+                                    _context.next = 9;
+                                    break;
+                                }
+
+                                return _context.abrupt('return', this.fail(1001, 'no likearticle!'));
 
                             case 9:
+                                currentPage = this.get('currentPage');
+                                num = this.get('num');
+                                _context.next = 13;
+                                return articleModel.getLikeArticles(likeArticleIds, currentPage, num);
+
+                            case 13:
                                 likeArticles = _context.sent;
                                 return _context.abrupt('return', this.success(likeArticles));
 
-                            case 11:
+                            case 15:
                             case 'end':
                                 return _context.stop();
                         }
@@ -113,7 +124,7 @@ var _class = function (_base) {
         key: 'canclelikeAction',
         value: function () {
             var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
-                var articleid, uid, userModel, lines;
+                var articleid, uid, userModel, articleModel, lines;
                 return _regenerator2.default.wrap(function _callee2$(_context2) {
                     while (1) {
                         switch (_context2.prev = _context2.next) {
@@ -123,14 +134,19 @@ var _class = function (_base) {
                                 console.log(articleid);
                                 uid = this.cookie('uid');
                                 userModel = this.model('user');
-                                _context2.next = 6;
+                                articleModel = this.model('article');
+                                _context2.next = 7;
+                                return articleModel.decreaseLikeNumber(articleid);
+
+                            case 7:
+                                _context2.next = 9;
                                 return userModel.updateLikes(parseInt(articleid), uid);
 
-                            case 6:
+                            case 9:
                                 lines = _context2.sent;
                                 return _context2.abrupt('return', this.success(lines));
 
-                            case 8:
+                            case 11:
                             case 'end':
                                 return _context2.stop();
                         }

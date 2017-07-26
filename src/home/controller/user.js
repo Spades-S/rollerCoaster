@@ -23,9 +23,13 @@ export default class extends base {
         let userModel = this.model('user');
         let articleModel = this.model('article');
         let likeArticleIdsRowData = await userModel.getLikes(uid);
-
         let likeArticleIds = JSON.parse(likeArticleIdsRowData[0].likes);
-        let likeArticles = await articleModel.getLikeArticles(likeArticleIds);
+        if (likeArticleIds == null || likeArticleIds.length == 0) {
+            return this.fail(1001, 'no likearticle!');
+        }
+        let currentPage = this.get('currentPage');
+        let num = this.get('num');
+        let likeArticles = await articleModel.getLikeArticles(likeArticleIds, currentPage, num);
         return this.success(likeArticles);
     }
 
@@ -34,7 +38,9 @@ export default class extends base {
         console.log(articleid);
         let uid = this.cookie('uid');
         let userModel = this.model('user');
-        let lines = await userModel.updateLikes(parseInt(articleid),uid);
+        let articleModel = this.model('article');
+        await articleModel.decreaseLikeNumber(articleid);
+        let lines = await userModel.updateLikes(parseInt(articleid), uid);
         return this.success(lines);
     }
 

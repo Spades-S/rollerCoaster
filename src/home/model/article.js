@@ -49,9 +49,15 @@ class Article extends think.model.base {
         return lines;
 
     }
-    async getLikeArticles(ids){
-        let articles = await this.field('id, title, poster, authorAvatar, authorName, col, description, updateTime').where({id: ['IN', ids]}).select();
+
+    async getLikeArticles(ids, currentPage, num) {
+        let articles = await this.field('id, title, poster, authorAvatar, authorName, col, description, updateTime').page(currentPage, num).where({id: ['IN', ids]}).countSelect();
         return articles;
+    }
+
+    async decreaseLikeNumber(id) {
+        let data = await this.where({id: id}).decrement('likes');
+        return data;
     }
 
 }

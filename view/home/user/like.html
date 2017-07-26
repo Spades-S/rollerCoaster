@@ -50,15 +50,14 @@
         }
 
         .content {
-            overflow-y: auto;
+            height: calc(100% - 3rem);
             -webkit-overflow-scrolling: touch;
         }
 
         .like-item {
+            overflow: hidden;
             height: 8.5rem;
-            /*margin-left: 0.7rem;*/
-            /*margin-right: 0.7rem;*/
-            /*margin-top: 0.5rem;*/
+            transition: all 1s ease;
             margin: 1rem 0.7rem;
             padding: 0.3rem 0.5rem;
             background: #FFF;
@@ -150,30 +149,35 @@
         <a class=" iconfont icon-arrow-left back "></a>
         <h1 class="title">喜欢</h1>
     </header>
-    <div class="content" id="content">
-        <template v-for="item in likeArticles">
-            <div class="like-item" :id="'item'+item.id">
-                <div class="article-info">
-                    <img class="avatar" :src='getAuthorAvatar(item.authorAvatar)' alt="">
-                    <div class="article-info-text">
-                        <div class="cancle-like" :data-id="item.id" @click="cancleLike">取消喜欢</div>
-                        <div class="userName">{$getAuthorName(item.authorName, item.col)$}</div>
-                        <div class="updateTime">{$getTime(item.updateTime)$}</div>
+    <div class="likes content infinite-scroll infinite-scroll-bottom" data-distance="5">
+        <div id="article-list">
+            <template v-for="item in likeArticles">
+                <div class="like-item" :id="'item'+item.id">
+                    <div class="article-info">
+                        <img class="avatar" :src='getAuthorAvatar(item.authorAvatar)' alt="">
+                        <div class="article-info-text">
+                            <div class="cancle-like" :data-id="item.id" @click="cancleLike">取消喜欢</div>
+                            <div class="userName">{$getAuthorName(item.authorName, item.col)$}</div>
+                            <div class="updateTime">{$getTime(item.updateTime)$}</div>
+
+                        </div>
 
                     </div>
+                    <hr>
+                    <a class="article-content external" :href="'/article/detail?articleid='+item.id">
+                        <img class="article-img" :src="'/static/img'+item.poster" alt="">
+                        <div class="article-content-text">
+                            <div class="article-title">{$ item.title $}</div>
+                            <div class="article-intro">{$ item.description $}<</div>
 
+                        </div>
+                    </a>
                 </div>
-                <hr>
-                <a class="article-content external" :href="'/article/detail?articleid='+item.id">
-                    <img class="article-img" :src="'/static/img'+item.poster" alt="">
-                    <div class="article-content-text">
-                        <div class="article-title">{$ item.title $}</div>
-                        <div class="article-intro">{$ item.description $}<</div>
-
-                    </div>
-                </a>
-            </div>
-        </template>
+            </template>
+        </div>
+        <div class="infinite-scroll-preloader">
+            <div class="preloader"></div>
+        </div>
 
 
     </div>
@@ -186,13 +190,14 @@
 <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 
 <script>
-    $.init;
+    $.init();
     let $vm = new Vue({
         delimiters: ['{$', '$}'],
-        el: '#content',
+        el: '#article-list',
         data: {
             likeArticles: [],
             liftHeight: 112,
+            currentPage: '',
         },
         methods: {
             getAuthorName: function (username, col) {
@@ -212,11 +217,11 @@
             cancleLike: function (e) {
                 let articleid = e.target.getAttribute('data-id');
                 let itemid = 'item' + articleid;
-                $('.like-item').css({
-                    overflow: 'hidden',
-                    transform: 'translateY(-' + this.liftHeight + '%)',
-                    transition: '1s',
-                })
+                $('#' + itemid).css({
+                    "height": '0',
+                    "padding": '0',
+                    "margin-top": '0',
+                });
                 this.liftHeight += 112;
                 $.ajax({
                     url: '/user/canclelike',
@@ -232,15 +237,43 @@
             }
         }
     })
+    let perPageItems = 10;
+    let pageLoading = false;
+    getLikesofOnePage(perPageItems, true);
 
-
-    getLikesofOnePage();
-    function getLikesofOnePage() {
+    $(document).on('infinite', '.likes', function () {
+        console.log('infinite');
+        if (pageLoading) return;
+        pageLoading = true;
+        getLikesofOnePage(perPageItems, false);
+    })
+    function getLikesofOnePage(num, firstFlag) {
+        if (firstFlag == true) {
+            $vm.currentPage = 1;
+        } else {
+            $vm.currentPage += 1;
+        }
         $.ajax({
             url: '/user/getlikes',
+            data: {
+                num: num,
+                currentPage: $vm.currentPage,
+            },
             success: function (res) {
                 if (res.errno === 0) {
-                    $vm.likeArticles = res.data;
+                    for (let item of res.data.data) {
+                        $vm.likeArticles.push(item);
+                    }
+
+                    pageLoading = false;
+                    if (res.data.currentPage == res.data.totalPages || res.data.totalPages == 0) {
+                        $.detachInfiniteScroll($('.infinite-scroll'));
+                        $('.infinite-scroll-preloader').remove();
+                    }
+                } else if (res.errno == 1001) {
+                    $.detachInfiniteScroll($('.infinite-scroll'));
+                    $('.infinite-scroll-preloader').remove();
+                    $.toast('还没有喜欢的文章哦~');
                 }
             }
         })
