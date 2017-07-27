@@ -16,9 +16,14 @@ export default class extends base {
 		let page = this.get('page')
 		let facilityModel = this.model('facility')
 		let res = await facilityModel.getFacility(cat, count, page)
-		if(think.isEmpty(res)){
-			return this.success('no more facility')
+		if(think.isEmpty(res.data)){
+			console.log('23')
+			return this.fail('no more')
 		}
 		return this.success(res)
+	}
+	
+	async mapAction() {
+		this.display('discovery/map.html')
 	}
 }
