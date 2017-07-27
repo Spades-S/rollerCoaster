@@ -89,7 +89,7 @@ export default class extends think.model.base {
     }
 
     async getUserDetail(uid) {
-        let userDetail = await this.field('nickname, avatar, gender, birth, mail, city, introduction').where({uid: uid}).find()
+        let userDetail = await this.field('id, nickname, avatar, phoneNumber, gender, birth, mail, city, introduction').where({uid: uid}).find()
         return userDetail
     }
 

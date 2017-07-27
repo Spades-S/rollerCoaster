@@ -4,6 +4,7 @@
 'use strict';
 
 export default class extends think.logic.base {
+
     indexAction() {
 
     }
@@ -87,5 +88,7 @@ export default class extends think.logic.base {
             return this.redirect('/user/index');
         }
     }
+
+
 
 }

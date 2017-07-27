@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>用户反馈</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <!--<link rel="stylesheet" href="/static/css/articleDetail.css">-->
+    <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+        .page{
+            background-color: #fff;
+        }
+        .bar{
+            height: 3rem;
+            background-color: #07518f;
+            border-bottom: none;
+        }
+        h1.title{
+            color: white;
+            line-height: 3rem;
+            letter-spacing: 5px;
+            border-image-width: 0;
+        }
+        .icon-arrow-left {
+            display: inline-block;
+            width: 0.9rem;
+            height: 1.4rem;
+            position: absolute;
+            top: 0.75rem;
+            z-index: 30;
+        }
+        .bar-nav~.content{
+            top: 3rem;
+        }
+        .select-type{
+            margin: .5rem 0;
+            position: relative;
+        }
+        .type-input-holder{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: .6rem;
+        }
+        .holder-none{
+            color: #787878;
+        }
+        #feedback-type{
+            display: none;
+            margin: .1rem 0;
+            position: absolute;
+            width: 100%;
+            z-index: 10;
+            background-color: #fff;
+        }
+        .type{
+            padding: .4rem .8rem 0 .8rem;
+            font-size: .6rem;
+        }
+        .type:last-of-type{
+            padding-bottom: .4rem;
+        }
+        .type-input-holder, #feedback-type, #feedback-input, .contact-input{
+            width: 100%;
+            border: 1px solid lightgray;
+            border-radius: .3rem;
+            font-size: .6rem;
+        }
+        .type-input-holder, #feedback-input{
+            padding: .2rem .5rem;
+        }
+        .contact{
+            margin: .3rem 0;
+        }
+        .contact-input{
+            padding: .4rem .5rem ;
+        }
+        .button-submit-container{
+            margin: 1rem 0;
+        }
+        .button{
+            width: 100%;
+            height: 1.8rem !important;
+            line-height: 1.8rem !important;
+            font-size: .7rem !important;
+            border: none;
+            background-color: #6EB732;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+    <header class="bar bar-nav">
+        <a class=" iconfont icon-arrow-left back " href="javascript:history.go(-1)"></a>
+        <h1 class="title">意见反馈</h1>
+    </header>
+    <div class="content content-padded" id="feedback">
+        <div class="types select-type" id="feedback-type-select">
+            <div class="type-input-holder holder-none" @click="toggleSelect">{$ holder $}<span class="iconfont icon-arrow-bottom"></span></div>
+            <div name="feedback-type" id="feedback-type">
+                <div v-for="type, index in types" :data-value="type" class="type" @click="toggleType">{$ type $}</div>
+            </div>
+        </div>
+        <div class="feedback-content">
+            <textarea name="content" id="feedback-input" rows="8"></textarea>
+        </div>
+        <div class="contact">
+            <input type="text" name="contact" class="contact-input" placeholder="邮箱／手机（选填，便于我们给您回复）">
+        </div>
+        <div class="button-submit-container">
+            <button class="button-submit button button-big" @click="submitFeedback">提交反馈</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
+<script>
+    $.init();
+
+    new Vue({
+        delimiters: ['{$', '$}'],
+        data () {
+        	return {
+        		holder: '请选择您要反馈的问题类型',
+                types: ['信息纠错', '提供文章', '提供资料', '搜索建议', 'bug反馈', '账户与安全', '版权事宜', '其它']
+            }
+        },
+        methods: {
+        	toggleSelect: function () {
+        		if  ($('#feedback-type').css('display') === 'none') {
+			        $('#feedback-type').css('display', 'block')
+                } else {
+			        $('#feedback-type').css('display', 'none')
+                }
+
+	        },
+            toggleType: function (e) {
+	            $('#feedback-type').css('display', 'none')
+                $('.type-input-holder').removeClass('holder-none')
+                this.holder = e.currentTarget.dataset.value
+            },
+	        submitFeedback: function () {
+                let type = this.holder
+                let content = $('#feedback-input').val()
+                let contact = $('.contact-input').val()
+                if (type === '请选择您要反馈的问题类型') {
+                	return $.toast('请选择您反馈的问题类型')
+                }
+                if (!content) {
+                	return $.toast('请输入反馈内容')
+                }
+
+                $.ajax({
+                    url: '/user/sendfeedback',
+                    method: 'POST',
+                    data: {
+                    	type: type,
+                        content: content,
+                        contact: contact
+                    },
+                    success: function (ret) {
+                    	if(ret.errno === 0){
+		                    $.toast('反馈成功')
+		                    setTimeout(function () {
+			                    window.history.go(-1)
+		                    }, 1000)
+                        } else {
+		                    $.toast('发送失败，请重试')
+                        }
+
+                    },
+                    error: function (err) {
+	                    $.toast('发送失败，请重试')
+                    }
+                })
+            }
+        }
+    }).$mount('#feedback')
+</script>
+</body>
+</html>

@@ -121,7 +121,7 @@ var Article = function (_think$model$base) {
                         switch (_context2.prev = _context2.next) {
                             case 0:
                                 _context2.next = 2;
-                                return this.alias('article').field('title, authorAvatar, authorName, content, updatetime, likes, col').where({ id: id }).select();
+                                return this.alias('article').field('title, authorAvatar, authorName, content, updateTime, likes, col').where({ id: id }).select();
 
                             case 2:
                                 data = _context2.sent;

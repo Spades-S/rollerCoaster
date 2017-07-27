@@ -74,7 +74,7 @@
             font-size: 1.1rem;
             text-align: center;
             padding-top: .5rem;
-            color: white;
+            color: #7d7979;
         }
 
         .detail {
@@ -108,7 +108,7 @@
 <body>
 <div class="page">
     <header class="bar bar-nav">
-        <a class=" iconfont icon-arrow-left back "></a>
+        <a class=" iconfont icon-arrow-left back" href="/user"></a>
         <h1 class="title">我的</h1>
         <a class="edit iconfont icon-bianji external" href="/user/edit"></a>
     </header>
@@ -147,10 +147,7 @@
             }
         },
         created: function () {
-            this.getUserDetail()
-            let imgBaseAddr = '/static/img';
-            let imgAddr = imgBaseAddr + (this.userDetail.avatar || '/systemAvatar.jpeg');
-            $('#basicInfo').css('background-image', "url(" + imgAddr + ")");
+            this.getUserDetail();
         },
         methods: {
             getUserDetail: function () {

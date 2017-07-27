@@ -561,30 +561,17 @@ var _class = function (_base) {
         key: 'updateuserdetailAction',
         value: function () {
             var _ref13 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee13() {
-                var avatarCropped, avatarBase64, avatarBinary, userModel, uid, userRowData, basePath, detailPath, userDetail, updateRes;
+                var avatarCropped, userModel, uid, userDetail, avatarBase64, avatarBinary, userRowData, basePath, detailPath, updateRes;
                 return _regenerator2.default.wrap(function _callee13$(_context13) {
                     while (1) {
                         switch (_context13.prev = _context13.next) {
                             case 0:
                                 avatarCropped = this.post('avatarCropped');
-                                avatarBase64 = avatarCropped.split(',')[1];
-                                avatarBinary = new Buffer(avatarBase64, 'base64').toString('binary');
                                 userModel = this.model('user');
                                 uid = this.cookie('uid');
-                                _context13.next = 7;
-                                return userModel.getUserInfo(uid);
-
-                            case 7:
-                                userRowData = _context13.sent;
-                                basePath = this.config('avatarBasePath');
-                                detailPath = '/avatar/' + userRowData.id + '.png';
-
-                                _fs2.default.writeFileSync(basePath + detailPath, avatarBinary, 'binary', function (err) {
-                                    console.log(err);
-                                });
                                 userDetail = {
                                     nickname: this.post('nickname'),
-                                    avatar: detailPath,
+                                    avatar: this.post('avatar'),
                                     gender: this.post('gender'),
                                     birth: this.post('birth'),
                                     mail: this.post('mail'),
@@ -592,25 +579,48 @@ var _class = function (_base) {
                                     city: this.post('city')
                                 };
 
-                                console.log(userDetail);
+                                if (!avatarCropped) {
+                                    _context13.next = 15;
+                                    break;
+                                }
 
-                                _context13.next = 15;
-                                return userModel.updateUserDetail(userDetail, uid);
+                                console.log('inner');
+                                avatarBase64 = avatarCropped.split(',')[1];
+                                avatarBinary = new Buffer(avatarBase64, 'base64').toString('binary');
+                                _context13.next = 10;
+                                return userModel.getUserInfo(uid);
+
+                            case 10:
+                                userRowData = _context13.sent;
+                                basePath = this.config('avatarBasePath');
+                                detailPath = '/avatar/' + userRowData.id + '.png';
+
+                                _fs2.default.writeFileSync(basePath + detailPath, avatarBinary, 'binary', function (err) {
+                                    console.log(err);
+                                });
+                                userDetail.avatar = detailPath;
 
                             case 15:
+
+                                console.log(userDetail);
+
+                                _context13.next = 18;
+                                return userModel.updateUserDetail(userDetail, uid);
+
+                            case 18:
                                 updateRes = _context13.sent;
 
                                 if (think.isEmpty(updateRes)) {
-                                    _context13.next = 20;
+                                    _context13.next = 23;
                                     break;
                                 }
 
                                 return _context13.abrupt('return', this.success('successfully update'));
 
-                            case 20:
+                            case 23:
                                 return _context13.abrupt('return', this.fail('update failed'));
 
-                            case 21:
+                            case 24:
                             case 'end':
                                 return _context13.stop();
                         }
@@ -738,6 +748,97 @@ var _class = function (_base) {
             }
 
             return resetpasswordAction;
+        }()
+    }, {
+        key: 'feedbackAction',
+        value: function () {
+            var _ref17 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee17() {
+                return _regenerator2.default.wrap(function _callee17$(_context17) {
+                    while (1) {
+                        switch (_context17.prev = _context17.next) {
+                            case 0:
+                                return _context17.abrupt('return', this.display('user/feedback.html'));
+
+                            case 1:
+                            case 'end':
+                                return _context17.stop();
+                        }
+                    }
+                }, _callee17, this);
+            }));
+
+            function feedbackAction() {
+                return _ref17.apply(this, arguments);
+            }
+
+            return feedbackAction;
+        }()
+    }, {
+        key: 'sendfeedbackAction',
+        value: function () {
+            var _ref18 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee18() {
+                var uid, userModel, feedbackModel, nickname, userId, phoneNumber, userInfo, res;
+                return _regenerator2.default.wrap(function _callee18$(_context18) {
+                    while (1) {
+                        switch (_context18.prev = _context18.next) {
+                            case 0:
+                                uid = this.cookie('uid');
+                                userModel = this.model('user');
+                                feedbackModel = this.model('feedback');
+                                nickname = void 0, userId = void 0, phoneNumber = void 0;
+
+                                if (!uid) {
+                                    _context18.next = 11;
+                                    break;
+                                }
+
+                                _context18.next = 7;
+                                return userModel.getUserDetail(uid);
+
+                            case 7:
+                                userInfo = _context18.sent;
+
+                                userId = userInfo.id;
+                                nickname = userInfo.nickname;
+                                phoneNumber = userInfo.phoneNumber;
+
+                            case 11:
+                                _context18.next = 13;
+                                return feedbackModel.storeFeedback({
+                                    type: this.post('type'),
+                                    content: this.post('content'),
+                                    contact: this.post('contact'),
+                                    userId: userId,
+                                    nickname: nickname,
+                                    phoneNumber: phoneNumber
+                                });
+
+                            case 13:
+                                res = _context18.sent;
+
+                                if (think.isEmpty(res)) {
+                                    _context18.next = 18;
+                                    break;
+                                }
+
+                                return _context18.abrupt('return', this.success('feedback sent'));
+
+                            case 18:
+                                return _context18.abrupt('return', this.fail('feedback error'));
+
+                            case 19:
+                            case 'end':
+                                return _context18.stop();
+                        }
+                    }
+                }, _callee18, this);
+            }));
+
+            function sendfeedbackAction() {
+                return _ref18.apply(this, arguments);
+            }
+
+            return sendfeedbackAction;
         }()
     }]);
     return _class;

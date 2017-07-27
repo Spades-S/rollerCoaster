@@ -358,7 +358,7 @@ var _class = function (_think$model$base) {
                         switch (_context8.prev = _context8.next) {
                             case 0:
                                 _context8.next = 2;
-                                return this.field('nickname, avatar, gender, birth, mail, city, introduction').where({ uid: uid }).find();
+                                return this.field('id, nickname, avatar, phoneNumber, gender, birth, mail, city, introduction').where({ uid: uid }).find();
 
                             case 2:
                                 userDetail = _context8.sent;

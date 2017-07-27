@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>欢乐冶</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <style>
+        *{
+            -webkit-font-smoothing: antialiased;
+        }
+        .bar{
+            border-bottom: none;
+        }
+        .bar.bar-nav{
+            height: 3rem;
+            background-color: #07518f;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+        .map-icon::before{
+            color: #fff;
+        }
+        .search{
+            width: 85%;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .search-input{
+            width: 100%;
+            border-radius: .3rem;
+            height: 1rem;
+            line-height: 1rem;
+            padding: .3rem .5rem;
+            box-sizing: content-box;
+            font-size: .6rem;
+            border: none;
+            outline: none;
+        }
+        .icon-sousuo{
+            position: absolute;
+            line-height: 1.6rem;
+            right: .5rem;
+            color: #6EB732;
+        }
+        .tab-item{
+            text-align: center;
+        }
+        .tab-item.active{
+            color: #72bb38 !important;
+        }
+        .bar-nav~.content{
+            top: 3rem;
+            padding-bottom: 2.5rem;
+        }
+        .content-tab{
+            display: flex;
+            justify-content: space-around;
+            padding: 0 1rem;
+        }
+        .content-tab-item{
+            width: 33.3%;
+            height:2rem;
+            line-height: 2rem;
+            text-align: center;
+        }
+        .content-tab .active{
+            color: #07518f;
+            background-color: #fff;
+            border-top: 2px solid #6EB732;
+        }
+        .content-nav{
+            display: flex;
+            justify-content: space-around;
+            padding: .8rem 1rem .5rem 1rem;
+            font-size: .7rem;
+            color: #A7A7A7;
+            background-color: #fff;
+        }
+        .content-nav-item{
+            width: 25%;
+            text-align: center;
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+        }
+        .content-nav-item .content-icon{
+            width: 2.2rem;
+            height: 2.2rem;
+            padding: .4rem;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .content-icon-img{
+            width: 1.4rem;
+            height: 1.4rem;
+        }
+        .content-nav-item-text{
+            margin-top: .5rem;
+        }
+        .rollercoaster-icon{
+            background-color: #FC704B;
+        }
+        .park-icon{
+            border: 1px solid #74B942;
+        }
+        .factory-icon{
+            border: 1px solid #55C3F4;
+        }
+        .knowledge-icon{
+            border: 1px solid #FDA134;
+        }
+        .content-list{
+            padding-top: .3rem;
+        }
+        .content-list-item{
+            height: 5rem;
+            padding: .8rem 1rem;
+            display: flex;
+            background-color: #fff;
+            border-bottom: 1px solid #EEEEEE;
+        }
+        .facility-poster{
+            height: 3.4rem;
+            width: 3.4rem;
+        }
+        .facility-poster-img{
+            height: 100%;
+            width: 100%;
+        }
+        .content-list-item-right{
+            width: calc(100% - 3.4rem);
+            padding-left: 1rem;
+        }
+        .facility-title{
+            height: 1.4rem;
+            line-height: 1.3rem;
+            margin: 0;
+        }
+        .facility-rating{
+            width: 100% !important;
+            height: .6rem;
+            padding: .05rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .facility-rating img{
+            width: .6rem;
+        }
+        .facility-detail{
+            display: flex;
+            justify-content: space-between;
+            margin-top: .3rem;
+            height: 1.3rem;
+            line-height: 1.3rem;
+        }
+        .facility-price, .facility-distance{
+            font-size: .7rem;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+<dvi class="page">
+    <header class="bar bar-nav">
+        <div class="search">
+            <input type="text" class="search-input" placeholder="过山车  黑暗乘骑  show  小组">
+            <span class="search-icon iconfont icon-sousuo"></span>
+        </div>
+        <div class="map-icon iconfont icon-dingwei"></div>
+    </header>
+    <div class="content infinite-scroll infinite-scroll-bottom" id="content" data-distance="5">
+        <div class="content-tab">
+            <div class="content-tab-item active">过山车</div>
+            <div class="content-tab-item">黑暗乘骑</div>
+            <div class="content-tab-item">演出</div>
+        </div>
+        <content-item :facility-list="facilityList"></content-item>
+        <div class="infinite-scroll-preloader">
+            <div class="preloader"></div>
+        </div>
+    </div>
+    <nav class="bar bar-tab ">
+        <a class="tab-item external" href="/index">
+            <span class="icon iconfont icon-shouye"></span>
+            <span class="tab-label ">首页</span>
+        </a>
+        <a class="tab-item active external">
+            <span class="icon iconfont icon-yikeapp15"></span>
+            <span class="tab-label ">发现</span>
+        </a>
+        <a class="tab-item external" href="/group">
+            <span class="icon iconfont icon-xiaozufill"></span>
+            <span class="tab-label ">小组</span>
+        </a>
+        <a class="tab-item external" href="/user">
+            <span class="icon iconfont icon-wode"></span>
+            <span class="tab-label ">我的</span>
+        </a>
+    </nav>
+</dvi>
+
+
+
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script src="/static/js/raty/jquery.raty.js"></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
+<script>
+	$.init();
+	$.fn.raty.defaults.path = '/static/js/raty/img'
+    let loading = false
+
+	/* let position = ''
+	window.navigator.geolocation.getCurrentPosition(function(pos) {
+		position = pos
+	}) */
+	Vue.component('content-item', {
+		delimiters: ['{$', '$}'],
+		props: ['facilityList'],
+		template: `<div class="content-item">
+    <div class="content-nav">
+        <div class="content-nav-item">
+            <div class="content-icon rollercoaster-icon">
+                <img class="content-icon-img" src="static/img/icon/rollercoaster2.svg">
+            </div>
+            <div class="content-nav-item-text">附近的车</div>
+        </div>
+        <div class="content-nav-item">
+            <div class="content-icon park-icon">
+                <img class="content-icon-img" src="static/img/icon/park.svg">
+            </div>
+            <div class="content-nav-item-text">乐园</div>
+        </div>
+        <div class="content-nav-item">
+            <div class="content-icon factory-icon">
+                <img class="content-icon-img" src="static/img/icon/factory.svg">
+            </div>
+            <div class="content-nav-item-text">厂商</div>
+        </div>
+        <div class="content-nav-item">
+            <div class="content-icon knowledge-icon">
+                <img class="content-icon-img" src="static/img/icon/knowledge.svg">
+            </div>
+            <div class="content-nav-item-text">过山车知识</div>
+        </div>
+    </div>
+    <div class="content-list">
+        <div class="content-list-item" v-for="item in facilityList">
+            <div class="facility-poster">
+                <img :src="item.poster.split(',')[0]" class="facility-poster-img">
+            </div>
+            <div class="content-list-item-right">
+                <div class="facility-title">
+                    {$ item.title $}
+                </div>
+                <div class="facility-rating">
+
+                </div>
+                <div class="facility-detail">
+                    <div class="facility-price">
+                        价格：{$ item.price || '0' $}
+                    </div>
+                    <div class="facility-distance">
+                        距离：{$ item.distance || '0' $}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>`
+	})
+
+	var vm = new Vue({
+        delimiters: ['{$', '$}'],
+        data () {
+        	return {
+        		cats: [{
+        			name: '过山车',
+                    en: 'rollercoaster'
+                }, {
+        			name: '黑暗乘骑',
+                    en: 'darkride'
+                }, {
+        			name: '演出',
+                    en: 'show'
+                }],
+                facilityList: [],
+                activeIndex: 0,
+                perPageItems: 10,
+                page: 1
+            }
+        },
+        created: function () {
+            this.getFacility(this.perPageItems, this.page)
+        },
+        updated: function () {
+	        $('.facility-rating').raty({
+                half: true,
+		        number: 5,
+		        score: 2.5
+	        })
+        },
+        methods: {
+        	getFacility: function (perPageItems, page) {
+        		let self = this
+                $.ajax({
+                    url: '/discovery/getfacility',
+                    data: {
+                    	cat: self.activeIndex + 1,
+                    	count: perPageItems,
+                        page: page
+                    },
+                    success: function (ret) {
+                    	if(ret.errno === 0){
+		                    self.facilityList = self.facilityList.concat(ret.data.data)
+		                    this.page ++
+                            loading = false
+                            return
+                        }
+                        return $.toast('获取失败，请刷新重试')
+                    },
+                    error: function (err) {
+	                    console.log(err)
+                    	return $.toast('获取失败，请刷新重试')
+                    }
+                })
+	        }
+        }
+    }).$mount('#content')
+
+    $(document).on('infinite', '.infinite-scroll', function () {
+    	console.log('loading', loading)
+        if(loading) return;
+        loading = true
+        vm.getFacility(vm.perPageItems, vm.page)
+    })
+
+
+</script>
+
+</body>
+</html>

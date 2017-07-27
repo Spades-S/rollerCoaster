@@ -46,20 +46,20 @@
                 </div>
                 <div class="button-row marginbottom">
                     <a href="#" class="button group">我的小组</a>
-                    <a href="#" class="button feed">意见反馈</a>
+                    <a href="/user/feedback " class="button feed external" >意见反馈</a>
                 </div>
 
             </div>
             <div class="article-list" id="article-list">
-                <template v-for="item in articles">
-                    <div :class="getClass(item.id, greyList)" v-bind:data-articleid="item.id">
+                <template v-for="item, index in articles">
+                    <div :class="'article-item ' + item.readClass" :data-index="index" v-bind:data-articleid="item.id"> <!-- getClass(item.id, greyList) -->
                         <div class="article-content padded">
                             <img :src="'/static/img'+item.poster " class="article-firstimg ">
                             <div class="article-title ">{$ item.title $}</div>
                             <div class="article-intro ">{$ item.description $}</div>
                         </div>
                         <div class="article-info padded">
-                            <span class="article-author ">作者：{$ getAuthorName(item.authorName, item.col) $}</span>
+                            <span class="article-author ">作者：{$ item.authorName || item.col $}</span>
                             <span class="article-category ">来自：{$ item.col $}</span>
                         </div>
 
@@ -83,11 +83,11 @@
             <span class="icon iconfont icon-shouye left-negtivedot2"></span>
             <span class="tab-label ">首页</span>
         </a>
-        <a class="tab-item external" href="#discovery">
+        <a class="tab-item external" href="/discovery">
             <span class="icon iconfont icon-yikeapp15 left-negtivedot2"></span>
             <span class="tab-label ">发现</span>
         </a>
-        <a class="tab-item external" href="#group">
+        <a class="tab-item external" href="/group">
             <span class="icon iconfont icon-xiaozufill left-negtivedot2 "></span>
             <span class="tab-label ">小组</span>
         </a>
@@ -355,13 +355,10 @@
 <script type="text/javascript ">
     $.init();
     $.fn.raty.defaults.path = '/static/js/raty/img';
-    //    window.onload = function(){
-    //        $(window).css('height', screen.height);
-    //        alert($(window).height());
-    //        alert(screen.height);
-    //    }
 
 
+    let readList = window.localStorage.getItem('readList') || []
+    console.log(readList)
     var $vm = new Vue({
         delimiters: ['{$', '$}'],
         el: '#article-list',
@@ -371,6 +368,7 @@
             greyList: [],
         },
         methods: {
+
             getAuthorName: function (name, col) {
                 return name || col;
             },
@@ -381,11 +379,11 @@
                     return "article-item readed";
                 }
             }
-        }
 
+        }
     })
     let articleLoading = false;
-    let perPageItems = 5;
+    let perPageItems = 10;
 
     getSomeArticles(perPageItems, true);
 
@@ -397,8 +395,10 @@
     });
     $(document).on('click', '.article-item', (e) => {
         let articleid = e.currentTarget.getAttribute('data-articleid');
-        e.currentTarget.setAttribute('class', 'article-item readed');
+	    let index = e.currentTarget.getAttribute('data-index');
 
+	    $vm.articles[index].readClass = "readed"
+        e.currentTarget.setAttribute('class', 'article-item readed');
 
         window.location.href = "/article/detail?articleid=" + articleid;
     });
@@ -439,7 +439,7 @@
      })*/
 
 
-    function getSomeArticles(number, firstFlag) {
+    function getSomeArticles(number, firstFlag, articleList) {
         if (firstFlag == true) {
             $vm.currentPage = 1;
         } else {
@@ -451,11 +451,16 @@
             data: {
                 currentPage: $vm.currentPage,
                 perPageNums: number,
+                articleList: articleList
             },
             success: function (data) {
+            	console.log(data)
                 if (data.errno == 0) {
-                    $vm.greyList = data.data.greyList;
+                    // $vm.greyList = data.data.greyList;
                     for (let item of data.data.data) {
+                    	if(readList.indexOf(item.id)>=0){
+                    		item.readClass += ' readed'
+                        }
                         $vm.articles.push(item);
                     }
                     articleLoading = false;
@@ -468,7 +473,6 @@
             }
         })
     }
-
 
 </script>
 </body>

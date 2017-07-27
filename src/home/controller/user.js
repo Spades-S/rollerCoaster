@@ -89,6 +89,7 @@ export default class extends base {
                 nickname = this.post('nickname'),
                 psd = this.post('psd')
             let userModel = this.model('user')
+
             let ck = generateUid()
             let data = await userModel.register(phone, nickname, psd, ck)
 
@@ -169,25 +170,31 @@ export default class extends base {
 
     async updateuserdetailAction() {
         let avatarCropped = this.post('avatarCropped');
-        let avatarBase64 = avatarCropped.split(',')[1];
-        let avatarBinary = new Buffer(avatarBase64, 'base64').toString('binary');
         let userModel = this.model('user');
-        let uid = this.cookie('uid')
-        let userRowData = await userModel.getUserInfo(uid);
-        let basePath = this.config('avatarBasePath');
-        let detailPath = '/avatar/' + userRowData.id + '.png';
-        fs.writeFileSync(basePath + detailPath, avatarBinary, 'binary', function (err) {
-            console.log(err);
-        });
+        let uid = this.cookie('uid');
         let userDetail = {
             nickname: this.post('nickname'),
-            avatar: detailPath,
+            avatar: this.post('avatar'),
             gender: this.post('gender'),
             birth: this.post('birth'),
             mail: this.post('mail'),
             introduction: this.post('introduction'),
             city: this.post('city')
         }
+        if (avatarCropped) {
+            console.log('inner');
+            let avatarBase64 = avatarCropped.split(',')[1];
+            let avatarBinary = new Buffer(avatarBase64, 'base64').toString('binary');
+            let userRowData = await userModel.getUserInfo(uid);
+            let basePath = this.config('avatarBasePath');
+            let detailPath = '/avatar/' + userRowData.id + '.png';
+            fs.writeFileSync(basePath + detailPath, avatarBinary, 'binary', function (err) {
+                console.log(err);
+            });
+            userDetail.avatar = detailPath;
+        }
+
+
         console.log(userDetail)
 
 
@@ -219,6 +226,39 @@ export default class extends base {
             return this.success('successfully update')
         } else {
             return this.fail('update failed')
+        }
+    }
+
+    async feedbackAction() {
+        return this.display('user/feedback.html')
+    }
+
+    async sendfeedbackAction() {
+        let uid = this.cookie('uid')
+        let userModel = this.model('user')
+        let feedbackModel = this.model('feedback')
+        let nickname, userId, phoneNumber
+
+        if (uid) {
+            let userInfo = await userModel.getUserDetail(uid)
+            userId = userInfo.id
+            nickname = userInfo.nickname
+            phoneNumber = userInfo.phoneNumber
+        }
+
+        let res = await feedbackModel.storeFeedback({
+            type: this.post('type'),
+            content: this.post('content'),
+            contact: this.post('contact'),
+            userId: userId,
+            nickname: nickname,
+            phoneNumber: phoneNumber
+        })
+
+        if (!think.isEmpty(res)) {
+            return this.success('feedback sent')
+        } else {
+            return this.fail('feedback error')
         }
     }
 }

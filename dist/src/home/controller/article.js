@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
 var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
@@ -11,10 +15,6 @@ var _regenerator2 = _interopRequireDefault(_regenerator);
 var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
-
-var _stringify = require('babel-runtime/core-js/json/stringify');
-
-var _stringify2 = _interopRequireDefault(_stringify);
 
 var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
 
@@ -52,63 +52,53 @@ var _class = function (_base) {
 
     (0, _createClass3.default)(_class, [{
         key: 'detailAction',
-        value: function detailAction() {
-            var articleId = this.get('articleid');
-
-            if (checkLogin(this)) {
-                console.log('Login checked!');
-
-                // to be finished
-            } else {
-                if (!this.cookie('readList')) {
-                    var readList = new Array();
-                    readList.push(parseInt(articleId));
-
-                    this.cookie('readList', (0, _stringify2.default)(readList));
-                } else {
-                    var _readList = JSON.parse(this.cookie('readList'));
-                    if (_readList.indexOf(parseInt(articleId)) < 0) {
-                        _readList.push(parseInt(articleId));
-                        this.cookie('readList', (0, _stringify2.default)(_readList));
-                    }
-                }
-            }
-            this.assign('articleid', articleId);
-            return this.display('article/detail.html');
-        }
-    }, {
-        key: 'addcommentAction',
         value: function () {
             var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
-                var userid, articleid, timestamp, content, userModel, authorInfo, authorAvatar, authorName, articleModel, data;
+                var articleId, readList;
                 return _regenerator2.default.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
-                                if (!this.isPost()) {
-                                    _context.next = 16;
+                                articleId = this.get('articleid');
+
+                                if (!checkLogin(this)) {
+                                    _context.next = 5;
                                     break;
                                 }
 
-                                userid = this.post("userid");
-                                articleid = this.post('articleid');
-                                timestamp = this.post('timestamp');
-                                content = this.post('content');
-                                userModel = this.model('user');
-                                _context.next = 8;
-                                return userModel.getAvatarInfoByUserId(parseInt(userid));
+                                console.log('Login checked!');
 
-                            case 8:
-                                authorInfo = _context.sent;
-                                authorAvatar = authorInfo[0].avatar;
-                                authorName = authorInfo[0].nickname;
-                                articleModel = this.model('comment');
+                                // to be finished
+
                                 _context.next = 14;
-                                return articleModel.addComment(parseInt(userid), parseInt(articleid), authorAvatar, authorName, content, parseInt(timestamp));
+                                break;
+
+                            case 5:
+                                _context.next = 7;
+                                return this.session('readList');
+
+                            case 7:
+                                _context.t0 = _context.sent;
+
+                                if (_context.t0) {
+                                    _context.next = 10;
+                                    break;
+                                }
+
+                                _context.t0 = [];
+
+                            case 10:
+                                readList = _context.t0;
+
+                                if (readList.indexOf(parseInt(articleId)) < 0) {
+                                    readList.push(parseInt(articleId));
+                                }
+                                _context.next = 14;
+                                return this.session('readList', readList);
 
                             case 14:
-                                data = _context.sent;
-                                return _context.abrupt('return', this.success(data));
+                                this.assign('articleid', articleId);
+                                return _context.abrupt('return', this.display('article/detail.html'));
 
                             case 16:
                             case 'end':
@@ -118,47 +108,47 @@ var _class = function (_base) {
                 }, _callee, this);
             }));
 
-            function addcommentAction() {
+            function detailAction() {
                 return _ref.apply(this, arguments);
             }
 
-            return addcommentAction;
+            return detailAction;
         }()
     }, {
-        key: 'refresharticlesAction',
+        key: 'addcommentAction',
         value: function () {
             var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
-                var greyList, invisibleList, readList, currentPage, perPageNum, articleModel, data;
+                var userid, articleid, timestamp, content, userModel, authorInfo, authorAvatar, authorName, articleModel, data;
                 return _regenerator2.default.wrap(function _callee2$(_context2) {
                     while (1) {
                         switch (_context2.prev = _context2.next) {
                             case 0:
-                                greyList = [];
-                                invisibleList = [];
-
-                                if (this.cookie('readList') !== '') {
-                                    readList = JSON.parse(this.cookie('readList'));
-
-                                    if (readList.length > 5) {
-                                        greyList = readList.splice(-5, 5);
-                                        invisibleList = readList;
-                                    } else {
-                                        greyList = readList;
-                                    }
+                                if (!this.isPost()) {
+                                    _context2.next = 16;
+                                    break;
                                 }
-                                currentPage = this.get('currentPage');
-                                perPageNum = this.get('perPageNums');
-                                articleModel = this.model('article');
+
+                                userid = this.post("userid");
+                                articleid = this.post('articleid');
+                                timestamp = this.post('timestamp');
+                                content = this.post('content');
+                                userModel = this.model('user');
                                 _context2.next = 8;
-                                return articleModel.getPerPageItems(perPageNum, currentPage, invisibleList);
+                                return userModel.getAvatarInfoByUserId(parseInt(userid));
 
                             case 8:
-                                data = _context2.sent;
+                                authorInfo = _context2.sent;
+                                authorAvatar = authorInfo[0].avatar;
+                                authorName = authorInfo[0].nickname;
+                                articleModel = this.model('comment');
+                                _context2.next = 14;
+                                return articleModel.addComment(parseInt(userid), parseInt(articleid), authorAvatar, authorName, content, parseInt(timestamp));
 
-                                data.greyList = greyList;
+                            case 14:
+                                data = _context2.sent;
                                 return _context2.abrupt('return', this.success(data));
 
-                            case 11:
+                            case 16:
                             case 'end':
                                 return _context2.stop();
                         }
@@ -166,31 +156,57 @@ var _class = function (_base) {
                 }, _callee2, this);
             }));
 
-            function refresharticlesAction() {
+            function addcommentAction() {
                 return _ref2.apply(this, arguments);
             }
 
-            return refresharticlesAction;
+            return addcommentAction;
         }()
     }, {
-        key: 'getarticlebyarticleidAction',
+        key: 'refresharticlesAction',
         value: function () {
             var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3() {
-                var articleid, articleModel, data;
+                var greyList, invisibleList, readList, currentPage, perPageNum, articleModel, data;
                 return _regenerator2.default.wrap(function _callee3$(_context3) {
                     while (1) {
                         switch (_context3.prev = _context3.next) {
                             case 0:
-                                articleid = this.get('articleid');
-                                articleModel = this.model('article');
+                                greyList = [];
+                                invisibleList = [];
                                 _context3.next = 4;
-                                return articleModel.getArticleItemByid(articleid);
+                                return this.session('readList');
 
                             case 4:
+                                readList = _context3.sent;
+
+                                if (readList) {
+                                    /* if (readList.length > 5) { */
+                                    greyList = readList; // .splice(-5, 5);
+                                    // console.log('greyList', greyList)
+                                    invisibleList = readList;
+                                    /* } else {
+                                           greyList = readList;
+                                       } */
+                                }
+                                currentPage = this.get('currentPage');
+                                perPageNum = this.get('perPageNums');
+                                articleModel = this.model('article');
+                                _context3.next = 11;
+                                return articleModel.getPerPageItems(perPageNum, currentPage, invisibleList);
+
+                            case 11:
                                 data = _context3.sent;
+
+                                data.data.forEach(function (el) {
+                                    if (greyList.indexOf(el.id) >= 0) {
+                                        el.readClass = "readed";
+                                    } else {
+                                        el.readClass = "";
+                                    }
+                                });
                                 return _context3.abrupt('return', this.success(data));
 
-                            case 6:
+                            case 14:
                             case 'end':
                                 return _context3.stop();
                         }
@@ -198,17 +214,17 @@ var _class = function (_base) {
                 }, _callee3, this);
             }));
 
-            function getarticlebyarticleidAction() {
+            function refresharticlesAction() {
                 return _ref3.apply(this, arguments);
             }
 
-            return getarticlebyarticleidAction;
+            return refresharticlesAction;
         }()
     }, {
-        key: 'getrelativearticleAction',
+        key: 'getarticlebyarticleidAction',
         value: function () {
             var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4() {
-                var articleid, articleModel, authoridRowData, col, relativeArticles;
+                var articleid, articleModel, data;
                 return _regenerator2.default.wrap(function _callee4$(_context4) {
                     while (1) {
                         switch (_context4.prev = _context4.next) {
@@ -216,23 +232,13 @@ var _class = function (_base) {
                                 articleid = this.get('articleid');
                                 articleModel = this.model('article');
                                 _context4.next = 4;
-                                return articleModel.getColByArticleId(articleid);
+                                return articleModel.getArticleItemByid(articleid);
 
                             case 4:
-                                authoridRowData = _context4.sent;
-                                col = authoridRowData[0].col;
-                                _context4.next = 8;
-                                return articleModel.getRelativeArticlesByCol(col, articleid);
+                                data = _context4.sent;
+                                return _context4.abrupt('return', this.success(data));
 
-                            case 8:
-                                relativeArticles = _context4.sent;
-
-                                if (relativeArticles.length >= 2) {
-                                    relativeArticles = relativeArticles.slice(0, 2);
-                                }
-                                return _context4.abrupt('return', this.success(relativeArticles));
-
-                            case 11:
+                            case 6:
                             case 'end':
                                 return _context4.stop();
                         }
@@ -240,8 +246,50 @@ var _class = function (_base) {
                 }, _callee4, this);
             }));
 
-            function getrelativearticleAction() {
+            function getarticlebyarticleidAction() {
                 return _ref4.apply(this, arguments);
+            }
+
+            return getarticlebyarticleidAction;
+        }()
+    }, {
+        key: 'getrelativearticleAction',
+        value: function () {
+            var _ref5 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5() {
+                var articleid, articleModel, authoridRowData, col, relativeArticles;
+                return _regenerator2.default.wrap(function _callee5$(_context5) {
+                    while (1) {
+                        switch (_context5.prev = _context5.next) {
+                            case 0:
+                                articleid = this.get('articleid');
+                                articleModel = this.model('article');
+                                _context5.next = 4;
+                                return articleModel.getColByArticleId(articleid);
+
+                            case 4:
+                                authoridRowData = _context5.sent;
+                                col = authoridRowData[0].col;
+                                _context5.next = 8;
+                                return articleModel.getRelativeArticlesByCol(col, articleid);
+
+                            case 8:
+                                relativeArticles = _context5.sent;
+
+                                if (relativeArticles.length >= 2) {
+                                    relativeArticles = relativeArticles.slice(0, 2);
+                                }
+                                return _context5.abrupt('return', this.success(relativeArticles));
+
+                            case 11:
+                            case 'end':
+                                return _context5.stop();
+                        }
+                    }
+                }, _callee5, this);
+            }));
+
+            function getrelativearticleAction() {
+                return _ref5.apply(this, arguments);
             }
 
             return getrelativearticleAction;
@@ -249,34 +297,34 @@ var _class = function (_base) {
     }, {
         key: 'refreshlikesAction',
         value: function () {
-            var _ref5 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5() {
+            var _ref6 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6() {
                 var likes, uid, articleid, articleModel, art_lines, userModel, data, likecookie, newlikearray;
-                return _regenerator2.default.wrap(function _callee5$(_context5) {
+                return _regenerator2.default.wrap(function _callee6$(_context6) {
                     while (1) {
-                        switch (_context5.prev = _context5.next) {
+                        switch (_context6.prev = _context6.next) {
                             case 0:
                                 likes = this.post('likes');
                                 uid = this.cookie('uid');
                                 articleid = parseInt(this.post('articleid'));
                                 articleModel = this.model('article');
-                                _context5.next = 6;
+                                _context6.next = 6;
                                 return articleModel.updateLikesByArticleId(articleid, likes);
 
                             case 6:
-                                art_lines = _context5.sent;
+                                art_lines = _context6.sent;
 
                                 if (!uid) {
-                                    _context5.next = 15;
+                                    _context6.next = 15;
                                     break;
                                 }
 
                                 userModel = this.model('user');
-                                _context5.next = 11;
+                                _context6.next = 11;
                                 return userModel.updateLikes(articleid, uid);
 
                             case 11:
-                                data = _context5.sent;
-                                return _context5.abrupt('return', this.success(data));
+                                data = _context6.sent;
+                                return _context6.abrupt('return', this.success(data));
 
                             case 15:
                                 likecookie = this.cookie('likecookie');
@@ -291,18 +339,18 @@ var _class = function (_base) {
                                     newlikearray.push(articleid);
                                 }
                                 this.cookie('likecookie', (0, _stringify2.default)(newlikearray));
-                                return _context5.abrupt('return', this.success());
+                                return _context6.abrupt('return', this.success());
 
                             case 20:
                             case 'end':
-                                return _context5.stop();
+                                return _context6.stop();
                         }
                     }
-                }, _callee5, this);
+                }, _callee6, this);
             }));
 
             function refreshlikesAction() {
-                return _ref5.apply(this, arguments);
+                return _ref6.apply(this, arguments);
             }
 
             return refreshlikesAction;
@@ -310,30 +358,30 @@ var _class = function (_base) {
     }, {
         key: 'getlikestatusAction',
         value: function () {
-            var _ref6 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6() {
+            var _ref7 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7() {
                 var uid, articleid, likes, userModel, rowdata, data;
-                return _regenerator2.default.wrap(function _callee6$(_context6) {
+                return _regenerator2.default.wrap(function _callee7$(_context7) {
                     while (1) {
-                        switch (_context6.prev = _context6.next) {
+                        switch (_context7.prev = _context7.next) {
                             case 0:
                                 uid = this.cookie('uid');
                                 articleid = parseInt(this.get('articleid'));
                                 likes = [];
 
                                 if (!uid) {
-                                    _context6.next = 11;
+                                    _context7.next = 11;
                                     break;
                                 }
 
                                 userModel = this.model('user');
-                                _context6.next = 7;
+                                _context7.next = 7;
                                 return userModel.getLikes(uid);
 
                             case 7:
-                                rowdata = _context6.sent;
+                                rowdata = _context7.sent;
 
                                 likes = JSON.parse(rowdata[0].likes);
-                                _context6.next = 12;
+                                _context7.next = 12;
                                 break;
 
                             case 11:
@@ -349,46 +397,9 @@ var _class = function (_base) {
                                 } else {
                                     data = false;
                                 }
-                                return _context6.abrupt('return', this.success(data));
+                                return _context7.abrupt('return', this.success(data));
 
                             case 15:
-                            case 'end':
-                                return _context6.stop();
-                        }
-                    }
-                }, _callee6, this);
-            }));
-
-            function getlikestatusAction() {
-                return _ref6.apply(this, arguments);
-            }
-
-            return getlikestatusAction;
-        }()
-    }, {
-        key: 'getcommentbyarticleidAction',
-        value: function () {
-            var _ref7 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7() {
-                var articleid, commentModel, comment, commentLength;
-                return _regenerator2.default.wrap(function _callee7$(_context7) {
-                    while (1) {
-                        switch (_context7.prev = _context7.next) {
-                            case 0:
-                                articleid = this.get('articleid');
-                                commentModel = this.model('comment');
-                                _context7.next = 4;
-                                return commentModel.getCommentByPostId(parseInt(articleid));
-
-                            case 4:
-                                comment = _context7.sent;
-                                commentLength = comment.length;
-
-                                if (commentLength >= 2) {
-                                    comment = comment.splice(0, 2);
-                                }
-                                return _context7.abrupt('return', this.success({ commentLength: commentLength, commentContent: comment }));
-
-                            case 8:
                             case 'end':
                                 return _context7.stop();
                         }
@@ -396,8 +407,45 @@ var _class = function (_base) {
                 }, _callee7, this);
             }));
 
-            function getcommentbyarticleidAction() {
+            function getlikestatusAction() {
                 return _ref7.apply(this, arguments);
+            }
+
+            return getlikestatusAction;
+        }()
+    }, {
+        key: 'getcommentbyarticleidAction',
+        value: function () {
+            var _ref8 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8() {
+                var articleid, commentModel, comment, commentLength;
+                return _regenerator2.default.wrap(function _callee8$(_context8) {
+                    while (1) {
+                        switch (_context8.prev = _context8.next) {
+                            case 0:
+                                articleid = this.get('articleid');
+                                commentModel = this.model('comment');
+                                _context8.next = 4;
+                                return commentModel.getCommentByPostId(parseInt(articleid));
+
+                            case 4:
+                                comment = _context8.sent;
+                                commentLength = comment.length;
+
+                                if (commentLength >= 2) {
+                                    comment = comment.splice(0, 2);
+                                }
+                                return _context8.abrupt('return', this.success({ commentLength: commentLength, commentContent: comment }));
+
+                            case 8:
+                            case 'end':
+                                return _context8.stop();
+                        }
+                    }
+                }, _callee8, this);
+            }));
+
+            function getcommentbyarticleidAction() {
+                return _ref8.apply(this, arguments);
             }
 
             return getcommentbyarticleidAction;
