@@ -10,11 +10,11 @@ export default class extends base {
             // to be finished
 
         } else {
-        	let readList = (await this.session('readList')) || []
+        	/* let readList = (await this.session('readList')) || []
 	        if (readList.indexOf(parseInt(articleId)) < 0) {
 		        readList.push(parseInt(articleId));
 	        }
-	        await this.session('readList', readList)
+	        await this.session('readList', readList) */
         }
         this.assign('articleid', articleId);
         return this.display('article/detail.html');
@@ -39,27 +39,26 @@ export default class extends base {
     async refresharticlesAction() {
         let greyList = [];
         let invisibleList = [];
-        let readList = await this.session('readList')
-        if (readList) {
-         /* if (readList.length > 5) { */
+        let readList = await this.session('readList') || []
+        /*if (readList) {
+         /!* if (readList.length > 5) { *!/
 		        greyList = readList // .splice(-5, 5);
 		        // console.log('greyList', greyList)
 		        invisibleList = readList;
-         /* } else {
+         /!* } else {
                 greyList = readList;
-            } */
-        }
+            } *!/
+        }*/
         let currentPage = this.get('currentPage');
         let perPageNum = this.get('perPageNums');
         let articleModel = this.model('article');
-        let data = await articleModel.getPerPageItems(perPageNum, currentPage, invisibleList);
+        let data = await articleModel.getPerPageItems(perPageNum, currentPage, readList);
         data.data.forEach(el => {
-        	if (greyList.indexOf(el.id) >= 0) {
-        		el.readClass = "readed"
-	        } else {
-		        el.readClass = ""
+        	if (readList.indexOf(el.id) === -1) {
+        		readList.push(el.id)
 	        }
         })
+        await this.session('readList', readList)
         return this.success(data);
     }
 

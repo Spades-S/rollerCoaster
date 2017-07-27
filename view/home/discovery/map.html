@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>欢乐冶</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+
+    <style>
+        *{
+            -webkit-font-smoothing: antialiased;
+        }
+        .bar{
+            border-bottom: none;
+        }
+        .bar.bar-nav{
+            height: 3rem;
+            background-color: #07518f;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+        .map-icon::before{
+            color: #fff;
+        }
+        .bar .searchbar{
+            width: 87%;
+            position: relative;
+            display: flex;
+            padding-right: 0;
+            align-items: center;
+            background: transparent;
+        }
+        .search-input{
+            width: 100%;
+            border-radius: .3rem;
+            box-sizing: content-box;
+            font-size: .6rem;
+        }
+        .searchbar .searchbar-cancel{
+            margin-left: .3rem;
+        }
+        .bar .searchbar .searchbar-cancel{
+            font-size: .7rem;
+            color: #fff;
+        }
+        .searchbar .search-input input {
+            height: 1.8rem;
+            margin: 0;
+        }
+        .search-input label+input {
+            padding-left: .7rem;
+        }
+        .icon-sousuo{
+            position: absolute;
+            line-height: 1.8rem;
+            right: .5rem;
+            color: #6EB732;
+        }
+        .bar~.content{
+            top: 3rem;
+        }
+        #container{
+            width: 100%;
+            height: calc(100% - 3rem);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page">
+        <header class="bar bar-nav">
+            <div class="searchbar">
+                <div class="search-input">
+                    <form action="">
+                        <label class="search-icon iconfont icon-sousuo active "></label>
+                        <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show'/>
+                    </form>
+                </div>
+                <a class="searchbar-cancel">取消</a>
+            </div>
+            <div class="map-icon iconfont icon-dingwei"></div>
+        </header>
+        <div class="content">
+            <div id="container"></div>
+        </div>
+    </div>
+
+
+
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script src="/static/js/raty/jquery.raty.js"></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=521f8907ee9a1459f01a4d66d2a36b99"></script>
+<script>
+    $.init();
+
+    let map = new AMap.Map('container', {
+	    resizeEnable: true,
+        zoom: 11
+    })
+    AMap.plugin(['AMap.ToolBar', 'AMap.Scale', 'AMap.Geolocation', 'AMap.PlaceSearch', 'AMap.Autocomplete'], function () {
+	    var toolBar = new AMap.ToolBar()
+        var scale = new AMap.Scale()
+        var geolocation = new AMap.Geolocation({
+            useNative: true
+        })
+        var placeSearch = new AMap.PlaceSearch()
+        var autoComplete = new AMap.Autocomplete()
+	    map.addControl(toolBar)
+        map.addControl(scale)
+        map.addControl(geolocation)
+        map.addControl(placeSearch)
+        map.addControl(autoComplete)
+    })
+
+</script>
+</body>
+</html>
