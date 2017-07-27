@@ -55,8 +55,8 @@
                     <div :class="'article-item ' + item.readClass" :data-index="index" v-bind:data-articleid="item.id"> <!-- getClass(item.id, greyList) -->
                         <div class="article-content padded">
                             <img :src="'/static/img'+item.poster " class="article-firstimg ">
-                            <div class="article-title ">{$ item.title $}</div>
-                            <div class="article-intro ">{$ item.description $}</div>
+                            <div class="article-title ">{$ escape(item.title) $}</div>
+                            <div class="article-intro ">{$ escape(item.description) $}</div>
                         </div>
                         <div class="article-info padded">
                             <span class="article-author ">作者：{$ item.authorName || item.col $}</span>
@@ -356,9 +356,9 @@
     $.init();
     $.fn.raty.defaults.path = '/static/js/raty/img';
 
+    let readList = (window.localStorage.getItem('readList') || '').split(',')
 
-    let readList = window.localStorage.getItem('readList') || []
-    console.log(readList)
+
     var $vm = new Vue({
         delimiters: ['{$', '$}'],
         el: '#article-list',
@@ -369,16 +369,9 @@
         },
         methods: {
 
-            getAuthorName: function (name, col) {
-                return name || col;
-            },
-            getClass: function (id, list) {
-                if (list.indexOf(id) < 0) {
-                    return "article-item";
-                } else {
-                    return "article-item readed";
-                }
-            }
+        	escape: function (str) {
+                return str.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&apos;/g, "'")
+	        }
 
         }
     })
@@ -393,6 +386,7 @@
         articleLoading = true;
         getSomeArticles(perPageItems, false);
     });
+
     $(document).on('click', '.article-item', (e) => {
         let articleid = e.currentTarget.getAttribute('data-articleid');
 	    let index = e.currentTarget.getAttribute('data-index');
@@ -454,11 +448,10 @@
                 articleList: articleList
             },
             success: function (data) {
-            	console.log(data)
                 if (data.errno == 0) {
                     // $vm.greyList = data.data.greyList;
                     for (let item of data.data.data) {
-                    	if(readList.indexOf(item.id)>=0){
+                    	if(readList.indexOf(String(item.id))>=0){
                     		item.readClass += ' readed'
                         }
                         $vm.articles.push(item);

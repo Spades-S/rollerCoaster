@@ -54,53 +54,29 @@ var _class = function (_base) {
         key: 'detailAction',
         value: function () {
             var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
-                var articleId, readList;
+                var articleId;
                 return _regenerator2.default.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
                                 articleId = this.get('articleid');
 
-                                if (!checkLogin(this)) {
-                                    _context.next = 5;
-                                    break;
-                                }
 
-                                console.log('Login checked!');
+                                if (checkLogin(this)) {
+                                    console.log('Login checked!');
 
-                                // to be finished
-
-                                _context.next = 14;
-                                break;
-
-                            case 5:
-                                _context.next = 7;
-                                return this.session('readList');
-
-                            case 7:
-                                _context.t0 = _context.sent;
-
-                                if (_context.t0) {
-                                    _context.next = 10;
-                                    break;
-                                }
-
-                                _context.t0 = [];
-
-                            case 10:
-                                readList = _context.t0;
-
-                                if (readList.indexOf(parseInt(articleId)) < 0) {
-                                    readList.push(parseInt(articleId));
-                                }
-                                _context.next = 14;
-                                return this.session('readList', readList);
-
-                            case 14:
+                                    // to be finished
+                                } else {
+                                        /* let readList = (await this.session('readList')) || []
+                                        if (readList.indexOf(parseInt(articleId)) < 0) {
+                                         readList.push(parseInt(articleId));
+                                        }
+                                        await this.session('readList', readList) */
+                                    }
                                 this.assign('articleid', articleId);
                                 return _context.abrupt('return', this.display('article/detail.html'));
 
-                            case 16:
+                            case 4:
                             case 'end':
                                 return _context.stop();
                         }
@@ -177,36 +153,48 @@ var _class = function (_base) {
                                 return this.session('readList');
 
                             case 4:
-                                readList = _context3.sent;
+                                _context3.t0 = _context3.sent;
 
-                                if (readList) {
-                                    /* if (readList.length > 5) { */
-                                    greyList = readList; // .splice(-5, 5);
-                                    // console.log('greyList', greyList)
-                                    invisibleList = readList;
-                                    /* } else {
-                                           greyList = readList;
-                                       } */
+                                if (_context3.t0) {
+                                    _context3.next = 7;
+                                    break;
                                 }
+
+                                _context3.t0 = [];
+
+                            case 7:
+                                readList = _context3.t0;
+
+                                /*if (readList) {
+                                 /!* if (readList.length > 5) { *!/
+                                  greyList = readList // .splice(-5, 5);
+                                  // console.log('greyList', greyList)
+                                  invisibleList = readList;
+                                 /!* } else {
+                                        greyList = readList;
+                                    } *!/
+                                }*/
                                 currentPage = this.get('currentPage');
                                 perPageNum = this.get('perPageNums');
                                 articleModel = this.model('article');
-                                _context3.next = 11;
-                                return articleModel.getPerPageItems(perPageNum, currentPage, invisibleList);
+                                _context3.next = 13;
+                                return articleModel.getPerPageItems(perPageNum, currentPage, readList);
 
-                            case 11:
+                            case 13:
                                 data = _context3.sent;
 
                                 data.data.forEach(function (el) {
-                                    if (greyList.indexOf(el.id) >= 0) {
-                                        el.readClass = "readed";
-                                    } else {
-                                        el.readClass = "";
+                                    if (readList.indexOf(el.id) === -1) {
+                                        readList.push(el.id);
                                     }
                                 });
+                                _context3.next = 17;
+                                return this.session('readList', readList);
+
+                            case 17:
                                 return _context3.abrupt('return', this.success(data));
 
-                            case 14:
+                            case 18:
                             case 'end':
                                 return _context3.stop();
                         }

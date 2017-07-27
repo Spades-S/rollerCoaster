@@ -56,7 +56,7 @@ var Article = function (_think$model$base) {
             }
 
             (_get2 = (0, _get4.default)(Article.prototype.__proto__ || (0, _getPrototypeOf2.default)(Article.prototype), 'init', this)).call.apply(_get2, [this].concat(args));
-            this.tableName = 'article';
+            this.tableName = 'article_copy';
         }
     }, {
         key: 'getPerPageItems',

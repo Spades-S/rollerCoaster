@@ -18,6 +18,7 @@
         }
         .bar{
             border-bottom: none;
+            padding-right: 0.2rem;
         }
         .bar.bar-nav{
             height: 3rem;
@@ -29,26 +30,37 @@
         .map-icon::before{
             color: #fff;
         }
-        .search{
-            width: 85%;
+        .bar .searchbar{
+            width: 87%;
             position: relative;
             display: flex;
+            padding-right: 0;
             align-items: center;
+            background: transparent;
         }
         .search-input{
             width: 100%;
             border-radius: .3rem;
-            height: 1rem;
-            line-height: 1rem;
-            padding: .3rem .5rem;
             box-sizing: content-box;
             font-size: .6rem;
-            border: none;
-            outline: none;
+        }
+        .searchbar .searchbar-cancel{
+            margin-left: .3rem;
+        }
+        .bar .searchbar .searchbar-cancel{
+            font-size: .7rem;
+            color: #fff;
+        }
+        .searchbar .search-input input {
+            height: 1.8rem;
+            margin: 0;
+        }
+        .search-input label+input {
+            padding-left: .7rem;
         }
         .icon-sousuo{
             position: absolute;
-            line-height: 1.6rem;
+            line-height: 1.8rem;
             right: .5rem;
             color: #6EB732;
         }
@@ -60,12 +72,19 @@
         }
         .bar-nav~.content{
             top: 3rem;
-            padding-bottom: 2.5rem;
+            height: calc(100% - 5.5rem);
+            background-color: #fff;
+        }
+        .map-link{
+            width: 2rem;
+            height: auto;
+            text-align: center;
         }
         .content-tab{
             display: flex;
             justify-content: space-around;
             padding: 0 1rem;
+            background-color: #eee;
         }
         .content-tab-item{
             width: 33.3%;
@@ -84,7 +103,7 @@
             padding: .8rem 1rem .5rem 1rem;
             font-size: .7rem;
             color: #A7A7A7;
-            background-color: #fff;
+            border-bottom: 5px solid #eee;
         }
         .content-nav-item{
             width: 25%;
@@ -171,21 +190,78 @@
     </style>
 </head>
 <body>
-<dvi class="page">
+<div class="page">
     <header class="bar bar-nav">
-        <div class="search">
-            <input type="text" class="search-input" placeholder="过山车  黑暗乘骑  show  小组">
-            <span class="search-icon iconfont icon-sousuo"></span>
+        <div class="searchbar">
+            <div class="search-input">
+                <form action="">
+                    <label class="search-icon iconfont icon-sousuo active "></label>
+                    <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show'/>
+                </form>
+            </div>
+            <a class="searchbar-cancel">取消</a>
         </div>
-        <div class="map-icon iconfont icon-dingwei"></div>
+        <a class="map-link external" href="/discovery/map"><div class="map-icon iconfont icon-dingwei"></div></a>
     </header>
-    <div class="content infinite-scroll infinite-scroll-bottom" id="content" data-distance="5">
+    <div class="content infinite-scroll" data-distance="50">
         <div class="content-tab">
-            <div class="content-tab-item active">过山车</div>
-            <div class="content-tab-item">黑暗乘骑</div>
-            <div class="content-tab-item">演出</div>
+            <div class="content-tab-item active" data-index="0">过山车</div>
+            <div class="content-tab-item" data-index="1">黑暗乘骑</div>
+            <div class="content-tab-item" data-index="2">演出</div>
         </div>
-        <content-item :facility-list="facilityList"></content-item>
+        <div id="content-list">
+            <div class="content-item">
+                <div class="content-nav">
+                    <div class="content-nav-item">
+                        <div class="content-icon rollercoaster-icon">
+                            <img class="content-icon-img" src="static/img/icon/rollercoaster2.svg">
+                        </div>
+                        <div class="content-nav-item-text">附近{$ cats[activeIndex].short $}</div>
+                    </div>
+                    <div class="content-nav-item">
+                        <div class="content-icon park-icon">
+                            <img class="content-icon-img" src="static/img/icon/park.svg">
+                        </div>
+                        <div class="content-nav-item-text">乐园</div>
+                    </div>
+                    <div class="content-nav-item">
+                        <div class="content-icon factory-icon">
+                            <img class="content-icon-img" src="static/img/icon/factory.svg">
+                        </div>
+                        <div class="content-nav-item-text">厂商</div>
+                    </div>
+                    <div class="content-nav-item">
+                        <div class="content-icon knowledge-icon">
+                            <img class="content-icon-img" src="static/img/icon/knowledge.svg">
+                        </div>
+                        <div class="content-nav-item-text">{$ cats[activeIndex].name $}知识</div>
+                    </div>
+                </div>
+                <div class="content-list">
+                    <div class="content-list-item" v-for="item in facilityList">
+                        <div class="facility-poster">
+                            <img :src="item.poster.split(',')[0]" class="facility-poster-img">
+                        </div>
+                        <div class="content-list-item-right">
+                            <div class="facility-title">
+                                {$ item.title $}
+                            </div>
+                            <div class="facility-rating">
+
+                            </div>
+                            <div class="facility-detail">
+                                <div class="facility-price">
+                                    价格：{$ item.price || '0' $}
+                                </div>
+                                <div class="facility-distance">
+                                    距离：{$ item.distance || '0' $}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="infinite-scroll-preloader">
             <div class="preloader"></div>
         </div>
@@ -208,7 +284,7 @@
             <span class="tab-label ">我的</span>
         </a>
     </nav>
-</dvi>
+</div>
 
 
 
@@ -219,83 +295,30 @@
 <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 <script>
 	$.init();
+
 	$.fn.raty.defaults.path = '/static/js/raty/img'
     let loading = false
 
-	/* let position = ''
+	let position = ''
 	window.navigator.geolocation.getCurrentPosition(function(pos) {
 		position = pos
-	}) */
-	Vue.component('content-item', {
-		delimiters: ['{$', '$}'],
-		props: ['facilityList'],
-		template: `<div class="content-item">
-    <div class="content-nav">
-        <div class="content-nav-item">
-            <div class="content-icon rollercoaster-icon">
-                <img class="content-icon-img" src="static/img/icon/rollercoaster2.svg">
-            </div>
-            <div class="content-nav-item-text">附近的车</div>
-        </div>
-        <div class="content-nav-item">
-            <div class="content-icon park-icon">
-                <img class="content-icon-img" src="static/img/icon/park.svg">
-            </div>
-            <div class="content-nav-item-text">乐园</div>
-        </div>
-        <div class="content-nav-item">
-            <div class="content-icon factory-icon">
-                <img class="content-icon-img" src="static/img/icon/factory.svg">
-            </div>
-            <div class="content-nav-item-text">厂商</div>
-        </div>
-        <div class="content-nav-item">
-            <div class="content-icon knowledge-icon">
-                <img class="content-icon-img" src="static/img/icon/knowledge.svg">
-            </div>
-            <div class="content-nav-item-text">过山车知识</div>
-        </div>
-    </div>
-    <div class="content-list">
-        <div class="content-list-item" v-for="item in facilityList">
-            <div class="facility-poster">
-                <img :src="item.poster.split(',')[0]" class="facility-poster-img">
-            </div>
-            <div class="content-list-item-right">
-                <div class="facility-title">
-                    {$ item.title $}
-                </div>
-                <div class="facility-rating">
-
-                </div>
-                <div class="facility-detail">
-                    <div class="facility-price">
-                        价格：{$ item.price || '0' $}
-                    </div>
-                    <div class="facility-distance">
-                        距离：{$ item.distance || '0' $}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>`
+        alert(position)
 	})
 
 	var vm = new Vue({
         delimiters: ['{$', '$}'],
+        el: '#content-list',
         data () {
         	return {
         		cats: [{
         			name: '过山车',
-                    en: 'rollercoaster'
+                    short: '的车'
                 }, {
-        			name: '黑暗乘骑',
-                    en: 'darkride'
+        			name: '乘骑',
+                    short: '乘骑'
                 }, {
         			name: '演出',
-                    en: 'show'
+                    short: '演出'
                 }],
                 facilityList: [],
                 activeIndex: 0,
@@ -313,24 +336,35 @@
 		        score: 2.5
 	        })
         },
+        watch: {
+        	activeIndex: function (newVal) {
+		        this.page = 0
+                this.facilityList = []
+                this.getFacility(this.perPageItems, this.page)
+	        }
+        },
         methods: {
         	getFacility: function (perPageItems, page) {
         		let self = this
                 $.ajax({
                     url: '/discovery/getfacility',
                     data: {
-                    	cat: self.activeIndex + 1,
+                    	cat: Number(self.activeIndex) + 1,
                     	count: perPageItems,
                         page: page
                     },
                     success: function (ret) {
                     	if(ret.errno === 0){
 		                    self.facilityList = self.facilityList.concat(ret.data.data)
-		                    this.page ++
+		                    self.page ++
                             loading = false
                             return
                         }
-                        return $.toast('获取失败，请刷新重试')
+                        if(ret.errmsg === 'no more'){
+	                        $('.infinite-scroll-preloader').hide()
+	                        return $.toast('没有更多了，向我们反馈吧')
+                        }
+                        return $.toast('出了点小问题，请重试')
                     },
                     error: function (err) {
 	                    console.log(err)
@@ -339,15 +373,20 @@
                 })
 	        }
         }
-    }).$mount('#content')
+    })
 
     $(document).on('infinite', '.infinite-scroll', function () {
-    	console.log('loading', loading)
+	    $('.infinite-scroll-preloader').show()
         if(loading) return;
         loading = true
         vm.getFacility(vm.perPageItems, vm.page)
     })
 
+    $('.content-tab').on('click', '.content-tab-item', function (e) {
+    	$('.content-tab-item.active').removeClass('active')
+        $(this).addClass('active')
+        vm.activeIndex = $(this).data('index')
+    })
 
 </script>
 

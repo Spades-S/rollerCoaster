@@ -119,9 +119,8 @@
 <script>
     $.init();
 
-    let readList = window.localStorage.getItem('readList') || []
-    readList += (' ' + (window.location.search.match(/\d+/)[0]))
-    console.log(readList)
+    let readList = window.localStorage.getItem('readList') || ''
+    readList += (',' + (window.location.search.match(/\d+/)[0]))
     window.localStorage.setItem('readList', readList)
 
     let $vm = new Vue({
