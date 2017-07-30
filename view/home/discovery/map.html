@@ -14,23 +14,27 @@
     <link rel="stylesheet" href="/static/iconfont/iconfont.css">
 
     <style>
-        *{
+        * {
             -webkit-font-smoothing: antialiased;
         }
-        .bar{
+
+        .bar {
             border-bottom: none;
         }
-        .bar.bar-nav{
+
+        .bar.bar-nav {
             height: 3rem;
             background-color: #07518f;
             display: flex;
             align-items: center;
             justify-content: space-around;
         }
-        .map-icon::before{
+
+        .map-icon::before {
             color: #fff;
         }
-        .bar .searchbar{
+
+        .bar .searchbar {
             width: 87%;
             position: relative;
             display: flex;
@@ -38,61 +42,163 @@
             align-items: center;
             background: transparent;
         }
-        .search-input{
+
+        .search-input {
             width: 100%;
             border-radius: .3rem;
             box-sizing: content-box;
             font-size: .6rem;
         }
-        .searchbar .searchbar-cancel{
+
+        .searchbar .searchbar-cancel {
             margin-left: .3rem;
         }
-        .bar .searchbar .searchbar-cancel{
+
+        .bar .searchbar .searchbar-cancel {
             font-size: .7rem;
             color: #fff;
         }
+
         .searchbar .search-input input {
             height: 1.8rem;
             margin: 0;
         }
-        .search-input label+input {
+
+        .search-input label + input {
             padding-left: .7rem;
         }
-        .icon-sousuo{
+
+        .icon-sousuo {
             position: absolute;
             line-height: 1.8rem;
             right: .5rem;
             color: #6EB732;
         }
-        .bar~.content{
+
+        .bar ~ .content {
             top: 3rem;
         }
-        #container{
+
+        #container {
             width: 100%;
-            height: calc(100% - 3rem);
+            height: calc(100% - 2.2rem);
+        }
+
+        .nearby-car {
+            position: absolute;
+            z-index: 10000;
+            bottom: 0;
+            width: 100%;
+            height: 2.2rem;
+
+            transition: all 0.5s;
+
+        }
+
+        .display {
+            height: calc(100% - 10rem);
+            transition: all 0.5s;
+
+            background: #eee;
+        }
+
+        .display .icon-arrow-top:before {
+            content: "\e823";
+        }
+
+        .icon-arrow-top, .name {
+            height: 1.1rem;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .item-list {
+            overflow-y: auto;
+        }
+
+        .item-content {
+            padding: 0.7rem 1rem 0.7rem 0.7rem;
+            height: 4.4rem;
+            background: #FFF;
+        }
+
+        .poster {
+            float: left;
+            width: 3rem;
+            height: 3rem;
+        }
+
+        .text-content {
+            padding-left: 3.6rem;
+            margin-top: 0.12rem;
+        }
+
+        .car-title {
+            overflow: hidden;
+            font-size: 16px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .price-distance {
+            margin-top: 0.7rem;
+            color: #8a8282;
+            font-size: 13px;
+        }
+
+        .distance {
+            float: right;
+        }
+
+        hr {
+            margin: 0;
+            border: none;
+            border-bottom: 1px solid #ccc;
         }
     </style>
 </head>
 <body>
 
-    <div class="page">
-        <header class="bar bar-nav">
-            <div class="searchbar">
-                <div class="search-input">
-                    <form action="">
-                        <label class="search-icon iconfont icon-sousuo active "></label>
-                        <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show'/>
-                    </form>
-                </div>
-                <a class="searchbar-cancel">取消</a>
+<div class="page">
+    <header class="bar bar-nav">
+        <div class="searchbar">
+            <div class="search-input">
+                <form action="">
+                    <label class="search-icon iconfont icon-sousuo active "></label>
+                    <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show'/>
+                </form>
             </div>
-            <div class="map-icon iconfont icon-dingwei"></div>
-        </header>
-        <div class="content">
-            <div id="container"></div>
+            <a class="searchbar-cancel">取消</a>
+        </div>
+        <div class="map-icon iconfont icon-dingwei"></div>
+    </header>
+    <div class="content">
+        <div id="container"></div>
+    </div>
+    <div class="nearby-car" id="nearby-car">
+        <div class="iconfont icon-arrow-top" @click=toggleDisplay></div>
+        <div class="name" @click=toggleDisplay>附近的车</div>
+        <div class="item-list">
+            <div class="item" v-for="carItem in nearbyCars ">
+                <div class="item-content">
+                    <img class="poster" :src="getPoster(carItem.poster)" alt="">
+                    <div class="text-content">
+                        <div class="car-title">{$ carItem.title$}</div>
+                        <div class="price-distance">
+                            <span class="price">价格：50/人</span>
+                            <span class="distance">距离：15km</span>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <hr>
+            </div>
+
         </div>
     </div>
-
+</div>
 
 
 <script type="text/javascript " src="/static/vue/vue.js "></script>
@@ -100,27 +206,114 @@
 <script src="/static/js/raty/jquery.raty.js"></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=521f8907ee9a1459f01a4d66d2a36b99"></script>
+<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
 <script>
     $.init();
+    let $vm = new Vue({
+        delimiters: ['{$', '$}'],
+        el: '#nearby-car',
+        data: {
+            nearbyCars: [],
+        },
+        methods: {
+            toggleDisplay: function () {
+                if ($('#nearby-car').hasClass('display')) {
+                    $('.display').css({
+                        height: '2.2rem',
+                    })
+                    console.log('display exist!');
+                    $('#nearby-car').removeClass('display');
+                } else {
+                    $('#nearby-car').addClass('display');
+                    let screenHeight = screen.height;
+                    let nearbycarDocumentHeight = $('.item').length * $('.item').height() + $('.icon-arrow-top').height() + $('.name').height();
+                    let leftHeight = (nearbycarDocumentHeight > screenHeight - 200) ? (screenHeight - 200) : nearbycarDocumentHeight;
+                    $('.display').css({
+                        height: leftHeight + 'px',
+                    })
+                    $('.item-list').css({
+                        height: (leftHeight - 42) + 'px',
+                    })
 
-    let map = new AMap.Map('container', {
-	    resizeEnable: true,
-        zoom: 11
-    })
-    AMap.plugin(['AMap.ToolBar', 'AMap.Scale', 'AMap.Geolocation', 'AMap.PlaceSearch', 'AMap.Autocomplete'], function () {
-	    var toolBar = new AMap.ToolBar()
-        var scale = new AMap.Scale()
-        var geolocation = new AMap.Geolocation({
-            useNative: true
+                }
+
+
+            },
+            getPoster: function (poster) {
+                if (poster) {
+                    let posterArray = poster.split(',')
+                    return posterArray[0];
+                }
+            }
+
+
+        }
+
+    });
+
+    var map, geolocation;
+    map = new AMap.Map('container', {
+        resizeEnable: true,
+        zoom: 11,
+    });
+    map.plugin(['AMap.Geolocation', 'AMap.Geocoder'], function () {
+        geolocation = new AMap.Geolocation({
+            enableHighAccuracy: true,
+            timeout: 10000,
+            buttonOffset: new AMap.Pixel(10, 20),
+//            zoomToAccuracy: true,
+            buttonPosition: 'LB'
+        });
+        geocoder = new AMap.Geocoder();
+        map.addControl(geolocation);
+        geolocation.getCurrentPosition();
+        AMap.event.addListener(geolocation, 'complete', onComplete);//返回定位信息
+        AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+    });
+
+    function onComplete(data) {
+        $.ajax({
+            url: '/discovery/nearbycars',
+            method: 'GET',
+            data: {
+                lng: data.position.getLng(),
+                lat: data.position.getLat(),
+            },
+            success: function (res) {
+                if (res.errno === 0) {
+                    $vm.nearbyCars = res.data;
+                    let infoWindow = new AMap.InfoWindow();
+                    for (let item of res.data) {
+                        let marker = new AMap.Marker({
+                            position: [item.longitude, item.latitude],
+                            title: item.title,
+                            map: map,
+                            offset: new AMap.Pixel(-5, -2)//-113, -140
+                        })
+                        marker.content = item.title;
+                        marker.on('click', markerClick);
+
+                    }
+//                    map.setFitView();
+
+                    function markerClick(e) {
+                        infoWindow.setContent(e.target.content);
+                        infoWindow.open(map, e.target.getPosition());
+
+                    }
+
+
+                }
+
+            }
         })
-        var placeSearch = new AMap.PlaceSearch()
-        var autoComplete = new AMap.Autocomplete()
-	    map.addControl(toolBar)
-        map.addControl(scale)
-        map.addControl(geolocation)
-        map.addControl(placeSearch)
-        map.addControl(autoComplete)
-    })
+    }
+
+    function onError(data) {
+        $.toast('定位失败，请刷新重试');
+
+    }
+
 
 </script>
 </body>

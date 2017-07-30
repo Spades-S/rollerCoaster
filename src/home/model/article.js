@@ -2,7 +2,7 @@
 class Article extends think.model.base {
     init(...args) {
         super.init(...args);
-        this.tableName = 'article_copy';
+        this.tableName = 'article';
     }
 
     async getPerPageItems(number, currentPage, invisibleList) {
