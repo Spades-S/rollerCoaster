@@ -96,7 +96,7 @@
         }
 
         .display {
-            height: calc(100% - 10rem);
+            /*height: calc(100% - 10rem);*/
             transition: all 0.5s;
 
             background: #eee;
@@ -155,6 +155,53 @@
             border: none;
             border-bottom: 1px solid #ccc;
         }
+
+        .item-detail {
+            padding-left: 0.5rem;
+            padding-right: 0.8rem;
+            height: 0;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.59);
+            transition: all 0.5s ease;
+            font-size: 0;
+        }
+
+        .detail-key {
+            display: inline-block;
+            padding-right: 0.5rem;
+            overflow: auto;
+            width: 27%;
+            height: 1.5rem;
+            font-size: 14px;
+            line-height: 1.5rem;
+            text-align: right;
+        }
+
+        .detial-value {
+            display: inline-block;
+            overflow-y: auto;
+            width: 73%;
+            font-size: 14px;
+            height: 1.5rem;
+            line-height: 1.5rem;
+            white-space: nowrap;
+        }
+        .map-info-title{
+            color: white;
+            font-size: 14px;
+            background-color: rgba(0,155,255,0.8);
+            line-height: 26px;
+            padding: 0px 0 0 6px;
+            font-weight: 700;
+            letter-spacing: 1px
+        }
+        .map-info-location{
+            margin-left: 2.5rem;
+            width: calc(100% - 2.5rem);
+            font-size: 14px;
+            line-height: 1rem;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -175,27 +222,33 @@
     <div class="content">
         <div id="container"></div>
     </div>
-    <div class="nearby-car" id="nearby-car">
+    <div class="nearby-car" :class="{display:display}" id="nearby-car">
         <div class="iconfont icon-arrow-top" @click=toggleDisplay></div>
         <div class="name" @click=toggleDisplay>附近的车</div>
         <div class="item-list">
-            <div class="item" v-for="carItem in nearbyCars ">
-                <div class="item-content">
-                    <img class="poster" :src="getPoster(carItem.poster)" alt="">
-                    <div class="text-content">
-                        <div class="car-title">{$ carItem.title$}</div>
-                        <div class="price-distance">
-                            <span class="price">价格：50/人</span>
-                            <span class="distance">距离：15km</span>
+            <div v-for="carItem in nearbyCars " @click="displayDetail($event)">
+                <div class="item">
+                    <div class="item-content">
+                        <img class="poster" :src="getPoster(carItem.poster)" alt="">
+                        <div class="text-content">
+                            <div class="car-title">{$ carItem.title$}</div>
+                            <div class="price-distance">
+                                <span class="price">价格: 50 / 人</span>
+                                <span class="distance">距离: {$ carItem.distance $} km</span>
+                            </div>
                         </div>
-
+                    </div>
+                    <hr>
+                </div>
+                <div class="item-detail">
+                    <div v-for="(detailItem,index) in getItemDetail(carItem)">
+                        <div v-if="index!=7||detailItem.value!=null" class="detail-key">{$ detailItem.key $}:</div>
+                        <div v-if="index!=7||detailItem.value!=null" class="detial-value">
+                            <span> {$ detailItem.value $}</span></div>
                     </div>
 
-
                 </div>
-                <hr>
             </div>
-
         </div>
     </div>
 </div>
@@ -214,27 +267,49 @@
         el: '#nearby-car',
         data: {
             nearbyCars: [],
+            display: false,
+        },
+        updated: function () {
+            if (this.nearbyCars.length === 1) {
+                $('.item-detail').css({
+                    height: '12rem',
+                })
+            }
         },
         methods: {
             toggleDisplay: function () {
-                if ($('#nearby-car').hasClass('display')) {
-                    $('.display').css({
+//                if ($('#nearby-car').hasClass('display')) {
+//                    $('.display').css({
+//                        height: '2.2rem',
+//                    })
+//                    $('#nearby-car').removeClass('display');
+//                } else {
+//                    $('#nearby-car').addClass('display');
+//                    let screenHeight = screen.height;
+//                    let nearbycarDocumentHeight = $('.item').length * $('.item').height() + $('.icon-arrow-top').height() + $('.name').height();
+//                    let leftHeight = (nearbycarDocumentHeight > screenHeight - 200) ? (screenHeight - 200) : nearbycarDocumentHeight;
+//                    $('.display').css({
+//                        height: leftHeight + 'px',
+//                    })
+//                    $('.item-list').css({
+//                        height: (leftHeight - 42) + 'px',
+//                    })
+//
+//                }
+                if (this.display) {
+                    $('.nearby-car').css({
                         height: '2.2rem',
                     })
-                    console.log('display exist!');
-                    $('#nearby-car').removeClass('display');
+                    this.display = false;
                 } else {
-                    $('#nearby-car').addClass('display');
-                    let screenHeight = screen.height;
-                    let nearbycarDocumentHeight = $('.item').length * $('.item').height() + $('.icon-arrow-top').height() + $('.name').height();
-                    let leftHeight = (nearbycarDocumentHeight > screenHeight - 200) ? (screenHeight - 200) : nearbycarDocumentHeight;
-                    $('.display').css({
+                    this.display = true;
+                    leftHeight = screen.height * 0.6;
+                    $('.nearby-car').css({
                         height: leftHeight + 'px',
                     })
                     $('.item-list').css({
-                        height: (leftHeight - 42) + 'px',
+                        height: (leftHeight - 44) + 'px',
                     })
-
                 }
 
 
@@ -244,6 +319,35 @@
                     let posterArray = poster.split(',')
                     return posterArray[0];
                 }
+            },
+            getItemDetail: function (detail) {
+                let result = [];
+                let keyArray = ['地点', '乐园', '类型', '状态', '模型', '制作', '开放时间', '关闭时间'];
+                let indexArray = ['location', 'park', 'style', 'status', 'model', 'make', 'openTime', 'closeTime'];
+                for (let i = 0; i < keyArray.length; i++) {
+                    let detailItem = {
+                        key: keyArray[i],
+                        value: detail[indexArray[i]],
+                    }
+                    result.push(detailItem);
+                }
+                return result;
+            },
+            displayDetail: function (e) {
+                if (this.nearbyCars.length > 1) {
+                    let itemDetail = e.currentTarget.childNodes[2];
+                    if ($(itemDetail).height() === 0) {
+                        $(itemDetail).css({
+                            height: '12rem',
+                        })
+                    } else {
+                        $(itemDetail).css({
+                            height: '0',
+                        })
+                    }
+
+                }
+
             }
 
 
@@ -256,7 +360,7 @@
         resizeEnable: true,
         zoom: 11,
     });
-    map.plugin(['AMap.Geolocation', 'AMap.Geocoder'], function () {
+    map.plugin(['AMap.Geolocation', 'AMap.Geocoder', 'AMap.AdvancedInfoWindow'], function () {
         geolocation = new AMap.Geolocation({
             enableHighAccuracy: true,
             timeout: 10000,
@@ -272,28 +376,32 @@
     });
 
     function onComplete(data) {
+        let longitude = data.position.getLng(), latitude = data.position.getLat();
         $.ajax({
             url: '/discovery/nearbycars',
             method: 'GET',
             data: {
-                lng: data.position.getLng(),
-                lat: data.position.getLat(),
+                lng: longitude,
+                lat: latitude,
             },
             success: function (res) {
                 if (res.errno === 0) {
                     $vm.nearbyCars = res.data;
-                    let infoWindow = new AMap.InfoWindow();
+                    let infoWindow = new AMap.AdvancedInfoWindow();
                     for (let item of res.data) {
                         let marker = new AMap.Marker({
                             position: [item.longitude, item.latitude],
                             title: item.title,
                             map: map,
-                            offset: new AMap.Pixel(-5, -2)//-113, -140
+                            offset: new AMap.Pixel(-5, -2),
                         })
-                        marker.content = item.title;
+                        let lnglat = new AMap.LngLat(item.longitude, item.latitude);
+                        item.distance =(lnglat.distance([longitude, latitude])/1000).toFixed(2);
+                        marker.content = "<div class='map-info-title'>🎢 "+item.title+" 过山车</div></div><img style='width:2rem;height:2rem;float:left'src=" + $vm.getPoster(item.poster) + "><div class='map-info-location'>" + item.location +"</div>";
                         marker.on('click', markerClick);
 
                     }
+
 //                    map.setFitView();
 
                     function markerClick(e) {
@@ -311,6 +419,18 @@
 
     function onError(data) {
         $.toast('定位失败，请刷新重试');
+
+//        /*************开发测试内容*************/
+//        $.ajax({
+//            url: '/discovery/gettestdata',
+//            method: 'GET',
+//            success: function (res) {
+//                if (res.errno === 0) {
+//                    $vm.nearbyCars = res.data;
+//                }
+//
+//            }
+//        })
 
     }
 

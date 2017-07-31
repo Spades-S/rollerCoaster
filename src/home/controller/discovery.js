@@ -38,4 +38,14 @@ export default class extends base {
         return this.success(data);
 
     }
+
+
+    async gettestdataAction() {
+        let lng = 63.2306,
+            lat = 22.8579;
+        let facilityModel = this.model('facility');
+        let dGeo = this.config('dGeo');
+        let data = await facilityModel.getNearByCars(lng, lat, dGeo);
+        return this.success(data);
+    }
 }

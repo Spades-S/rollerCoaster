@@ -19,7 +19,7 @@ class Facility extends think.model.base {
         // lat = 22.8579;
         lng = Number(lng);
         lat = Number(lat);
-        let res = await this.field('id,poster,title,longitude,latitude').where({
+        let res = await this.field('id, title, poster, location, park, style, openTime, status, closeTime, model, make, longitude, latitude').where({
             category: 1,
             longitude: {'>': lng - dGeo.lng, '<': lng + dGeo.lng},
             latitude: {'>': lat - dGeo.lat, '<': lat + dGeo.lat}
