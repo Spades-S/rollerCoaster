@@ -373,13 +373,10 @@
                         })
                         let lnglat = new AMap.LngLat(item.longitude, item.latitude);
                         item.distance =(lnglat.distance([longitude, latitude])/1000).toFixed(2);
-                        marker.content = "<div class='map-info-title'>🎢 "+item.title+" 过山车</div></div><img style='width:2rem;height:2rem;float:left'src=" + $vm.getPoster(item.poster) + "><div class='map-info-location'>" + item.location +"</div>";
+                        marker.content = "<div class='map-info-title'>🎢 "+item.title+" 过山车</div></div><img style='width:2rem;height:2rem;float:left'src=" + item.poster + "><div class='map-info-location'>" + item.location +"</div>";
                         marker.on('click', markerClick);
-
                     }
-
 //                    map.setFitView();
-
                     function markerClick(e) {
                         infoWindow.setContent(e.target.content);
                         infoWindow.open(map, e.target.getPosition());

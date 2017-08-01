@@ -15,8 +15,8 @@ class Facility extends think.model.base {
     }
 
     async getNearByCars(lng, lat, dGeo) {
-        // lng = 63.2306;
-        // lat = 22.8579;
+        lng = 63.2306;
+        lat = 22.8579;
         lng = Number(lng);
         lat = Number(lat);
         let res = await this.field('id, title, poster, location, park, style, openTime, status, closeTime, model, make, longitude, latitude').where({
