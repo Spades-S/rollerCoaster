@@ -35,6 +35,10 @@ export default class extends base {
         let facilityModel = this.model('facility');
         let dGeo = this.config('dGeo');
         let data = await facilityModel.getNearByCars(lng, lat, dGeo);
+        for(let item of data){
+            item.poster = item.poster.split(',')[0];
+        }
+        console.log(data);
         return this.success(data);
 
     }

@@ -229,7 +229,7 @@
             <div v-for="carItem in nearbyCars " @click="displayDetail($event)">
                 <div class="item">
                     <div class="item-content">
-                        <img class="poster" :src="getPoster(carItem.poster)" alt="">
+                        <img class="poster" :src="carItem.poster" alt="">
                         <div class="text-content">
                             <div class="car-title">{$ carItem.title$}</div>
                             <div class="price-distance">
@@ -278,24 +278,6 @@
         },
         methods: {
             toggleDisplay: function () {
-//                if ($('#nearby-car').hasClass('display')) {
-//                    $('.display').css({
-//                        height: '2.2rem',
-//                    })
-//                    $('#nearby-car').removeClass('display');
-//                } else {
-//                    $('#nearby-car').addClass('display');
-//                    let screenHeight = screen.height;
-//                    let nearbycarDocumentHeight = $('.item').length * $('.item').height() + $('.icon-arrow-top').height() + $('.name').height();
-//                    let leftHeight = (nearbycarDocumentHeight > screenHeight - 200) ? (screenHeight - 200) : nearbycarDocumentHeight;
-//                    $('.display').css({
-//                        height: leftHeight + 'px',
-//                    })
-//                    $('.item-list').css({
-//                        height: (leftHeight - 42) + 'px',
-//                    })
-//
-//                }
                 if (this.display) {
                     $('.nearby-car').css({
                         height: '2.2rem',
@@ -313,12 +295,6 @@
                 }
 
 
-            },
-            getPoster: function (poster) {
-                if (poster) {
-                    let posterArray = poster.split(',')
-                    return posterArray[0];
-                }
             },
             getItemDetail: function (detail) {
                 let result = [];
