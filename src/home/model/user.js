@@ -9,10 +9,10 @@ export default class extends think.model.base {
         this.tableName = 'user';
     }
 
-    async updateLikes(articleid) {
-        let data = await this.field('likes').where({id: 1}).select();
-        let newLikes;
-        if (data[0].likes == "") {
+    async updateLikes(articleid, uid) {
+        let data = await this.field('likes').where({uid: uid}).select();
+        let newLikes
+        if (data[0].likes == null) {
             let likedata = new Array();
             likedata.push(articleid);
             newLikes = JSON.stringify(likedata);
@@ -26,12 +26,12 @@ export default class extends think.model.base {
             }
             newLikes = JSON.stringify(oldLikes);
         }
-        let lines = await this.where({id: 1}).update({likes: newLikes});
-        return lines;
+        let lines = await this.where({uid: uid}).update({likes: newLikes});
+        return lines
     }
 
-    async getLikes() {
-        let data = await this.field('likes').where({id: 1}).select();
+    async getLikes(uid) {
+        let data = await this.field('likes').where({uid: uid}).select();
         return data;
     }
 
@@ -84,7 +84,7 @@ export default class extends think.model.base {
     }
 
     async getUserInfo(uid) {
-        let userInfo = await this.field('nickname, avatar').where({uid: uid}).find()
+        let userInfo = await this.field('id, nickname, avatar').where({uid: uid}).find()
         return userInfo
     }
 

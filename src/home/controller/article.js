@@ -24,21 +24,18 @@ export default class extends base {
         if (this.isPost()) {
             let userid = this.post("userid");
             let articleid = this.post('articleid');
-            let timestamp = this.post('timestamp');
             let content = this.post('content');
             let userModel = this.model('user');
             let authorInfo = await userModel.getAvatarInfoByUserId(parseInt(userid));
             let authorAvatar = authorInfo[0].avatar;
             let authorName = authorInfo[0].nickname;
             let articleModel = this.model('comment');
-            let data = await articleModel.addComment(parseInt(userid), parseInt(articleid), authorAvatar, authorName, content, parseInt(timestamp));
+            let data = await articleModel.addComment(parseInt(userid), parseInt(articleid), authorAvatar, authorName, content);
             return this.success(data);
         }
     }
 
     async refresharticlesAction() {
-        let greyList = [];
-        let invisibleList = [];
         let readList = await this.session('readList') || []
         /*if (readList) {
          /!* if (readList.length > 5) { *!/
@@ -86,23 +83,24 @@ export default class extends base {
     async refreshlikesAction() {
         let likes = this.post('likes');
         let articleid = this.post('articleid');
+	    let data = false
+	    if(this.cookie('uid')){
+		    let userModel = this.model('user');
+		    data = await userModel.updateLikes(articleid, this.cookie('uid'));
+	    }
         let articleModel = this.model('article');
-        let art_lines = await articleModel.updateLikesByArticleId(articleid, likes);
-        let userModel = this.model('user');
-        let data = await userModel.updateLikes(articleid);
+        await articleModel.updateLikesByArticleId(articleid, likes);
         return this.success(data);
     }
 
     async getlikestatusAction() {
         let articleid = this.get('articleid');
         let userModel = this.model('user');
-        let rowdata = await userModel.getLikes();
-        let likes = JSON.parse(rowdata[0].likes) || [];
-        let data;
-        if (likes.indexOf(articleid) >= 0) {
-            data = true;
-        } else {
-            data = false;
+        let uid = this.cookie('uid')
+        let rowdata = await userModel.getLikes(uid);
+        let data = false;
+        if(rowdata[0] && rowdata[0].likes.indexOf(articleid) >= 0){
+	        data = true;
         }
         return this.success(data);
 
