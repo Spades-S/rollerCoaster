@@ -72,7 +72,7 @@
         }
         .bar-nav~.content{
             top: 3rem;
-            height: calc(100% - 5.5rem);
+            padding-bottom: 2.5rem;
             background-color: #fff;
         }
         .map-link{
@@ -238,7 +238,7 @@
                     </div>
                 </div>
                 <div class="content-list">
-                    <div class="content-list-item" v-for="item in facilityList">
+                    <div class="content-list-item" v-for="item in facilityList" :data-id="item.id"  @click="toFacility">
                         <div class="facility-poster">
                             <img :src="item.poster.split(',')[0]" class="facility-poster-img">
                         </div>
@@ -247,14 +247,13 @@
                                 {$ item.title $}
                             </div>
                             <div class="facility-rating">
-
                             </div>
                             <div class="facility-detail">
                                 <div class="facility-price">
                                     价格：{$ item.price || '0' $}
                                 </div>
-                                <div class="facility-distance">
-                                    距离：{$ item.distance || '0' $}
+                                <div class="facility-distance" :data-position="item.geolocation">
+                                    距离：{$ convertToKilometers(item.geolocation) $}
                                 </div>
                             </div>
                         </div>
@@ -302,8 +301,13 @@
 	let position = ''
 	window.navigator.geolocation.getCurrentPosition(function(pos) {
 		position = pos
-        alert(position)
 	})
+
+    // simulate position
+    position = {
+		latitude: '102.666939',
+        longitude: '25.024536'
+    }
 
 	var vm = new Vue({
         delimiters: ['{$', '$}'],
@@ -327,7 +331,7 @@
             }
         },
         created: function () {
-            this.getFacility(this.perPageItems, this.page)
+            this.getFacility(this.perPageItems, this.page, position)
         },
         updated: function () {
 	        $('.facility-rating').raty({
@@ -338,20 +342,22 @@
         },
         watch: {
         	activeIndex: function (newVal) {
-		        this.page = 0
+		        this.page = 1
                 this.facilityList = []
-                this.getFacility(this.perPageItems, this.page)
+                this.getFacility(this.perPageItems, this.page, position)
 	        }
         },
         methods: {
-        	getFacility: function (perPageItems, page) {
+        	getFacility: function (perPageItems, page, position) {
+		        $('.infinite-scroll-preloader').show();
         		let self = this
                 $.ajax({
                     url: '/discovery/getfacility',
                     data: {
                     	cat: Number(self.activeIndex) + 1,
                     	count: perPageItems,
-                        page: page
+                        page: page,
+                        position: JSON.stringify(position)
                     },
                     success: function (ret) {
                     	if(ret.errno === 0){
@@ -361,17 +367,51 @@
                             return
                         }
                         if(ret.errmsg === 'no more'){
-	                        $('.infinite-scroll-preloader').hide()
-	                        return $.toast('没有更多了，向我们反馈吧')
+	                        $.toast('没有更多了，向我们反馈吧')
+                            $.detachInfiniteScroll($('.infinite-scroll'))
+	                        $('.infinite-scroll-preloader').hide();
+	                        return
                         }
-                        return $.toast('出了点小问题，请重试')
+                        $.toast('出了点小问题，请重试')
+	                    $('.infinite-scroll-preloader').hide();
+	                    return
                     },
                     error: function (err) {
-	                    console.log(err)
                     	return $.toast('获取失败，请刷新重试')
                     }
                 })
-	        }
+	        },
+            toFacility: function (e) {
+                window.location.href = '/discovery/facility?id=' + e.currentTarget.dataset.id
+            },
+	        convertToKilometers: function (geolocationString) {
+        		var sin = Math.sin
+                var cos = Math.cos
+                var asin = Math.asin
+                var sqrt = Math.sqrt
+                var pow = Math.pow
+                var PI = Math.PI
+                var earth_radius = 6378.137
+                var lat1 = position.latitude
+                var lng1 = position.longitude
+                var lng2 = geolocationString.split(',')[0]
+                var lat2 = geolocationString.split(',')[1]
+                var getRad = function (d) {
+                    return d*PI/180
+                }
+                var radLat1 = getRad(lat1)
+                var radLat2 = getRad(lat2)
+                var a = radLat1 - radLat2
+                var b = getRad(lng1) - getRad(lng2)
+
+                var s = 2 * asin(sqrt(pow(sin(a/2), 2) + cos(radLat1) * cos(radLat2) * pow(sin(b/2), 2)))
+
+                s = s * earth_radius
+
+                s = Math.round(s * 10000) / 10000.0
+
+                return s
+            }
         }
     })
 
@@ -379,7 +419,7 @@
 	    $('.infinite-scroll-preloader').show()
         if(loading) return;
         loading = true
-        vm.getFacility(vm.perPageItems, vm.page)
+        vm.getFacility(vm.perPageItems, vm.page, position)
     })
 
     $('.content-tab').on('click', '.content-tab-item', function (e) {

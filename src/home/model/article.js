@@ -2,7 +2,7 @@
 class Article extends think.model.base {
     init(...args) {
         super.init(...args);
-        this.tableName = 'article_copy';
+        this.tableName = 'article';
     }
 
     async getPerPageItems(number, currentPage, invisibleList) {
@@ -45,6 +45,7 @@ class Article extends think.model.base {
     }
 
     async updateLikesByArticleId(articleid, likes) {
+        console.log(likes)
         let lines = await this.where({id: articleid}).update({likes: likes});
         return lines;
 

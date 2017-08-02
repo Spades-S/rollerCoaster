@@ -11,7 +11,8 @@ export default class extends think.model.base {
 
     async updateLikes(articleid, uid) {
         let data = await this.field('likes').where({uid: uid}).select();
-        let newLikes;
+
+        let newLikes
         if (data[0].likes == null) {
             let likedata = new Array();
             likedata.push(articleid);
@@ -28,6 +29,7 @@ export default class extends think.model.base {
         }
         let lines = await this.where({uid: uid}).update({likes: newLikes});
         return lines;
+
     }
 
     async getLikes(uid) {
@@ -84,7 +86,8 @@ export default class extends think.model.base {
     }
 
     async getUserInfo(uid) {
-        let userInfo = await this.field('id,nickname, avatar').where({uid: uid}).find()
+
+        let userInfo = await this.field('id, nickname, avatar').where({uid: uid}).find()
         return userInfo
     }
 

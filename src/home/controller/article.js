@@ -10,11 +10,11 @@ export default class extends base {
             // to be finished
 
         } else {
-        	/* let readList = (await this.session('readList')) || []
-	        if (readList.indexOf(parseInt(articleId)) < 0) {
-		        readList.push(parseInt(articleId));
-	        }
-	        await this.session('readList', readList) */
+            /* let readList = (await this.session('readList')) || []
+             if (readList.indexOf(parseInt(articleId)) < 0) {
+             readList.push(parseInt(articleId));
+             }
+             await this.session('readList', readList) */
         }
         this.assign('articleid', articleId);
         return this.display('article/detail.html');
@@ -24,39 +24,36 @@ export default class extends base {
         if (this.isPost()) {
             let userid = this.post("userid");
             let articleid = this.post('articleid');
-            let timestamp = this.post('timestamp');
             let content = this.post('content');
             let userModel = this.model('user');
             let authorInfo = await userModel.getAvatarInfoByUserId(parseInt(userid));
             let authorAvatar = authorInfo[0].avatar;
             let authorName = authorInfo[0].nickname;
-            let articleModel = this.model('comment');
-            let data = await articleModel.addComment(parseInt(userid), parseInt(articleid), authorAvatar, authorName, content, parseInt(timestamp));
+            let commentModel = this.model('comment');
+            let data = await commentModel.addComment(parseInt(userid), parseInt(articleid), authorAvatar, authorName, content);
             return this.success(data);
         }
     }
 
     async refresharticlesAction() {
-        let greyList = [];
-        let invisibleList = [];
         let readList = await this.session('readList') || []
         /*if (readList) {
          /!* if (readList.length > 5) { *!/
-		        greyList = readList // .splice(-5, 5);
-		        // console.log('greyList', greyList)
-		        invisibleList = readList;
+         greyList = readList // .splice(-5, 5);
+         // console.log('greyList', greyList)
+         invisibleList = readList;
          /!* } else {
-                greyList = readList;
-            } *!/
-        }*/
+         greyList = readList;
+         } *!/
+         }*/
         let currentPage = this.get('currentPage');
         let perPageNum = this.get('perPageNums');
         let articleModel = this.model('article');
         let data = await articleModel.getPerPageItems(perPageNum, currentPage, readList);
         data.data.forEach(el => {
-        	if (readList.indexOf(el.id) === -1) {
-        		readList.push(el.id)
-	        }
+            if (readList.indexOf(el.id) === -1) {
+                readList.push(el.id)
+            }
         })
         await this.session('readList', readList)
         return this.success(data);
@@ -85,6 +82,7 @@ export default class extends base {
 
     async refreshlikesAction() {
         let likes = this.post('likes');
+// <<<<<<< HEAD
         let uid = this.cookie('uid');
         let articleid = parseInt(this.post('articleid'));
         let articleModel = this.model('article');
@@ -125,11 +123,30 @@ export default class extends base {
             }
         }
 
-        let data;
+        let data = false;
         if (likes.indexOf(articleid) >= 0) {
             data = true;
-        } else {
-            data = false;
+// =======
+//         let articleid = this.post('articleid');
+// 	    let data = false;
+// 	    if(this.cookie('uid')){
+// 		    let userModel = this.model('user');
+// 		    data = await userModel.updateLikes(articleid, this.cookie('uid'));
+// 	    }
+//         let articleModel = this.model('article');
+//         await articleModel.updateLikesByArticleId(articleid, likes);
+//         return this.success(data);
+//     }
+//
+//     async getlikestatusAction() {
+//         let articleid = this.get('articleid');
+//         let userModel = this.model('user');
+//         let uid = this.cookie('uid')
+//         let rowdata = await userModel.getLikes(uid);
+//         let data = false;
+//         if(rowdata[0] && rowdata[0].likes.indexOf(articleid) >= 0){
+// 	        data = true;
+// // >>>>>>> e6f24d4ab561c0321a4a480f7995de8601e411d0
         }
         return this.success(data);
     }

@@ -30,8 +30,7 @@
                         <div class="comment-info">
                             <img :src=item.authorAvatar class="comment avatar">
                             <span class="author">{$item.authorName$}</span>
-                            <span class="time">{$getTime(item.timestamp)$}</span>
-
+                            <span class="time">{$getTime(item.updateTime)$}</span>
                         </div>
                         <div class="comment-content">
                             {$item.content$}
@@ -112,8 +111,6 @@
                 return;
 
             }
-
-
         })
     }
 
