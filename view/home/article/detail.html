@@ -34,23 +34,22 @@
 
                     <span class="time">{$ article.updateTime $}</span>
                 </div>
-                <div class="article-content content-padded" id="article-content"></div>
+                <div class="article-content content-padded" id="article-content" v-html="article.content"></div>
 
-                <div class="love ">
-                    <span v-if="likestatus" class="love-img iconfont icon-xihuan checked" id="love-img"></span>
-                    <span v-else class="love-img iconfont icon-xihuan" id="love-img"></span><span
-                        class="love-num"> {$ article.likes $}</span>
+                <div class="love" v-if="article.content">
+                    <span :class="'love-img iconfont icon-xihuan ' + (likestatus == true? 'checked' : '')"></span>
+                    <span class="love-num"> {$ article.likes $}</span>
                 </div>
 
                 <div v-if="relativeArticles.length>0" class="relative-part ">
                     <div class="relative-part-name">相关文章</div>
-                    <div v-for="item in relativeArticles">
+                    <div v-for="item, index in relativeArticles">
                         <div class="relative-article content-padded" :data-articleid="item.id">
                             <img :src="'/static/img'+item.poster" class="relative-article-firstimg">
                             <div class="relative-article-title">{$ item.title $}</div>
                             <div class="relative-article-intro">{$ item.description $}</div>
-                            <hr>
                         </div>
+                        <hr v-if="index === 0">
                     </div>
 
                 </div>
@@ -61,7 +60,7 @@
                         <div class="comment-info">
                             <img :src=item.authorAvatar class="comment avatar">
                             <span class="author">{$ item.authorName $}</span>
-                            <span class="time">{$ getTime(item.timestamp)$}</span>
+                            <span class="time">{$ getTime(item.updateTime)$}</span>
 
                         </div>
                         <div class="comment-content">
@@ -127,7 +126,7 @@
             article: {},
             relativeArticles: [],
             comment: {},
-            likestatus: true,
+            likestatus: false,
             commentNum: 0,
         },
         methods: {
@@ -155,8 +154,28 @@
         method: 'GET',
         success: function (data) {
             if (data.errno == 0) {
-                data.data[0].updateTime = new Date(data.data[0].updateTime).Format("yyyy-MM-dd hh:mm");
+	            data.data[0].updateTime = new Date(data.data[0].updateTime).Format("yyyy-MM-dd hh:mm");
+	            let content = escape2Html(data.data[0].content)
+	            $vm.article.content = content.replace(/(<a [^>]+>)|(<img[^>]+>)/g, function (el) {
+	            	if(/<img/.test(el)){
+	            		return el.replace(/style="[^"]+"/, ' ').replace(/ src=[^\s]+/, ' ').replace('data-src', 'src')
+                    } else {
+	            		return el.replace('>', ' class="external">').replace(/target[^\s]+/, '')
+                    }
+	            })
+
+                for(let i in data.data[0]){
+	            	if(i !== 'content'){
+			            $vm.article[i] = data.data[0][i]
+                    }
+                }
+	            $vm.article.title = escape2Html($vm.article.title)
+                console.log($vm)
+
+
+                /*data.data[0].updateTime = new Date(data.data[0].updateTime).Format("yyyy-MM-dd hh:mm");
                 $vm.article = data.data[0];
+                console.log($.parseHTML(escape2Html(data.data[0].content)))
                 document.getElementById('article-content').innerHTML = escape2Html(data.data[0].content);
                 $vm.article.title = escape2Html($vm.article.title);
                 $('#article-content a').addClass('external').removeAttr('target');
@@ -168,7 +187,7 @@
                     }
                     imgs[i].setAttribute('src', '/static/img' + imgs[i].getAttribute('src'));
                     imgs[i].setAttribute('style', '');
-                }
+                }*/
             }
         }
     })
@@ -196,7 +215,6 @@
         success: function (data) {
             $vm.likestatus = data.data;
         }
-
     })
     $.ajax({
         url: '/article/getrelativearticle',
@@ -266,12 +284,14 @@
     })
 
     $(document).on('click', '.love-img', function () {
-        if ($('#love-img').hasClass('checked')) {
-            $('#love-img').removeClass('checked');
-            $vm.article.likes -= 1;
+        if ($('.love-img').hasClass('checked')) {
+            $('.love-img').removeClass('checked');
+            $vm.article.likes --
+            $('.love-num').text(Number($('.love-num').text()) - 1)
         } else {
-            $('#love-img').addClass('checked');
-            $vm.article.likes += 1;
+            $('.love-img').addClass('checked');
+	        $vm.article.likes ++
+	        $('.love-num').text(Number($('.love-num').text()) + 1)
         }
         $.ajax({
             method: 'POST',
@@ -346,7 +366,7 @@
     })
 
 
-    Date.prototype.Format = function (fmt) { //author: meizz
+    Date.prototype.Format = function (fmt) {
         var o = {
             "M+": this.getMonth() + 1, //月份
             "d+": this.getDate(), //日

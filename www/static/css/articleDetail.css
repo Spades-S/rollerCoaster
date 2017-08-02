@@ -64,41 +64,42 @@ header h1.title {
 }
 
 .article-title {
-    font-size: 27px;
-    padding-top: 1rem;
-    padding-bottom: 0.8rem;
+    font-size: 1.2rem;
+    padding: .3rem 0;
 }
 
 .article-info {
-    height: 3.5rem;
+    height: 2.5rem;
+    margin: 0 .5rem;
+    display: flex;
+    align-items: center;
+    position: relative;
 }
 
 .article .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
-    top: 0.2rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
     position: relative;
-    top: 0.5rem;
 }
 
 .author {
     font-size: 18px;
     padding-left: 0.3rem;
     padding-right: 0.3rem;
-    width: 6rem;
     overflow: hidden;
     display: inline-block;
     height: 1.2rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     position: relative;
-    top: 0.17rem;
 }
 
 .article .time {
     font-size: 16px;
     color: #9e9d9d;
+    position: absolute;
+    right: .5rem;
 }
 
 .article-content {
@@ -141,16 +142,14 @@ header h1.title {
 .relative-part-name,
 .comment-part-name {
     height: 3rem;
-    padding: 0.5rem;
+    padding: 0.9rem 0.5rem 0.5rem 0.5rem;
     background: #eeeeee;
-    padding-top: 0.9rem;
     font-size: 18px;
     color: gray;
 }
 
-.relative-article {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+.relative-article{
+    height: 4rem;
 }
 
 .relative-article-firstimg {
