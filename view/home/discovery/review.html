@@ -15,20 +15,24 @@
             box-sizing: border-box;
             -webkit-font-smoothing: antialiased;
         }
-        .page{
+
+        .page {
             background-color: #fff;
         }
-        .bar{
+
+        .bar {
             height: 3rem;
             background-color: #07518f;
             border-bottom: none;
         }
-        h1.title{
+
+        h1.title {
             color: white;
             overflow: hidden;
             text-overflow: ellipsis;
             line-height: 3rem;
         }
+
         .icon-arrow-left {
             display: inline-block;
             width: 0.9rem;
@@ -37,63 +41,75 @@
             top: 0.75rem;
             z-index: 30;
         }
-        .bar~.content{
+
+        .bar ~ .content {
             top: 3rem;
             padding: 0 .5rem;
             font-size: .7rem;
         }
-        .star{
+
+        .star {
             margin-top: 1rem;
             width: 100% !important;
             text-align: center;
         }
-        .star img{
+
+        .star img {
             width: 1.2rem;
             height: 1.2rem;
             margin: .2rem;
         }
-        .position{
+
+        .position {
             margin-top: .5rem;
             text-align: center;
             line-height: 1.2rem;
         }
-        .position-select{
+
+        .position-select {
             display: inline-block;
             margin-left: .5rem;
             width: 6rem;
             text-align: left;
         }
-        .position-option{
+
+        .position-option {
             color: #ABABAB;
             border: 1px solid #DCDCDC;
             border-radius: 1rem;
             padding-left: .5rem;
         }
-        .options{
+
+        .options {
             display: none;
             position: absolute;
             width: inherit;
             padding: .1rem 0 .1rem .5rem;
+            z-index: 100;
             background-color: #fff;
             border: 1px solid #DCDCDC;
             border-radius: .5rem;
         }
-        .option{
+
+        .option {
             padding: .1rem 0;
         }
-        textarea{
+
+        textarea {
             width: 100%;
             border: 1px solid #DCDCDC;
             border-radius: .5rem;
             padding: .5rem;
             margin: 1rem 0;
         }
-        .icon-arrow-bottom{
+
+        .icon-arrow-bottom {
             color: #9a9a9a;
             float: right;
             padding-right: .5rem;
         }
-        .button{
+
+        .button {
             /*border: none;*/
         }
     </style>
@@ -104,8 +120,9 @@
         <h1 class="title">{{ title }}</h1>
     </header>
     <div class="content content-padded" id="content">
-        <div class="star"></div>
-        <div class="position">刷车位置<div class="position-select"><span class="iconfont icon-arrow-bottom"></span>
+        <div class="star" id="star"></div>
+        <div class="position">刷车位置
+            <div class="position-select"><span class="iconfont icon-arrow-bottom"></span>
                 <div class="position-option">选择位置</div>
                 <div class="options">
                     <div class="option" data-position="居前">居前</div>
@@ -120,64 +137,67 @@
 </div>
 
 
-
 <script type="text/javascript " src="/static/vue/vue.js "></script>
 <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
-<script type="text/javascript" src="/static/js/raty/jquery.raty.min.js"></script>
+<script type="text/javascript" src="/static/star/starlib.js"></script>
 <script>
     $.init;
+    let starConfig = {
+        num: 5,
+        readOnly: false,
+        imgPath: {
+            neg: '/static/star/images/starNeg.png',
+            act: '/static/star/images/starAct.png',
+        },
+        size: 1.3 //单位rem
+    }
+    let star = new raty('.star', starConfig);
 
-    $('.star').raty({
-        half: true,
-        number: 5,
-	    path: '/static/js/raty/img',
-	    starOn: 'star-on-big.png',
-	    starOff: 'star-off-big.png',
-	    starHalf: 'star-half-big.png'
-    })
+    star.init();
+
 
     $(document).on('click', function (e) {
         if (!/option/.test(e.target.className)) {
-	        $('.options').css('display', 'none')
-	        $('.position-option').removeClass('showing')
+            $('.options').css('display', 'none')
+            $('.position-option').removeClass('showing')
         }
     })
     $('.position-option').on('click', function () {
-    	if ($(this).hasClass('showing')) {
-		    $('.options').css('display', 'none')
-		    $(this).removeClass('showing')
+        if ($(this).hasClass('showing')) {
+            $('.options').css('display', 'none')
+            $(this).removeClass('showing')
         } else {
-		    $('.options').css('display', 'block')
+            $('.options').css('display', 'block')
             $(this).addClass('showing')
         }
     })
 
     $('textarea').on('input', debounce(function () {
-	    let event = Array.from(arguments).shift()
+        let event = Array.from(arguments).shift()
         if (event.currentTarget.value != '') {
-	    	$('.button-big').removeClass('disabled')
-	        $('.button-big').removeAttr('disabled')
+            $('.button-big').removeClass('disabled')
+            $('.button-big').removeAttr('disabled')
         } else {
-	        $('.button-big').addClass('disabled')
-	        $('.button-big').attr('disabled', true)
+            $('.button-big').addClass('disabled')
+            $('.button-big').attr('disabled', true)
         }
     }, 300))
 
     $('.options').on('click', '.option', function (e) {
-    	let positionOption = $('.position-option')
+        let positionOption = $('.position-option')
         $(positionOption).text(e.currentTarget.innerText)
-	    $('.options').css({
+        $('.options').css({
             'display': 'none'
-	    })
-	    $(positionOption).removeClass('showing').css({
+        })
+        $(positionOption).removeClass('showing').css({
             'color': '#1e1e1e'
-	    }).attr('data-position', e.currentTarget.innerText)
+        }).attr('data-position', e.currentTarget.innerText)
     })
 
     $('.button-big').on('click', function () {
-        if (!$('.star').raty('score')) {
-        	return $.toast('请输入评分')
+        if (star.get('#star') == 0) {
+            return $.toast('请输入评分')
         }
         if (!$('.position-option').attr('data-position')) {
             return $.toast('请记录刷车位置')
@@ -186,7 +206,7 @@
             url: '/discovery/addreview',
             method: 'POST',
             data: {
-            	stars: $('.star').raty('score'),
+                stars: star.get(),
                 position: $('.position-option').attr('data-position'),
                 content: $('textarea').val()
             },
@@ -203,29 +223,29 @@
     })
 
 
-
-
     // debounce function, no need to import all lodash or underscore functions
     function debounce(func, bouncingTime, args) {
-	    var context, timestamp, timeout, initArgs = args ? args.slice(0) : []
-	    function run(context) {
-		    timestamp = new Date().getTime()
-		    timeout = setTimeout(function () {
-			    func.apply(context, args)
-		    }, bouncingTime)
-	    }
-	    return function (e) {
-	    	if (e) {
-			    args = [e].concat(initArgs)
+        var context, timestamp, timeout, initArgs = args ? args.slice(0) : []
+
+        function run(context) {
+            timestamp = new Date().getTime()
+            timeout = setTimeout(function () {
+                func.apply(context, args)
+            }, bouncingTime)
+        }
+
+        return function (e) {
+            if (e) {
+                args = [e].concat(initArgs)
             }
-		    context = this
-		    if (!timeout || (new Date().getTime() - timestamp > bouncingTime)) {
-			    run(this)
-		    } else {
-			    clearTimeout(timeout)
-			    run(this)
-		    }
-	    }
+            context = this
+            if (!timeout || (new Date().getTime() - timestamp > bouncingTime)) {
+                run(this)
+            } else {
+                clearTimeout(timeout)
+                run(this)
+            }
+        }
     }
 </script>
 </body>

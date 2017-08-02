@@ -10,8 +10,9 @@ class Facility extends think.model.base {
     }
 
     async getFacility(cat, count, page, position) {
-        let latitudeRange = [position.latitude - 1, parseFloat(position.latitude) + 1]
-        let longitudeRange = [position.longitude- 1, parseFloat(position.longitude) + 1]
+        console.log(position);
+        let latitudeRange = [parseFloat(position.latitude) - 1, parseFloat(position.latitude) + 1]
+        let longitudeRange = [parseFloat(position.longitude)- 1, parseFloat(position.longitude) + 1]
         let res = await this.field('id, title, poster, rating, price, geolocation').where({
             category: cat,
             latitude: {'>': latitudeRange[0], '<': latitudeRange[1]},
