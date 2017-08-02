@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>撰写评测</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+        .page{
+            background-color: #fff;
+        }
+        .bar{
+            height: 3rem;
+            background-color: #07518f;
+            border-bottom: none;
+        }
+        h1.title{
+            color: white;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 3rem;
+        }
+        .icon-arrow-left {
+            display: inline-block;
+            width: 0.9rem;
+            height: 1.4rem;
+            position: absolute;
+            top: 0.75rem;
+            z-index: 30;
+        }
+        .bar~.content{
+            top: 3rem;
+            padding: 0 .5rem;
+            font-size: .7rem;
+        }
+        .star{
+            margin-top: 1rem;
+            width: 100% !important;
+            text-align: center;
+        }
+        .star img{
+            width: 1.2rem;
+            height: 1.2rem;
+            margin: .2rem;
+        }
+        .position{
+            margin-top: .5rem;
+            text-align: center;
+            line-height: 1.2rem;
+        }
+        .position-select{
+            display: inline-block;
+            margin-left: .5rem;
+            width: 6rem;
+            text-align: left;
+        }
+        .position-option{
+            color: #ABABAB;
+            border: 1px solid #DCDCDC;
+            border-radius: 1rem;
+            padding-left: .5rem;
+        }
+        .options{
+            display: none;
+            position: absolute;
+            width: inherit;
+            padding: .1rem 0 .1rem .5rem;
+            background-color: #fff;
+            border: 1px solid #DCDCDC;
+            border-radius: .5rem;
+        }
+        .option{
+            padding: .1rem 0;
+        }
+        textarea{
+            width: 100%;
+            border: 1px solid #DCDCDC;
+            border-radius: .5rem;
+            padding: .5rem;
+            margin: 1rem 0;
+        }
+        .icon-arrow-bottom{
+            color: #9a9a9a;
+            float: right;
+            padding-right: .5rem;
+        }
+        .button{
+            /*border: none;*/
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <header class="bar bar-nav"><a href="" class="iconfont icon-arrow-left back"></a>
+        <h1 class="title">{{ title }}</h1>
+    </header>
+    <div class="content content-padded" id="content">
+        <div class="star"></div>
+        <div class="position">刷车位置<div class="position-select"><span class="iconfont icon-arrow-bottom"></span>
+                <div class="position-option">选择位置</div>
+                <div class="options">
+                    <div class="option" data-position="居前">居前</div>
+                    <div class="option" data-position="中部">中部</div>
+                    <div class="option" data-position="靠后">靠后</div>
+                </div>
+            </div>
+        </div>
+        <textarea name="" id="" cols="30" rows="10" class="input"></textarea>
+        <div class="button button-big disabled" disabled="true">提交评测</div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="/static/js/raty/jquery.raty.min.js"></script>
+<script>
+    $.init;
+
+    $('.star').raty({
+        half: true,
+        number: 5,
+	    path: '/static/js/raty/img',
+	    starOn: 'star-on-big.png',
+	    starOff: 'star-off-big.png',
+	    starHalf: 'star-half-big.png'
+    })
+
+    $(document).on('click', function (e) {
+        if (!/option/.test(e.target.className)) {
+	        $('.options').css('display', 'none')
+	        $('.position-option').removeClass('showing')
+        }
+    })
+    $('.position-option').on('click', function () {
+    	if ($(this).hasClass('showing')) {
+		    $('.options').css('display', 'none')
+		    $(this).removeClass('showing')
+        } else {
+		    $('.options').css('display', 'block')
+            $(this).addClass('showing')
+        }
+    })
+
+    $('textarea').on('input', debounce(function () {
+	    let event = Array.from(arguments).shift()
+        if (event.currentTarget.value != '') {
+	    	$('.button-big').removeClass('disabled')
+	        $('.button-big').removeAttr('disabled')
+        } else {
+	        $('.button-big').addClass('disabled')
+	        $('.button-big').attr('disabled', true)
+        }
+    }, 300))
+
+    $('.options').on('click', '.option', function (e) {
+    	let positionOption = $('.position-option')
+        $(positionOption).text(e.currentTarget.innerText)
+	    $('.options').css({
+            'display': 'none'
+	    })
+	    $(positionOption).removeClass('showing').css({
+            'color': '#1e1e1e'
+	    }).attr('data-position', e.currentTarget.innerText)
+    })
+
+    $('.button-big').on('click', function () {
+        if (!$('.star').raty('score')) {
+        	return $.toast('请输入评分')
+        }
+        if (!$('.position-option').attr('data-position')) {
+            return $.toast('请记录刷车位置')
+        }
+        $.ajax({
+            url: '/discovery/addreview',
+            method: 'POST',
+            data: {
+            	stars: $('.star').raty('score'),
+                position: $('.position-option').attr('data-position'),
+                content: $('textarea').val()
+            },
+            success: function (ret) {
+                console.log(ret)
+            },
+            error: function (err) {
+                console.log(err)
+            },
+            complete: function () {
+
+            }
+        })
+    })
+
+
+
+
+    // debounce function, no need to import all lodash or underscore functions
+    function debounce(func, bouncingTime, args) {
+	    var context, timestamp, timeout, initArgs = args ? args.slice(0) : []
+	    function run(context) {
+		    timestamp = new Date().getTime()
+		    timeout = setTimeout(function () {
+			    func.apply(context, args)
+		    }, bouncingTime)
+	    }
+	    return function (e) {
+	    	if (e) {
+			    args = [e].concat(initArgs)
+            }
+		    context = this
+		    if (!timeout || (new Date().getTime() - timestamp > bouncingTime)) {
+			    run(this)
+		    } else {
+			    clearTimeout(timeout)
+			    run(this)
+		    }
+	    }
+    }
+</script>
+</body>
+</html>

@@ -5,15 +5,14 @@ class Comment extends think.model.base {
         this.tableName = 'comment';
     }
 
-    async addComment(userid, articleid, authorAvatar, authorName, content, timestamp) {
+    async addComment(userid, articleid, authorAvatar, authorName, content) {
         try {
             let insertId = await this.add({
                 "authorId": userid,
                 "authorAvatar": authorAvatar,
                 "authorName": authorName,
                 "postId": articleid,
-                "content": content,
-                "updateTime": timestamp
+                "content": content
             });
             return insertId;
         } catch (e) {
