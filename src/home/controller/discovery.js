@@ -9,8 +9,18 @@ import base from './base'
 export default class extends base {
     indexAction() {
 
-        this.display('discovery/index.html')
+        return this.display('discovery/index.html')
     }
+
+    mapAction() {
+        return this.display('discovery/map.html')
+    }
+
+    parkdetailAction() {
+        this.assign('parkId', 1);
+        return this.display('discovery/parkdetail.html');
+    }
+
 
     async getfacilityAction() {
         let cat = this.get('cat')
@@ -25,9 +35,6 @@ export default class extends base {
         return this.success(res)
     }
 
-    async mapAction() {
-        this.display('discovery/map.html')
-    }
 
     async nearbycarsAction() {
         let lng = this.get('lng');
@@ -35,7 +42,7 @@ export default class extends base {
         let facilityModel = this.model('facility');
         let dGeo = this.config('dGeo');
         let data = await facilityModel.getNearByCars(lng, lat, dGeo);
-        for(let item of data){
+        for (let item of data) {
             item.poster = item.poster.split(',')[0];
         }
         console.log(data);
@@ -51,5 +58,11 @@ export default class extends base {
         let dGeo = this.config('dGeo');
         let data = await facilityModel.getNearByCars(lng, lat, dGeo);
         return this.success(data);
+    }
+
+    async getparkdetailinfoAction(){
+        let id = this.get('id');
+        let companyModel
+
     }
 }

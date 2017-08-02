@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>欢乐冶</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <style>
+        .page {
+            background: #fff;
+        }
+
+        .bar {
+            height: 3rem;
+            background-color: #07518f;
+            color: white;
+            border: none;
+        }
+
+        .icon-arrow-left {
+            display: inline-block;
+            position: absolute;
+            width: 3rem;
+            height: 3rem;
+            padding-top: 0.65rem;
+            z-index: 30;
+        }
+
+        header h1.title {
+            color: white;
+            margin-top: 0.3rem;
+            font-size: 20px;
+            letter-spacing: 5px;
+            font-weight: 400;
+        }
+
+        .show-box {
+            position: relative;
+            margin-top: 3rem;
+            width: 100%;
+            height: 35%;
+        }
+
+        .image-box {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .image-box img {
+            float: left;
+            width: 100%;
+            height: 100%;
+        }
+
+        .dot-box {
+            position: relative;
+            top: -1.5rem;
+            right: 1rem;
+            text-align: right;
+        }
+
+        .dot-box span {
+            display: inline-block;
+            margin-right: 0.14rem;
+            width: 0.4rem;
+            height: 0.4rem;
+            border-radius: 0.2rem;
+            background: grey;
+        }
+
+        .dot-box span.active {
+            background: #fff;
+        }
+
+        .park-info {
+            margin-top: 1rem;
+        }
+
+        .park-title {
+            text-align: center;
+            font-size: 19px;
+            font-weight: 500;
+        }
+
+        .park-info-detail {
+            font-size: 0;
+            margin-top: 1rem;
+        }
+
+        .pid-key, .pid-value {
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .pid-key {
+            width: 35%;
+            padding-right: 0.5rem;
+            text-align: right;
+            color: #a8a7a7;
+
+        }
+
+        .pid-value {
+            width: 65%;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<div class="page-group">
+    <div class="page page-current">
+        <header class="bar bar-nav">
+            <a class=" iconfont icon-arrow-left back" href="javascript:window.history.go(-1)">
+            </a>
+            <h1 class='title'>乐园</h1>
+        </header>
+        <div class="show-box">
+            <div class="image-box">
+                <img src="/static/img/article-img.jpg" alt="">
+                <img src="/static/img/avatar.png" alt="">
+                <img src="/static/img/systemAvatar.jpeg" alt="">
+                <img src="/static/img/article-img.jpg" alt="">
+            </div>
+            <div class="dot-box">
+                <span rel="0" class="active"></span>
+                <span rel="1"></span>
+                <span rel="2"></span>
+            </div>
+        </div>
+        <div class="park-info" id="park-info">
+            <div class="park-title">上海迪士尼乐园</div>
+            <div class="park-info-detail" >
+                <span class="pid-key">开放时间:</span>
+                <span class="pid-value">2016/4/5</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script>
+    $.init();
+    swiper();
+    let prkInfo = new Vue({
+        delimiters: ['{$', '$}'],
+        el: '#park-info',
+        data: {
+            parkInfo:[]
+        },
+
+    })
+    $.ajax({
+        url: '/discovery/getparkdetailinfo',
+        data:{
+            id:"{{parkId}}"
+        },
+        method: 'GET',
+        success:function(){
+
+        }
+    })
+
+    function swiper() {
+        $(document).ready(function () {
+            let imageBox = $('.show-box').children('.image-box')[0];
+            let dotBox = $('.show-box').children('.dot-box')[0];
+            let dotArray = $(dotBox).children('span');
+            let imgNum = $(imageBox).children().length;
+            let activeId = parseInt($(dotBox).children('.active').attr('rel'));
+            let nextId = 0;
+            let delayDuartion = 3000;
+            let animateDuration = 800;
+            let imageWidthSum = $(imageBox).width() * imgNum;
+            let imageBoxWidth = $(imageBox).width();
+            $('.image-box img').width(imageBoxWidth);
+            $(imageBox).width(imageWidthSum);
+            let intervalId = setInterval(rotate, delayDuartion);
+
+            function rotate() {
+                nextId = (activeId + 1) % imgNum;
+                if (activeId == 0) {
+                    $(imageBox).css({
+                        left: 0,
+                    })
+                }
+                $(imageBox).animate({left: "-" + nextId * imageBoxWidth + "px"}, animateDuration);
+                if (nextId === 3) {
+                    nextId = 0;
+                }
+
+                $(dotArray[activeId]).removeClass('active');
+                $(dotArray[nextId]).addClass('active');
+                activeId = nextId;
+
+
+            }
+
+
+        })
+    }
+
+
+</script>
+</body>
+
+</html>
