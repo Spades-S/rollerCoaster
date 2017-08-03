@@ -1,10 +1,30 @@
 'use strict'
 
-class Facility extends think.model.base {
+class Company extends think.model.base {
     init(...args) {
         super.init(...args)
         this.tableName = 'company'
     }
 
+    async getCompanyDetailById(id) {
+        let res = await this.field('title, location, openTime, status, phoneNumber, website, owner, poster').where({id: id}).find();
+        return res;
+
+    }
+
+    async getnearbycompany(type, position, dGeo, page, count) {
+        let lng = Number(position.longitude);
+        let lat = Number(position.latitude);
+        let res = await this.field('id, title, poster, geolocation').where({
+            type: type,
+            longitude: {'>': lng - dGeo.lng, '<': lng + dGeo.lng},
+            latitude: {'>': lat - dGeo.lat, '<': lat + dGeo.lat}
+        }).page(page, count).countSelect()
+        return res;
+
+
+    }
+
 
 }
+export default Company;

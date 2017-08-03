@@ -18,12 +18,16 @@ export default class extends base {
     }
 
     async facilityAction() {
-        this.assign('id', this.get('id'))
-        this.display('discovery/facility.html')
+        this.assign('id', Number(this.get('id')));
+        this.display('discovery/facility.html');
+    }
+
+    parklistAction() {
+        return this.display('discovery/parklist.html')
     }
 
     parkdetailAction() {
-        this.assign('parkId', 1);
+        this.assign('parkId', this.get('id'));
         return this.display('discovery/parkdetail.html');
     }
 
@@ -39,6 +43,17 @@ export default class extends base {
             return this.fail('no more')
         }
         return this.success(res)
+    }
+
+    async getparklistAction() {
+        let count = this.get('count');
+        let page = this.get('page');
+        let position = JSON.parse(this.get('position'));
+        let companyModel = this.model('company');
+        let dGeo = this.config('dGeo');
+        let data = await companyModel.getnearbycompany(1, position, dGeo, page, count);
+        return this.success(data);
+
     }
 
 
@@ -67,9 +82,20 @@ export default class extends base {
     }
 
     async getparkdetailinfoAction() {
-        let id = this.get('id');
-        let companyModel
+        let id = Number(this.get('id'));
+        let companyModel = this.model('company');
+        let data = await companyModel.getCompanyDetailById(id);
+        if (think.isEmpty(data)) {
+            return this.fail(1000, 'no detail!');
+        }
+        return this.success(data);
+    }
 
+    async getfacilitylistAction() {
+        let id = Number(this.get('id'));
+        let facilityModel = this.model('facility');
+        let res = await facilityModel.getFacilityListByParkID(id);
+        return this.success(res);
     }
 
 

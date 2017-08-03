@@ -40,6 +40,10 @@ class Facility extends think.model.base {
 		let res = await this.where({'facility.id': id}).join("facility_detail ON facility.id=facility_detail.id").select()
 		return res
 	}
+	async getFacilityListByParkID(parkID){
+        let res = await this.field('title, type, style, openTime, status, closeTime').where({parkId: parkID}).select();
+        return res;
+    }
 }
 
 export default Facility

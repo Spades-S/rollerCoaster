@@ -472,7 +472,6 @@
                             return $.toast('获取失败，请重试')
                         }
                         self.reviewInfo = ret.data.data
-                        self.ratify()
                     },
                     error: function (err) {
                         console.log(err)
@@ -498,28 +497,6 @@
                         window.location.href = '/discovery/review'
                     }
                 })
-            },
-            ratify: function () {
-
-                setTimeout(function () {
-
-                }, 0)
-
-
-//                setTimeout(function () {
-//                    $('.average-review .star, .review-item .star').raty({
-//                        half: true,
-//                        number: 5,
-//                        score: function () {
-//                            return $(this).attr('data-score')
-//                        },
-//                        path: '/static/js/raty/img',
-//                        starOn: 'star-on-big.png',
-//                        starOff: 'star-off-big.png',
-//                        starHalf: 'star-half-big.png',
-//                        readOnly: true
-//                    })
-//                }, 0)
             },
             format: function (time) {
                 return new Date(time).Format("yyyy-MM-dd hh:mm")

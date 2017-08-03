@@ -10,7 +10,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
-    <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/iconfont/iconfont.css">
     <style>
         * {
@@ -25,38 +24,22 @@
         .bar.bar-nav {
             height: 3rem;
             background-color: #07518f;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
         }
 
-        .map-icon::before {
-            color: #fff;
+        .icon-arrow-left {
+            display: inline-block;
+            width: 0.9rem;
+            height: 1.4rem;
+            position: absolute;
+            top: 0.75rem;
+            z-index: 30;
         }
 
-        .bar .searchbar {
-            width: 87%;
-            position: relative;
-            display: flex;
-            padding-right: 0;
-            align-items: center;
-            background: transparent;
-        }
-
-        .search-input {
-            width: 100%;
-            border-radius: .3rem;
-            box-sizing: content-box;
-            font-size: .6rem;
-        }
-
-        .searchbar .searchbar-cancel {
-            margin-left: .3rem;
-        }
-
-        .bar .searchbar .searchbar-cancel {
-            font-size: .7rem;
-            color: #fff;
+        h1.title {
+            color: white;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 3rem;
         }
 
         .searchbar .search-input input {
@@ -66,13 +49,6 @@
 
         .search-input label + input {
             padding-left: .7rem;
-        }
-
-        .icon-sousuo {
-            position: absolute;
-            line-height: 1.8rem;
-            right: .5rem;
-            color: #6EB732;
         }
 
         .tab-item {
@@ -89,82 +65,10 @@
             background-color: #fff;
         }
 
-        .map-link {
-            width: 2rem;
-            height: auto;
-            z-index: 100;
-            text-align: center;
-        }
-
-        .content-tab {
-            display: flex;
-            justify-content: space-around;
-            padding: 0 1rem;
-            background-color: #eee;
-        }
-
-        .content-tab-item {
-            width: 33.3%;
-            height: 2rem;
-            line-height: 2rem;
-            text-align: center;
-        }
-
         .content-tab .active {
             color: #07518f;
             background-color: #fff;
             border-top: 2px solid #6EB732;
-        }
-
-        .content-nav {
-            display: flex;
-            justify-content: space-around;
-            padding: .8rem 1rem .5rem 1rem;
-            font-size: .7rem;
-            color: #A7A7A7;
-            border-bottom: 5px solid #eee;
-        }
-
-        .content-nav-item {
-            width: 25%;
-            text-align: center;
-            display: flex;
-            flex-flow: column;
-            align-items: center;
-            color: #A7A7A7;
-        }
-
-        .content-nav-item .content-icon {
-            width: 2.2rem;
-            height: 2.2rem;
-            padding: .4rem;
-            border-radius: 50%;
-            overflow: hidden;
-        }
-
-        .content-icon-img {
-            width: 1.4rem;
-            height: 1.4rem;
-        }
-
-        .content-nav-item-text {
-            margin-top: .5rem;
-        }
-
-        .rollercoaster-icon {
-            background-color: #FC704B;
-        }
-
-        .park-icon {
-            border: 1px solid #74B942;
-        }
-
-        .factory-icon {
-            border: 1px solid #55C3F4;
-        }
-
-        .knowledge-icon {
-            border: 1px solid #FDA134;
         }
 
         .content-list {
@@ -230,57 +134,18 @@
 <body>
 <div class="page">
     <header class="bar bar-nav">
-        <div class="searchbar">
-            <div class="search-input">
-                <form action="">
-                    <label class="search-icon iconfont icon-sousuo active "></label>
-                    <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show'/>
-                </form>
-            </div>
-            <a class="searchbar-cancel">取消</a>
-        </div>
-        <a class="map-link external" href="/discovery/map">
-            <div class="map-icon iconfont icon-dingwei"></div>
-        </a>
+        <a href="javascript:window.history.go(-1)" class=" iconfont icon-arrow-left back"></a>
+        <h1 class="title">乐园</h1>
     </header>
     <div class="content infinite-scroll" data-distance="50">
-        <div class="content-tab">
-            <div class="content-tab-item active" data-index="0">过山车</div>
-            <div class="content-tab-item" data-index="1">黑暗乘骑</div>
-            <div class="content-tab-item" data-index="2">演出</div>
-        </div>
         <div id="content-list">
             <div class="content-item">
-                <div class="content-nav">
-                    <a class="content-nav-item" href="#">
-                        <div class="content-icon rollercoaster-icon">
-                            <img class="content-icon-img" src="static/img/icon/rollercoaster2.svg">
-                        </div>
-                        <div class="content-nav-item-text">附近{$ cats[activeIndex].short $}</div>
-                    </a>
-                    <a class="content-nav-item external" href="/discovery/parklist">
-                        <div class="content-icon park-icon">
-                            <img class="content-icon-img" src="static/img/icon/park.svg">
-                        </div>
-                        <div class="content-nav-item-text">乐园</div>
-                    </a>
-                    <a class="content-nav-item">
-                        <div class="content-icon factory-icon">
-                            <img class="content-icon-img" src="static/img/icon/factory.svg">
-                        </div>
-                        <div class="content-nav-item-text">厂商</div>
-                    </a>
-                    <a class="content-nav-item">
-                        <div class="content-icon knowledge-icon">
-                            <img class="content-icon-img" src="static/img/icon/knowledge.svg">
-                        </div>
-                        <div class="content-nav-item-text">{$ cats[activeIndex].name $}知识</div>
-                    </a>
-                </div>
                 <div class="content-list">
-                    <div class="content-list-item" v-for="item in facilityList" :data-id="item.id" @click="toFacility">
+                    <div class="content-list-item" v-for="item in parkList" :data-id="item.id" @click="toFacility">
                         <div class="facility-poster">
-                            <img :src="item.poster.split(',')[0]" class="facility-poster-img">
+                            <img v-if="item.poster==''" src="/static/img/systemAvatar.jpeg" alt=""
+                                 class="facility-poster-img">
+                            <img v-else :src="item.poster.split(',')[0]" class="facility-poster-img">
                         </div>
                         <div class="content-list-item-right">
                             <div class="facility-title">
@@ -293,7 +158,7 @@
                                     价格：{$ item.price || '0' $}
                                 </div>
                                 <div class="facility-distance" :data-position="item.geolocation">
-                                    距离：{$ convertToKilometers(item.geolocation) $}
+                                    距离：{$ convertToKilometers(item.geolocation) $} km
                                 </div>
                             </div>
                         </div>
@@ -330,7 +195,6 @@
 <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
 <script src="/static/js/raty/jquery.raty.js"></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
-<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 <script>
     $.init();
 
@@ -345,8 +209,8 @@
 
     // simulate position
     position = {
-        latitude: '102.666939',
-        longitude: '25.024536'
+        latitude: '119',
+        longitude: '27'
     }
 
     var vm = new Vue({
@@ -354,18 +218,7 @@
         el: '#content-list',
         data () {
             return {
-                cats: [{
-                    name: '过山车',
-                    short: '的车'
-                }, {
-                    name: '乘骑',
-                    short: '乘骑'
-                }, {
-                    name: '演出',
-                    short: '演出'
-                }],
-                facilityList: [],
-                activeIndex: 0,
+                parkList: [],
                 perPageItems: 10,
                 page: 1
             }
@@ -380,31 +233,23 @@
                 score: 2.5
             })
         },
-        watch: {
-            activeIndex: function (newVal) {
-                this.page = 1
-                this.facilityList = []
-                this.getFacility(this.perPageItems, this.page, position)
-            }
-        },
         methods: {
             getFacility: function (perPageItems, page, position) {
                 $('.infinite-scroll-preloader').show();
                 let self = this
                 $.ajax({
-                    url: '/discovery/getfacility',
+                    url: '/discovery/getparklist',
                     data: {
-                        cat: Number(self.activeIndex) + 1,
                         count: perPageItems,
                         page: page,
                         position: JSON.stringify(position)
                     },
                     success: function (ret) {
                         if (ret.errno === 0) {
-                            self.facilityList = self.facilityList.concat(ret.data.data)
+                            self.parkList = self.parkList.concat(ret.data.data)
                             self.page++
                             loading = false
-                            if(ret.data.totalPages == 1){
+                            if (ret.data.totalPages == 1) {
                                 $.detachInfiniteScroll($('.infinite-scroll'))
                                 $('.infinite-scroll-preloader').hide();
                             }
@@ -426,7 +271,7 @@
                 })
             },
             toFacility: function (e) {
-                window.location.href = '/discovery/facility?id=' + e.currentTarget.dataset.id
+                window.location.href = '/discovery/parkdetail?id=' + e.currentTarget.dataset.id
             },
             convertToKilometers: function (geolocationString) {
                 var sin = Math.sin
@@ -465,12 +310,6 @@
         loading = true
         console.log(position);
         vm.getFacility(vm.perPageItems, vm.page, position)
-    })
-
-    $('.content-tab').on('click', '.content-tab-item', function (e) {
-        $('.content-tab-item.active').removeClass('active')
-        $(this).addClass('active')
-        vm.activeIndex = $(this).data('index')
     })
 
 </script>
