@@ -17,7 +17,7 @@ export default class extends base {
         return this.display('discovery/map.html')
     }
 
-    async facilityAction() {
+    facilityAction() {
         this.assign('id', Number(this.get('id')));
         this.display('discovery/facility.html');
     }
@@ -29,6 +29,11 @@ export default class extends base {
     parkdetailAction() {
         this.assign('parkId', this.get('id'));
         return this.display('discovery/parkdetail.html');
+    }
+
+    knowledgeAction() {
+        this.assign('tag', Number(this.get('type')) + 1);
+        return this.display('discovery/knowledge.html');
     }
 
 
@@ -66,7 +71,6 @@ export default class extends base {
         for (let item of data) {
             item.poster = item.poster.split(',')[0];
         }
-        console.log(data);
         return this.success(data);
 
     }
@@ -150,6 +154,19 @@ export default class extends base {
             facilityId: await this.session('facilityId')
         })
         return this.success(res)
+    }
+
+    async getknowledgeAction() {
+        let tag = Number(this.get('tag'));
+        let page = Number(this.get('page'));
+        let count = Number(this.get('count'));
+        let articleModel = this.model('article');
+        let res = await articleModel.getKnowledgeArticles(count, page, tag);
+        if (think.isEmpty(res.data)) {
+            return this.fail('no more')
+        }
+        return this.success(res)
+
     }
 
 }
