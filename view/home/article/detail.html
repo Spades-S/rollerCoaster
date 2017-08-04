@@ -10,7 +10,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
-    <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/css/articleDetail.css">
     <link rel="stylesheet" href="/static/share/css/share.min.css">
     <link rel="stylesheet" href="/static/iconfont/iconfont.css">
@@ -111,10 +110,8 @@
 <script type="text/javascript " src="/static/vue/vue.js "></script>
 <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
-<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 <script type="text/javascript" src="/static/share/js/jquery.share.min.js"></script>
 <script type="text/javascript" src="/static/js/clipboard.min.js"></script>
-<script type="text/javascript" src="/static/share/jquery.share.js"></script>
 <script>
     $.init();
 
@@ -356,7 +353,10 @@
                     if (data.errno == 0) {
                         $.toast("评论发表成功!");
                         overlayHide();
-                    } else {
+                    } else if (data.errno === 1000) {
+                        $.toast("请先登录!");
+                    }
+                    else {
                         $.toast("评论发表失败!");
                     }
 
@@ -366,7 +366,7 @@
     })
 
 
-    Date.prototype.Format = function (fmt) { //author: meizz
+    Date.prototype.Format = function (fmt) {
         var o = {
             "M+": this.getMonth() + 1, //月份
             "d+": this.getDate(), //日

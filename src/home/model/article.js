@@ -2,7 +2,7 @@
 class Article extends think.model.base {
     init(...args) {
         super.init(...args);
-        this.tableName = 'article_copy';
+        this.tableName = 'article';
     }
 
     async getPerPageItems(number, currentPage, invisibleList) {
@@ -49,6 +49,21 @@ class Article extends think.model.base {
         let lines = await this.where({id: articleid}).update({likes: likes});
         return lines;
 
+    }
+
+    async getLikeArticles(ids, currentPage, num) {
+        let articles = await this.field('id, title, poster, authorAvatar, authorName, col, description, updateTime').page(currentPage, num).where({id: ['IN', ids]}).countSelect();
+        return articles;
+    }
+
+    async decreaseLikeNumber(id) {
+        let data = await this.where({id: id}).decrement('likes');
+        return data;
+    }
+
+    async getKnowledgeArticles(number, page, tag) {
+        let data = await this.field('id, title, poster, authorAvatar, authorName, col, description, updateTime').order('updateTime DESC').where({tag: tag, type: 0}).page(page, number).countSelect();
+        return data;
     }
 
 }

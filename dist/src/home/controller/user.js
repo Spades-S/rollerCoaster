@@ -36,6 +36,10 @@ var _base2 = require('./base.js');
 
 var _base3 = _interopRequireDefault(_base2);
 
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _class = function (_base) {
@@ -57,16 +61,52 @@ var _class = function (_base) {
             }
         }
     }, {
-        key: 'registerAction',
+        key: 'agreementAction',
+        value: function agreementAction() {
+            return this.display('user/agreement.html');
+        }
+    }, {
+        key: 'likeAction',
+        value: function likeAction() {
+            return this.display('user/like.html');
+        }
+    }, {
+        key: 'getlikesAction',
         value: function () {
             var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
+                var uid, userModel, articleModel, likeArticleIdsRowData, likeArticleIds, currentPage, num, likeArticles;
                 return _regenerator2.default.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
-                                return _context.abrupt('return', this.display('user/register.html'));
+                                uid = this.cookie('uid');
+                                userModel = this.model('user');
+                                articleModel = this.model('article');
+                                _context.next = 5;
+                                return userModel.getLikes(uid);
 
-                            case 1:
+                            case 5:
+                                likeArticleIdsRowData = _context.sent;
+                                likeArticleIds = JSON.parse(likeArticleIdsRowData[0].likes);
+
+                                if (!(likeArticleIds == null || likeArticleIds.length == 0)) {
+                                    _context.next = 9;
+                                    break;
+                                }
+
+                                return _context.abrupt('return', this.fail(1001, 'no likearticle!'));
+
+                            case 9:
+                                currentPage = this.get('currentPage');
+                                num = this.get('num');
+                                _context.next = 13;
+                                return articleModel.getLikeArticles(likeArticleIds, currentPage, num);
+
+                            case 13:
+                                likeArticles = _context.sent;
+                                return _context.abrupt('return', this.success(likeArticles));
+
+                            case 15:
                             case 'end':
                                 return _context.stop();
                         }
@@ -74,76 +114,105 @@ var _class = function (_base) {
                 }, _callee, this);
             }));
 
-            function registerAction() {
+            function getlikesAction() {
                 return _ref.apply(this, arguments);
             }
 
-            return registerAction;
+            return getlikesAction;
         }()
     }, {
-        key: 'getvfcodeAction',
+        key: 'canclelikeAction',
         value: function () {
             var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
-                var account, userModel, accountExist, code, sessionCode;
+                var articleid, uid, userModel, articleModel, lines;
                 return _regenerator2.default.wrap(function _callee2$(_context2) {
                     while (1) {
                         switch (_context2.prev = _context2.next) {
                             case 0:
-                                _context2.prev = 0;
-                                account = this.post('account');
+                                articleid = this.post('articleid');
+
+                                console.log(articleid);
+                                uid = this.cookie('uid');
                                 userModel = this.model('user');
-                                _context2.next = 5;
-                                return userModel.isPhoneNumExist(account);
+                                articleModel = this.model('article');
+                                _context2.next = 7;
+                                return articleModel.decreaseLikeNumber(articleid);
 
-                            case 5:
-                                accountExist = _context2.sent;
+                            case 7:
+                                _context2.next = 9;
+                                return userModel.updateLikes(parseInt(articleid), uid);
 
-                                if (!accountExist) {
-                                    _context2.next = 8;
-                                    break;
-                                }
-
-                                return _context2.abrupt('return', this.fail(1000, 'phone number exists!'));
-
-                            case 8:
-                                code = generateVerificationCode();
-
-                                // let userModel = this.model('user')
-                                // let send_res = await userModel.sendMessage(phone, code)
-
-                                _context2.next = 11;
-                                return this.session('account', account);
+                            case 9:
+                                lines = _context2.sent;
+                                return _context2.abrupt('return', this.success(lines));
 
                             case 11:
-                                _context2.next = 13;
-                                return this.session('code', Number(code));
-
-                            case 13:
-                                _context2.next = 15;
-                                return this.session('code');
-
-                            case 15:
-                                sessionCode = _context2.sent;
-
-                                console.log(sessionCode);
-
-                                return _context2.abrupt('return', this.success(true));
-
-                            case 20:
-                                _context2.prev = 20;
-                                _context2.t0 = _context2['catch'](0);
-                                return _context2.abrupt('return', this.fail(_context2.t0, this.errors()));
-
-                            case 23:
                             case 'end':
                                 return _context2.stop();
                         }
                     }
-                }, _callee2, this, [[0, 20]]);
+                }, _callee2, this);
+            }));
+
+            function canclelikeAction() {
+                return _ref2.apply(this, arguments);
+            }
+
+            return canclelikeAction;
+        }()
+    }, {
+        key: 'registerAction',
+        value: function registerAction() {
+            return this.display('user/register.html');
+        }
+    }, {
+        key: 'getvfcodeAction',
+        value: function () {
+            var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3() {
+                var account, code, sessionCode;
+                return _regenerator2.default.wrap(function _callee3$(_context3) {
+                    while (1) {
+                        switch (_context3.prev = _context3.next) {
+                            case 0:
+                                _context3.prev = 0;
+                                account = this.post('account');
+                                code = generateVerificationCode();
+                                // let userModel = this.model('user')
+                                // let send_res = await userModel.sendMessage(phone, code)
+
+                                _context3.next = 5;
+                                return this.session('account', account);
+
+                            case 5:
+                                _context3.next = 7;
+                                return this.session('code', Number(code));
+
+                            case 7:
+                                _context3.next = 9;
+                                return this.session('code');
+
+                            case 9:
+                                sessionCode = _context3.sent;
+
+                                console.log(sessionCode);
+
+                                return _context3.abrupt('return', this.success(true));
+
+                            case 14:
+                                _context3.prev = 14;
+                                _context3.t0 = _context3['catch'](0);
+                                return _context3.abrupt('return', this.fail(_context3.t0, this.errors()));
+
+                            case 17:
+                            case 'end':
+                                return _context3.stop();
+                        }
+                    }
+                }, _callee3, this, [[0, 14]]);
             }));
 
             function getvfcodeAction() {
-                return _ref2.apply(this, arguments);
+                return _ref3.apply(this, arguments);
             }
 
             return getvfcodeAction;
@@ -151,46 +220,14 @@ var _class = function (_base) {
     }, {
         key: 'verifycodeAction',
         value: function () {
-            var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3() {
-                return _regenerator2.default.wrap(function _callee3$(_context3) {
-                    while (1) {
-                        switch (_context3.prev = _context3.next) {
-                            case 0:
-                                return _context3.abrupt('return', this.success('successfully verified'));
-
-                            case 1:
-                            case 'end':
-                                return _context3.stop();
-                        }
-                    }
-                }, _callee3, this);
-            }));
-
-            function verifycodeAction() {
-                return _ref3.apply(this, arguments);
-            }
-
-            return verifycodeAction;
-        }()
-    }, {
-        key: 'passwordAction',
-        value: function () {
             var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4() {
                 return _regenerator2.default.wrap(function _callee4$(_context4) {
                     while (1) {
                         switch (_context4.prev = _context4.next) {
                             case 0:
-                                if (!checkLogin(this)) {
-                                    _context4.next = 4;
-                                    break;
-                                }
+                                return _context4.abrupt('return', this.success('successfully verified'));
 
-                                return _context4.abrupt('return', this.redirect('index'));
-
-                            case 4:
-                                return _context4.abrupt('return', this.display('user/password.html'));
-
-                            case 5:
+                            case 1:
                             case 'end':
                                 return _context4.stop();
                         }
@@ -198,8 +235,40 @@ var _class = function (_base) {
                 }, _callee4, this);
             }));
 
-            function passwordAction() {
+            function verifycodeAction() {
                 return _ref4.apply(this, arguments);
+            }
+
+            return verifycodeAction;
+        }()
+    }, {
+        key: 'passwordAction',
+        value: function () {
+            var _ref5 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5() {
+                return _regenerator2.default.wrap(function _callee5$(_context5) {
+                    while (1) {
+                        switch (_context5.prev = _context5.next) {
+                            case 0:
+                                if (!checkLogin(this)) {
+                                    _context5.next = 4;
+                                    break;
+                                }
+
+                                return _context5.abrupt('return', this.redirect('index'));
+
+                            case 4:
+                                return _context5.abrupt('return', this.display('user/password.html'));
+
+                            case 5:
+                            case 'end':
+                                return _context5.stop();
+                        }
+                    }
+                }, _callee5, this);
+            }));
+
+            function passwordAction() {
+                return _ref5.apply(this, arguments);
             }
 
             return passwordAction;
@@ -207,63 +276,49 @@ var _class = function (_base) {
     }, {
         key: 'registerinAction',
         value: function () {
-            var _ref5 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5() {
-                var phone, nickname, psd, userModel, nicknameExist, ck, data;
-                return _regenerator2.default.wrap(function _callee5$(_context5) {
+            var _ref6 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6() {
+                var phone, nickname, psd, userModel, ck, data;
+                return _regenerator2.default.wrap(function _callee6$(_context6) {
                     while (1) {
-                        switch (_context5.prev = _context5.next) {
+                        switch (_context6.prev = _context6.next) {
                             case 0:
-                                _context5.prev = 0;
-                                _context5.next = 3;
+                                _context6.prev = 0;
+                                _context6.next = 3;
                                 return this.session('account');
 
                             case 3:
-                                phone = _context5.sent;
+                                phone = _context6.sent;
                                 nickname = this.post('nickname');
                                 psd = this.post('psd');
                                 userModel = this.model('user');
-                                _context5.next = 9;
-                                return userModel.isNickNameExist(nickname);
-
-                            case 9:
-                                nicknameExist = _context5.sent;
-
-                                if (!nicknameExist) {
-                                    _context5.next = 12;
-                                    break;
-                                }
-
-                                return _context5.abrupt('return', this.fail(1000, 'nickname has already existed!'));
-
-                            case 12:
                                 ck = generateUid();
-                                _context5.next = 15;
+                                _context6.next = 10;
                                 return userModel.register(phone, nickname, psd, ck);
 
-                            case 15:
-                                data = _context5.sent;
+                            case 10:
+                                data = _context6.sent;
 
 
                                 this.cookie('uid', ck);
                                 console.log(data);
 
-                                return _context5.abrupt('return', this.success(data));
+                                return _context6.abrupt('return', this.success(data));
 
-                            case 21:
-                                _context5.prev = 21;
-                                _context5.t0 = _context5['catch'](0);
-                                return _context5.abrupt('return', this.fail(_context5.t0));
+                            case 16:
+                                _context6.prev = 16;
+                                _context6.t0 = _context6['catch'](0);
+                                return _context6.abrupt('return', this.fail(_context6.t0));
 
-                            case 24:
+                            case 19:
                             case 'end':
-                                return _context5.stop();
+                                return _context6.stop();
                         }
                     }
-                }, _callee5, this, [[0, 21]]);
+                }, _callee6, this, [[0, 16]]);
             }));
 
             function registerinAction() {
-                return _ref5.apply(this, arguments);
+                return _ref6.apply(this, arguments);
             }
 
             return registerinAction;
@@ -271,73 +326,25 @@ var _class = function (_base) {
     }, {
         key: 'loginAction',
         value: function () {
-            var _ref6 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6() {
-                var uid;
-                return _regenerator2.default.wrap(function _callee6$(_context6) {
-                    while (1) {
-                        switch (_context6.prev = _context6.next) {
-                            case 0:
-                                uid = this.cookie('uid');
-
-                                if (!uid) {
-                                    _context6.next = 3;
-                                    break;
-                                }
-
-                                return _context6.abrupt('return', this.redirect('/user/index'));
-
-                            case 3:
-                                return _context6.abrupt('return', this.display('user/login.html'));
-
-                            case 4:
-                            case 'end':
-                                return _context6.stop();
-                        }
-                    }
-                }, _callee6, this);
-            }));
-
-            function loginAction() {
-                return _ref6.apply(this, arguments);
-            }
-
-            return loginAction;
-        }()
-    }, {
-        key: 'logintosystemAction',
-        value: function () {
             var _ref7 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7() {
-                var account, psd, userModel, ck, loginRes, isEmpty;
+                var uid;
                 return _regenerator2.default.wrap(function _callee7$(_context7) {
                     while (1) {
                         switch (_context7.prev = _context7.next) {
                             case 0:
-                                account = this.post('account');
-                                psd = this.post('psd');
-                                userModel = this.model('user');
-                                ck = generateUid();
-                                _context7.next = 6;
-                                return userModel.logIntoSystem(account, psd, ck);
+                                uid = this.cookie('uid');
 
-                            case 6:
-                                loginRes = _context7.sent;
-                                isEmpty = think.isEmpty(loginRes);
-
-
-                                console.log(isEmpty);
-
-                                if (isEmpty) {
-                                    _context7.next = 14;
+                                if (!uid) {
+                                    _context7.next = 3;
                                     break;
                                 }
 
-                                this.cookie('uid', ck);
-                                return _context7.abrupt('return', this.success(loginRes));
+                                return _context7.abrupt('return', this.redirect('/user/index'));
 
-                            case 14:
-                                return _context7.abrupt('return', this.fail('login error'));
+                            case 3:
+                                return _context7.abrupt('return', this.display('user/login.html'));
 
-                            case 15:
+                            case 4:
                             case 'end':
                                 return _context7.stop();
                         }
@@ -345,8 +352,56 @@ var _class = function (_base) {
                 }, _callee7, this);
             }));
 
-            function logintosystemAction() {
+            function loginAction() {
                 return _ref7.apply(this, arguments);
+            }
+
+            return loginAction;
+        }()
+    }, {
+        key: 'logintosystemAction',
+        value: function () {
+            var _ref8 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8() {
+                var account, psd, userModel, ck, loginRes, isEmpty;
+                return _regenerator2.default.wrap(function _callee8$(_context8) {
+                    while (1) {
+                        switch (_context8.prev = _context8.next) {
+                            case 0:
+                                account = this.post('account');
+                                psd = this.post('psd');
+                                userModel = this.model('user');
+                                ck = generateUid();
+                                _context8.next = 6;
+                                return userModel.logIntoSystem(account, psd, ck);
+
+                            case 6:
+                                loginRes = _context8.sent;
+                                isEmpty = think.isEmpty(loginRes);
+
+
+                                console.log(isEmpty);
+
+                                if (isEmpty) {
+                                    _context8.next = 14;
+                                    break;
+                                }
+
+                                this.cookie('uid', ck);
+                                return _context8.abrupt('return', this.success(loginRes));
+
+                            case 14:
+                                return _context8.abrupt('return', this.fail('login error'));
+
+                            case 15:
+                            case 'end':
+                                return _context8.stop();
+                        }
+                    }
+                }, _callee8, this);
+            }));
+
+            function logintosystemAction() {
+                return _ref8.apply(this, arguments);
             }
 
             return logintosystemAction;
@@ -354,60 +409,60 @@ var _class = function (_base) {
     }, {
         key: 'getuserinfoAction',
         value: function () {
-            var _ref8 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8() {
+            var _ref9 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee9() {
                 var uid, userModel, userInfo;
-                return _regenerator2.default.wrap(function _callee8$(_context8) {
+                return _regenerator2.default.wrap(function _callee9$(_context9) {
                     while (1) {
-                        switch (_context8.prev = _context8.next) {
+                        switch (_context9.prev = _context9.next) {
                             case 0:
-                                _context8.prev = 0;
+                                _context9.prev = 0;
                                 uid = this.cookie('uid');
                                 userModel = this.model('user');
-                                _context8.next = 5;
+                                _context9.next = 5;
                                 return userModel.getUserInfo(uid);
 
                             case 5:
-                                userInfo = _context8.sent;
+                                userInfo = _context9.sent;
 
                                 console.log(userInfo);
 
                                 if (think.isEmpty(userInfo)) {
-                                    _context8.next = 11;
+                                    _context9.next = 11;
                                     break;
                                 }
 
-                                return _context8.abrupt('return', this.success(userInfo));
+                                return _context9.abrupt('return', this.success(userInfo));
 
                             case 11:
-                                _context8.next = 13;
+                                _context9.next = 13;
                                 return this.cookie('uid', null);
 
                             case 13:
-                                return _context8.abrupt('return', this.fail('invalid uid'));
+                                return _context9.abrupt('return', this.fail('invalid uid'));
 
                             case 14:
-                                _context8.next = 21;
+                                _context9.next = 21;
                                 break;
 
                             case 16:
-                                _context8.prev = 16;
-                                _context8.t0 = _context8['catch'](0);
-                                _context8.next = 20;
+                                _context9.prev = 16;
+                                _context9.t0 = _context9['catch'](0);
+                                _context9.next = 20;
                                 return this.cookie('uid', null);
 
                             case 20:
-                                return _context8.abrupt('return', this.fail('invalid uid'));
+                                return _context9.abrupt('return', this.fail('invalid uid'));
 
                             case 21:
                             case 'end':
-                                return _context8.stop();
+                                return _context9.stop();
                         }
                     }
-                }, _callee8, this, [[0, 16]]);
+                }, _callee9, this, [[0, 16]]);
             }));
 
             function getuserinfoAction() {
-                return _ref8.apply(this, arguments);
+                return _ref9.apply(this, arguments);
             }
 
             return getuserinfoAction;
@@ -415,56 +470,14 @@ var _class = function (_base) {
     }, {
         key: 'detailAction',
         value: function () {
-            var _ref9 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee9() {
-                return _regenerator2.default.wrap(function _callee9$(_context9) {
-                    while (1) {
-                        switch (_context9.prev = _context9.next) {
-                            case 0:
-                                return _context9.abrupt('return', this.display('user/detail.html'));
-
-                            case 1:
-                            case 'end':
-                                return _context9.stop();
-                        }
-                    }
-                }, _callee9, this);
-            }));
-
-            function detailAction() {
-                return _ref9.apply(this, arguments);
-            }
-
-            return detailAction;
-        }()
-    }, {
-        key: 'getuserdetailAction',
-        value: function () {
             var _ref10 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee10() {
-                var uid, userModel, userDetail;
                 return _regenerator2.default.wrap(function _callee10$(_context10) {
                     while (1) {
                         switch (_context10.prev = _context10.next) {
                             case 0:
-                                uid = this.cookie('uid');
-                                userModel = this.model('user');
-                                _context10.next = 4;
-                                return userModel.getUserDetail(uid);
+                                return _context10.abrupt('return', this.display('user/detail.html'));
 
-                            case 4:
-                                userDetail = _context10.sent;
-
-                                if (think.isEmpty(userDetail)) {
-                                    _context10.next = 9;
-                                    break;
-                                }
-
-                                return _context10.abrupt('return', this.success(userDetail));
-
-                            case 9:
-                                this.cookie('uid', null);
-                                return _context10.abrupt('return', this.fail('invalid uid'));
-
-                            case 11:
+                            case 1:
                             case 'end':
                                 return _context10.stop();
                         }
@@ -472,23 +485,41 @@ var _class = function (_base) {
                 }, _callee10, this);
             }));
 
-            function getuserdetailAction() {
+            function detailAction() {
                 return _ref10.apply(this, arguments);
             }
 
-            return getuserdetailAction;
+            return detailAction;
         }()
     }, {
-        key: 'editAction',
+        key: 'getuserdetailAction',
         value: function () {
             var _ref11 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee11() {
+                var uid, userModel, userDetail;
                 return _regenerator2.default.wrap(function _callee11$(_context11) {
                     while (1) {
                         switch (_context11.prev = _context11.next) {
                             case 0:
-                                return _context11.abrupt('return', this.display('user/edit.html'));
+                                uid = this.cookie('uid');
+                                userModel = this.model('user');
+                                _context11.next = 4;
+                                return userModel.getUserDetail(uid);
 
-                            case 1:
+                            case 4:
+                                userDetail = _context11.sent;
+
+                                if (think.isEmpty(userDetail)) {
+                                    _context11.next = 9;
+                                    break;
+                                }
+
+                                return _context11.abrupt('return', this.success(userDetail));
+
+                            case 9:
+                                this.cookie('uid', null);
+                                return _context11.abrupt('return', this.fail('invalid uid'));
+
+                            case 11:
                             case 'end':
                                 return _context11.stop();
                         }
@@ -496,8 +527,32 @@ var _class = function (_base) {
                 }, _callee11, this);
             }));
 
-            function editAction() {
+            function getuserdetailAction() {
                 return _ref11.apply(this, arguments);
+            }
+
+            return getuserdetailAction;
+        }()
+    }, {
+        key: 'editAction',
+        value: function () {
+            var _ref12 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee12() {
+                return _regenerator2.default.wrap(function _callee12$(_context12) {
+                    while (1) {
+                        switch (_context12.prev = _context12.next) {
+                            case 0:
+                                return _context12.abrupt('return', this.display('user/edit.html'));
+
+                            case 1:
+                            case 'end':
+                                return _context12.stop();
+                        }
+                    }
+                }, _callee12, this);
+            }));
+
+            function editAction() {
+                return _ref12.apply(this, arguments);
             }
 
             return editAction;
@@ -505,12 +560,15 @@ var _class = function (_base) {
     }, {
         key: 'updateuserdetailAction',
         value: function () {
-            var _ref12 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee12() {
-                var userDetail, uid, userModel, updateRes;
-                return _regenerator2.default.wrap(function _callee12$(_context12) {
+            var _ref13 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee13() {
+                var avatarCropped, userModel, uid, userDetail, avatarBase64, avatarBinary, userRowData, basePath, detailPath, updateRes;
+                return _regenerator2.default.wrap(function _callee13$(_context13) {
                     while (1) {
-                        switch (_context12.prev = _context12.next) {
+                        switch (_context13.prev = _context13.next) {
                             case 0:
+                                avatarCropped = this.post('avatarCropped');
+                                userModel = this.model('user');
+                                uid = this.cookie('uid');
                                 userDetail = {
                                     nickname: this.post('nickname'),
                                     avatar: this.post('avatar'),
@@ -521,50 +579,48 @@ var _class = function (_base) {
                                     city: this.post('city')
                                 };
 
-                                console.log(userDetail);
-                                uid = this.cookie('uid');
-                                userModel = this.model('user');
-                                _context12.next = 6;
-                                return userModel.updateUserDetail(userDetail, uid);
-
-                            case 6:
-                                updateRes = _context12.sent;
-
-                                if (think.isEmpty(updateRes)) {
-                                    _context12.next = 11;
+                                if (!avatarCropped) {
+                                    _context13.next = 15;
                                     break;
                                 }
 
-                                return _context12.abrupt('return', this.success('successfully update'));
+                                console.log('inner');
+                                avatarBase64 = avatarCropped.split(',')[1];
+                                avatarBinary = new Buffer(avatarBase64, 'base64').toString('binary');
+                                _context13.next = 10;
+                                return userModel.getUserInfo(uid);
 
-                            case 11:
-                                return _context12.abrupt('return', this.fail('update failed'));
+                            case 10:
+                                userRowData = _context13.sent;
+                                basePath = this.config('avatarBasePath');
+                                detailPath = '/avatar/' + userRowData.id + '.png';
 
-                            case 12:
-                            case 'end':
-                                return _context12.stop();
-                        }
-                    }
-                }, _callee12, this);
-            }));
+                                _fs2.default.writeFileSync(basePath + detailPath, avatarBinary, 'binary', function (err) {
+                                    console.log(err);
+                                });
+                                userDetail.avatar = detailPath;
 
-            function updateuserdetailAction() {
-                return _ref12.apply(this, arguments);
-            }
+                            case 15:
 
-            return updateuserdetailAction;
-        }()
-    }, {
-        key: 'verifyAction',
-        value: function () {
-            var _ref13 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee13() {
-                return _regenerator2.default.wrap(function _callee13$(_context13) {
-                    while (1) {
-                        switch (_context13.prev = _context13.next) {
-                            case 0:
-                                return _context13.abrupt('return', this.display('user/verify.html'));
+                                console.log(userDetail);
 
-                            case 1:
+                                _context13.next = 18;
+                                return userModel.updateUserDetail(userDetail, uid);
+
+                            case 18:
+                                updateRes = _context13.sent;
+
+                                if (think.isEmpty(updateRes)) {
+                                    _context13.next = 23;
+                                    break;
+                                }
+
+                                return _context13.abrupt('return', this.success('successfully update'));
+
+                            case 23:
+                                return _context13.abrupt('return', this.fail('update failed'));
+
+                            case 24:
                             case 'end':
                                 return _context13.stop();
                         }
@@ -572,41 +628,23 @@ var _class = function (_base) {
                 }, _callee13, this);
             }));
 
-            function verifyAction() {
+            function updateuserdetailAction() {
                 return _ref13.apply(this, arguments);
             }
 
-            return verifyAction;
+            return updateuserdetailAction;
         }()
     }, {
-        key: 'resetAction',
+        key: 'verifyAction',
         value: function () {
             var _ref14 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee14() {
                 return _regenerator2.default.wrap(function _callee14$(_context14) {
                     while (1) {
                         switch (_context14.prev = _context14.next) {
                             case 0:
-                                _context14.t0 = console;
-                                _context14.next = 3;
-                                return this.session('account');
+                                return _context14.abrupt('return', this.display('user/verify.html'));
 
-                            case 3:
-                                _context14.t1 = _context14.sent;
-
-                                _context14.t0.log.call(_context14.t0, _context14.t1);
-
-                                _context14.t2 = console;
-                                _context14.next = 8;
-                                return this.session('reset');
-
-                            case 8:
-                                _context14.t3 = _context14.sent;
-
-                                _context14.t2.log.call(_context14.t2, _context14.t3);
-
-                                return _context14.abrupt('return', this.display('user/reset.html'));
-
-                            case 11:
+                            case 1:
                             case 'end':
                                 return _context14.stop();
                         }
@@ -614,48 +652,41 @@ var _class = function (_base) {
                 }, _callee14, this);
             }));
 
-            function resetAction() {
+            function verifyAction() {
                 return _ref14.apply(this, arguments);
             }
 
-            return resetAction;
+            return verifyAction;
         }()
     }, {
-        key: 'resetpasswordAction',
+        key: 'resetAction',
         value: function () {
             var _ref15 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee15() {
-                var account, psd, userModel, updateRes;
                 return _regenerator2.default.wrap(function _callee15$(_context15) {
                     while (1) {
                         switch (_context15.prev = _context15.next) {
                             case 0:
-                                _context15.next = 2;
+                                _context15.t0 = console;
+                                _context15.next = 3;
                                 return this.session('account');
 
-                            case 2:
-                                account = _context15.sent;
-                                psd = this.post('psd');
-                                userModel = this.model('user');
-                                _context15.next = 7;
-                                return userModel.resetPassword(account, psd);
+                            case 3:
+                                _context15.t1 = _context15.sent;
 
-                            case 7:
-                                updateRes = _context15.sent;
-                                _context15.next = 10;
-                                return this.session('reset', false);
+                                _context15.t0.log.call(_context15.t0, _context15.t1);
 
-                            case 10:
-                                if (think.isEmpty(updateRes)) {
-                                    _context15.next = 14;
-                                    break;
-                                }
+                                _context15.t2 = console;
+                                _context15.next = 8;
+                                return this.session('reset');
 
-                                return _context15.abrupt('return', this.success('successfully update'));
+                            case 8:
+                                _context15.t3 = _context15.sent;
 
-                            case 14:
-                                return _context15.abrupt('return', this.fail('update failed'));
+                                _context15.t2.log.call(_context15.t2, _context15.t3);
 
-                            case 15:
+                                return _context15.abrupt('return', this.display('user/reset.html'));
+
+                            case 11:
                             case 'end':
                                 return _context15.stop();
                         }
@@ -663,11 +694,151 @@ var _class = function (_base) {
                 }, _callee15, this);
             }));
 
-            function resetpasswordAction() {
+            function resetAction() {
                 return _ref15.apply(this, arguments);
             }
 
+            return resetAction;
+        }()
+    }, {
+        key: 'resetpasswordAction',
+        value: function () {
+            var _ref16 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee16() {
+                var account, psd, userModel, updateRes;
+                return _regenerator2.default.wrap(function _callee16$(_context16) {
+                    while (1) {
+                        switch (_context16.prev = _context16.next) {
+                            case 0:
+                                _context16.next = 2;
+                                return this.session('account');
+
+                            case 2:
+                                account = _context16.sent;
+                                psd = this.post('psd');
+                                userModel = this.model('user');
+                                _context16.next = 7;
+                                return userModel.resetPassword(account, psd);
+
+                            case 7:
+                                updateRes = _context16.sent;
+                                _context16.next = 10;
+                                return this.session('reset', false);
+
+                            case 10:
+                                if (think.isEmpty(updateRes)) {
+                                    _context16.next = 14;
+                                    break;
+                                }
+
+                                return _context16.abrupt('return', this.success('successfully update'));
+
+                            case 14:
+                                return _context16.abrupt('return', this.fail('update failed'));
+
+                            case 15:
+                            case 'end':
+                                return _context16.stop();
+                        }
+                    }
+                }, _callee16, this);
+            }));
+
+            function resetpasswordAction() {
+                return _ref16.apply(this, arguments);
+            }
+
             return resetpasswordAction;
+        }()
+    }, {
+        key: 'feedbackAction',
+        value: function () {
+            var _ref17 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee17() {
+                return _regenerator2.default.wrap(function _callee17$(_context17) {
+                    while (1) {
+                        switch (_context17.prev = _context17.next) {
+                            case 0:
+                                return _context17.abrupt('return', this.display('user/feedback.html'));
+
+                            case 1:
+                            case 'end':
+                                return _context17.stop();
+                        }
+                    }
+                }, _callee17, this);
+            }));
+
+            function feedbackAction() {
+                return _ref17.apply(this, arguments);
+            }
+
+            return feedbackAction;
+        }()
+    }, {
+        key: 'sendfeedbackAction',
+        value: function () {
+            var _ref18 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee18() {
+                var uid, userModel, feedbackModel, nickname, userId, phoneNumber, userInfo, res;
+                return _regenerator2.default.wrap(function _callee18$(_context18) {
+                    while (1) {
+                        switch (_context18.prev = _context18.next) {
+                            case 0:
+                                uid = this.cookie('uid');
+                                userModel = this.model('user');
+                                feedbackModel = this.model('feedback');
+                                nickname = void 0, userId = void 0, phoneNumber = void 0;
+
+                                if (!uid) {
+                                    _context18.next = 11;
+                                    break;
+                                }
+
+                                _context18.next = 7;
+                                return userModel.getUserDetail(uid);
+
+                            case 7:
+                                userInfo = _context18.sent;
+
+                                userId = userInfo.id;
+                                nickname = userInfo.nickname;
+                                phoneNumber = userInfo.phoneNumber;
+
+                            case 11:
+                                _context18.next = 13;
+                                return feedbackModel.storeFeedback({
+                                    type: this.post('type'),
+                                    content: this.post('content'),
+                                    contact: this.post('contact'),
+                                    userId: userId,
+                                    nickname: nickname,
+                                    phoneNumber: phoneNumber
+                                });
+
+                            case 13:
+                                res = _context18.sent;
+
+                                if (think.isEmpty(res)) {
+                                    _context18.next = 18;
+                                    break;
+                                }
+
+                                return _context18.abrupt('return', this.success('feedback sent'));
+
+                            case 18:
+                                return _context18.abrupt('return', this.fail('feedback error'));
+
+                            case 19:
+                            case 'end':
+                                return _context18.stop();
+                        }
+                    }
+                }, _callee18, this);
+            }));
+
+            function sendfeedbackAction() {
+                return _ref18.apply(this, arguments);
+            }
+
+            return sendfeedbackAction;
         }()
     }]);
     return _class;

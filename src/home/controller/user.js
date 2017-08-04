@@ -1,5 +1,5 @@
 import base from './base.js';
-
+import fs from 'fs';
 export default class extends base {
     indexAction() {
         if (checkLogin(this)) {
@@ -10,15 +10,49 @@ export default class extends base {
         }
     }
 
-    async registerAction() {
+    agreementAction() {
+        return this.display('user/agreement.html')
+    }
+
+    likeAction() {
+        return this.display('user/like.html');
+    }
+
+    async getlikesAction() {
+        let uid = this.cookie('uid');
+        let userModel = this.model('user');
+        let articleModel = this.model('article');
+        let likeArticleIdsRowData = await userModel.getLikes(uid);
+        let likeArticleIds = JSON.parse(likeArticleIdsRowData[0].likes);
+        if (likeArticleIds == null || likeArticleIds.length == 0) {
+            return this.fail(1001, 'no likearticle!');
+        }
+        let currentPage = this.get('currentPage');
+        let num = this.get('num');
+        let likeArticles = await articleModel.getLikeArticles(likeArticleIds, currentPage, num);
+        return this.success(likeArticles);
+    }
+
+    async canclelikeAction() {
+        let articleid = this.post('articleid');
+        console.log(articleid);
+        let uid = this.cookie('uid');
+        let userModel = this.model('user');
+        let articleModel = this.model('article');
+        await articleModel.decreaseLikeNumber(articleid);
+        let lines = await userModel.updateLikes(parseInt(articleid), uid);
+        return this.success(lines);
+    }
+
+    registerAction() {
         return this.display('user/register.html')
     }
 
     async getvfcodeAction() {
         try {
-	        let account = this.post('account')
-            let code = generateVerificationCode();
 
+            let account = this.post('account')
+            let code = generateVerificationCode();
             // let userModel = this.model('user')
             // let send_res = await userModel.sendMessage(phone, code)
 
@@ -55,11 +89,7 @@ export default class extends base {
                 nickname = this.post('nickname'),
                 psd = this.post('psd')
             let userModel = this.model('user')
-            let nicknameExist = await userModel.isNickNameExist(nickname);
-            if(nicknameExist){
-                return this.fail(1000,'nickname has already existed!');
-            }
-            // set cookie uid
+
             let ck = generateUid()
             let data = await userModel.register(phone, nickname, psd, ck)
 
@@ -139,6 +169,9 @@ export default class extends base {
     }
 
     async updateuserdetailAction() {
+        let avatarCropped = this.post('avatarCropped');
+        let userModel = this.model('user');
+        let uid = this.cookie('uid');
         let userDetail = {
             nickname: this.post('nickname'),
             avatar: this.post('avatar'),
@@ -148,9 +181,23 @@ export default class extends base {
             introduction: this.post('introduction'),
             city: this.post('city')
         }
+        if (avatarCropped) {
+            console.log('inner');
+            let avatarBase64 = avatarCropped.split(',')[1];
+            let avatarBinary = new Buffer(avatarBase64, 'base64').toString('binary');
+            let userRowData = await userModel.getUserInfo(uid);
+            let basePath = this.config('avatarBasePath');
+            let detailPath = '/avatar/' + userRowData.id + '.png';
+            fs.writeFileSync(basePath + detailPath, avatarBinary, 'binary', function (err) {
+                console.log(err);
+            });
+            userDetail.avatar = detailPath;
+        }
+
+
         console.log(userDetail)
-        let uid = this.cookie('uid')
-        let userModel = this.model('user')
+
+
         let updateRes = await userModel.updateUserDetail(userDetail, uid)
         if (!think.isEmpty(updateRes)) {
             return this.success('successfully update')
@@ -181,37 +228,37 @@ export default class extends base {
             return this.fail('update failed')
         }
     }
-    
-    async feedbackAction () {
-    	return this.display('user/feedback.html')
+
+    async feedbackAction() {
+        return this.display('user/feedback.html')
     }
-    
+
     async sendfeedbackAction() {
-	    let uid = this.cookie('uid')
-	    let userModel = this.model('user')
-	    let feedbackModel = this.model('feedback')
-	    let nickname, userId, phoneNumber
-	    
-	    if (uid) {
-    		let userInfo = await userModel.getUserDetail(uid)
-		    userId = userInfo.id
-		    nickname = userInfo.nickname
-		    phoneNumber = userInfo.phoneNumber
-	    }
-	    
-	    let res = await feedbackModel.storeFeedback({
-		    type: this.post('type'),
-		    content: this.post('content'),
-		    contact: this.post('contact'),
-		    userId: userId,
-		    nickname: nickname,
-		    phoneNumber: phoneNumber
-	    })
-	    
-	    if (!think.isEmpty(res)) {
-		    return this.success('feedback sent')
-    	} else {
-    		return this.fail('feedback error')
-	    }
+        let uid = this.cookie('uid')
+        let userModel = this.model('user')
+        let feedbackModel = this.model('feedback')
+        let nickname, userId, phoneNumber
+
+        if (uid) {
+            let userInfo = await userModel.getUserDetail(uid)
+            userId = userInfo.id
+            nickname = userInfo.nickname
+            phoneNumber = userInfo.phoneNumber
+        }
+
+        let res = await feedbackModel.storeFeedback({
+            type: this.post('type'),
+            content: this.post('content'),
+            contact: this.post('contact'),
+            userId: userId,
+            nickname: nickname,
+            phoneNumber: phoneNumber
+        })
+
+        if (!think.isEmpty(res)) {
+            return this.success('feedback sent')
+        } else {
+            return this.fail('feedback error')
+        }
     }
 }

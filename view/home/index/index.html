@@ -8,8 +8,10 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-
+    <meta name="mobile-web-app-status-bar-style" content="black">
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
     <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/css/index.css">
@@ -44,6 +46,7 @@
                 </div>
                 <div class="button-row marginbottom">
                     <a href="#" class="button group">我的小组</a>
+
                     <a href="/user/feedback" class="button feed external">意见反馈</a>
                 </div>
 
@@ -347,7 +350,7 @@
 <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
 <script type="text/javascript" src="/static/vue/vue.js"></script>
 <script src="/static/js/raty/jquery.raty.js"></script>
-<script type='text/javascript' src='/static/light7/js/light7.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 
 <script type="text/javascript ">
@@ -355,6 +358,7 @@
     $.fn.raty.defaults.path = '/static/js/raty/img';
 
     let readList = (window.localStorage.getItem('readList') || '').split(',')
+
 
     var $vm = new Vue({
         delimiters: ['{$', '$}'],
@@ -365,9 +369,11 @@
             greyList: [],
         },
         methods: {
+
         	escape: function (str) {
                 return str.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&apos;/g, "'")
 	        }
+
         }
     })
     let articleLoading = false;
@@ -461,6 +467,7 @@
             }
         })
     }
+
 </script>
 </body>
 

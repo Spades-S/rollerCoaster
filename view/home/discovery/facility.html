@@ -20,20 +20,24 @@
             box-sizing: border-box;
             -webkit-font-smoothing: antialiased;
         }
-        .page{
+
+        .page {
             background-color: #fff;
         }
-        .bar{
+
+        .bar {
             height: 3rem;
             background-color: #07518f;
             border-bottom: none;
         }
-        h1.title{
+
+        h1.title {
             color: white;
             overflow: hidden;
             text-overflow: ellipsis;
             line-height: 3rem;
         }
+
         .icon-arrow-left {
             display: inline-block;
             width: 0.9rem;
@@ -42,98 +46,119 @@
             top: 0.75rem;
             z-index: 30;
         }
-        .bar~.content{
+
+        .bar ~ .content {
             top: 3rem;
             padding-bottom: 2rem;
         }
-        .swiper-container{
+
+        .swiper-container {
             height: 9rem;
         }
-        .swiper-wrapper{
+
+        .swiper-wrapper {
             width: 100%;
         }
-        .swiper-container img{
+
+        .swiper-container img {
             width: 100%;
             height: auto;
             position: relative;
             top: 50%;
             transform: translateY(-50%);
         }
-        .buttons-tab{
+
+        .buttons-tab {
             font-size: .8rem;
         }
-        .buttons-tab .button.active{
+
+        .buttons-tab .button.active {
             color: #07518f;
             border-color: #60B300;
         }
-        .info-rows{
+
+        .info-rows {
             padding: .5rem 0;
         }
-        .row{
+
+        .row {
             padding: .4rem 0;
             font-size: .7rem;
             word-break: normal;
             margin-left: 0;
         }
-        .info-rows .col-33{
+
+        .info-rows .col-33 {
             text-align: right;
             padding-right: 1rem;
             color: #989898;
         }
-        .col-66{
+
+        .col-66 {
             white-space: normal;
         }
-        .state{
+
+        .state {
             height: 2rem;
             line-height: 2rem;
             padding: 0 1rem;
             color: #797979;
             background-color: #EEEEEE;
         }
-        .statistics-table, .details-table{
+
+        .statistics-table, .details-table {
             margin: .8rem;
             border: 1px solid #DCDCDC;
         }
-        .statistics-table .col-33, .details-table .col-33{
+
+        .statistics-table .col-33, .details-table .col-33 {
             padding-left: 1rem;
         }
-        .average-review{
+
+        .average-review {
             padding: .7rem 0 .5rem 0;
             text-align: center;
             border-bottom: 1px solid #DCDCDC;
             font-size: .7rem;
         }
-        .average-review .star img{
+
+        .average-review .star img {
             height: 1rem;
             width: 1rem;
             margin-bottom: .3rem;
         }
-        .star{
+
+        .star {
             width: 100% !important;
             position: relative;
             display: flex;
             align-items: center;
         }
-        .average-review .star{
+
+        .average-review .star {
             justify-content: center;
         }
-        .review-item{
+
+        .review-item {
             position: relative;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
         }
-        .review-left{
+
+        .review-left {
             width: 10%;
             text-align: center;
             padding-top: .5rem;
         }
-        .review-left img{
+
+        .review-left img {
             width: 100%;
             height: 100%;
             border-radius: 50%;
         }
-        .review-right{
+
+        .review-right {
             width: 90%;
             padding: .5rem 0;
             margin-left: .5rem;
@@ -141,22 +166,26 @@
             line-height: 1rem;
             border-bottom: 1px solid #DCDCDC;
         }
-        .review-right .star img{
+
+        .review-right .star img {
             height: .6rem;
             width: .6rem;
         }
-        .review-item .time{
+
+        .review-item .time {
             position: absolute;
             right: 0;
             top: .5rem;
         }
-        .review-item .time, .review-right .review-content{
+
+        .review-item .time, .review-right .review-content {
             padding: .2rem 0;
             line-height: .8rem;
             font-size: .6rem;
             color: #969696;
         }
-        .review-fixed-bottom{
+
+        .review-fixed-bottom {
             position: fixed;
             width: 100%;
             bottom: 0;
@@ -169,12 +198,14 @@
             font-size: .7rem;
             color: #898989;
         }
-        .review-input{
+
+        .review-input {
             width: 80%;
             border: none;
             border-bottom: 1px solid #DCDCDC;
         }
-        .no-review{
+
+        .no-review {
             font-size: .7rem;
             text-align: center;
             margin-top: 2rem;
@@ -211,7 +242,8 @@
             <div class="statistics">
                 <div class="state">统计数据</div>
                 <div class="statistics-table">
-                    <div class="row" v-for="item, index in statistics" v-if="facilityInfo[item.en]" :style="'background-color: ' + (index % 2 == 1 ? '#F9F9F9' : '')">
+                    <div class="row" v-for="item, index in statistics" v-if="facilityInfo[item.en]"
+                         :style="'background-color: ' + (index % 2 == 1 ? '#F9F9F9' : '')">
                         <div class="col-33">{$ item.item $}</div>
                         <div class="col-66">{$ escape(facilityInfo[item.en]) $}</div>
                     </div>
@@ -220,7 +252,8 @@
             <div class="detail">
                 <div class="state">详细信息</div>
                 <div class="details-table">
-                    <div class="row" v-for="item, index in details" v-if="facilityInfo[item.en]" :style="'background-color: ' + (index % 2 == 0 ? '' : '#F9F9F9')">
+                    <div class="row" v-for="item, index in details" v-if="facilityInfo[item.en]"
+                         :style="'background-color: ' + (index % 2 == 0 ? '' : '#F9F9F9')">
                         <div class="col-33">{$ item.item $}</div>
                         <div class="col-66">{$ escape(facilityInfo[item.en]) $}</div>
                     </div>
@@ -229,7 +262,7 @@
         </div>
         <div class="review" v-if="buttonsTabIndex == 1">
             <div class="average-review">
-                <div class="star" :data-score="facilityInfo.averageRating || '4.3'"></div>
+                <div class="star" id="star-average" :data-score="facilityInfo.averageRating || '4.3'"></div>
                 <div class="average-score">综合评分: {$ facilityInfo.averageRating || 4.3 $}</div>
             </div>
             <div class="review-list">
@@ -240,7 +273,7 @@
                     <div class="review-right">
                         <div class="name">{$ review.authorName $}</div>
                         <div class="time">{$ format(review.time) $}</div>
-                        <div class="star" :data-score="review.stars"></div>
+                        <div class="small-star" :data-score="review.stars"></div>
                         <div class="review-content">{$ review.content $}</div>
                     </div>
                 </div>
@@ -258,143 +291,169 @@
 <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
-<script type="text/javascript" src="/static/js/raty/jquery.raty.min.js"></script>
-<script type="text/javascript" src="/static/share/js/jquery.share.min.js"></script>
+<script type="text/javascript" src="/static/star/starlib.js"></script>
+
 <script>
     $.init();
+    let starConfig = {
+        num: 5,
+        readOnly: true,
+        imgPath: {
+            neg: '/static/star/images/starNeg.png',
+            act: '/static/star/images/starAct.png',
+        },
+        size: 1.2 //单位rem
+    }
+    let smallStarConfig = {
+        num: 5,
+        readOnly: true,
+        imgPath: {
+            neg: '/static/star/images/starNeg.png',
+            act: '/static/star/images/starAct.png',
+        },
+        size: 0.8 //单位rem
+    }
+    let star = new raty('.star', starConfig);
+    let smallStar = new raty('.small-star', smallStarConfig);
+
 
     new Vue({
         delimiters: ['{$', '$}'],
         data () {
-        	return {
-        		facilityInfo: {},
+            return {
+                facilityInfo: {},
                 reviewInfo: undefined,
                 perpageReview: 10,
                 page: 0,
                 buttonsTabIndex: 0,
                 infos: [{
-        			item: '地址',
+                    item: '地址',
                     en: 'location'
                 }, {
-	                item: '乐园',
-	                en: 'park'
+                    item: '乐园',
+                    en: 'park'
                 }, {
-	                item: '开放时间',
-	                en: 'openTime'
+                    item: '开放时间',
+                    en: 'openTime'
                 }, {
-	                item: '类型',
-	                en: 'type'
+                    item: '类型',
+                    en: 'type'
                 }, {
-	                item: '状态',
-	                en: 'status'
+                    item: '状态',
+                    en: 'status'
                 }, {
-	                item: '关闭时间',
-	                en: 'closeTime'
+                    item: '关闭时间',
+                    en: 'closeTime'
                 }, {
-	                item: '模型',
-	                en: 'model'
+                    item: '模型',
+                    en: 'model'
                 }, {
-	                item: '制作',
-	                en: 'make'
+                    item: '制作',
+                    en: 'make'
                 }],
                 statistics: [{
-        			item: '长度',
+                    item: '长度',
                     en: 'length'
                 }, {
-	                item: '高度',
-	                en: 'height'
+                    item: '高度',
+                    en: 'height'
                 }, {
-	                item: '反转数',
-	                en: 'inverse'
+                    item: '反转数',
+                    en: 'inverse'
                 }, {
-	                item: '速度',
-	                en: 'speed'
+                    item: '速度',
+                    en: 'speed'
                 }, {
-	                item: '落差',
-	                en: 'dropHeight'
+                    item: '落差',
+                    en: 'dropHeight'
                 }, {
-	                item: '维度',
-	                en: 'dimension'
+                    item: '维度',
+                    en: 'dimension'
                 }, {
-	                item: '时长',
-	                en: 'duration'
+                    item: '时长',
+                    en: 'duration'
                 }, {
-	                item: '设计',
-	                en: 'design'
+                    item: '设计',
+                    en: 'design'
                 }, {
-	                item: '运载能力',
-	                en: 'capacity'
+                    item: '运载能力',
+                    en: 'capacity'
                 }],
                 details: [{
-        			item: '曾用名',
+                    item: '曾用名',
                     en: 'usedName'
                 }, {
-	                item: '设计者',
-	                en: 'designer'
+                    item: '设计者',
+                    en: 'designer'
                 }, {
-	                item: '新址',
-	                en: 'relocation'
+                    item: '新址',
+                    en: 'relocation'
                 }, {
-	                item: '花费',
-	                en: 'cost'
+                    item: '花费',
+                    en: 'cost'
                 }, {
-	                item: '结构',
-	                en: 'structure'
+                    item: '结构',
+                    en: 'structure'
                 }, {
-	                item: '前身状态',
-	                en: 'formerStatus'
+                    item: '前身状态',
+                    en: 'formerStatus'
                 }, {
-	                item: '具体分类',
-	                en: 'specificCategory'
+                    item: '具体分类',
+                    en: 'specificCategory'
                 }, {
-	                item: '词源',
-	                en: 'etymology'
+                    item: '词源',
+                    en: 'etymology'
                 }, {
-	                item: '说明',
-	                en: 'notes'
+                    item: '说明',
+                    en: 'notes'
                 }]
             }
         },
         created: function () {
-        	let self = this
+            let self = this
+            star.init();
+            smallStar.init();
             $.ajax({
                 url: '/discovery/getfacilityinfo',
                 data: {
-                	id: "{{ id }}"
+                    id: "{{ id }}"
                 },
                 success: function (ret) {
-                    self.facilityInfo= ret.data[0]
+                    self.facilityInfo = ret.data[0]
                     self.facilityInfo.poster = self.facilityInfo.poster.split(',')
                     self.createSwiper(self.facilityInfo.poster)
                 }
             })
         },
+        updated: function () {
+            star.set();
+            smallStar.set();
+        },
         methods: {
-        	switchTab: function (e) {
+            switchTab: function (e) {
                 this.buttonsTabIndex = e.target.dataset.tabIndex
-		        if (e.target.dataset.tabIndex === '1') {
-                	if (!this.reviewInfo) {
-		                return this.getReview(this.page, this.perpageReview)
+                if (e.target.dataset.tabIndex === '1') {
+                    if (!this.reviewInfo) {
+                        return this.getReview(this.page, this.perpageReview)
                     }
-			        this.ratify()
-		        } else {
-                	$('.star').raty('destroy')
+                } else {
+
                 }
-	        },
+            },
             createSwiper: function () {
-        		var wrapper = document.querySelector('.swiper-wrapper')
+                var wrapper = document.querySelector('.swiper-wrapper')
                 this.facilityInfo.poster.forEach((el) => {
                     if (el) {
-	                    var slide = document.createElement('DIV')
-	                    slide.className = 'swiper-slide'
-	                    slide.innerHTML = '<img src="' + el + '" />'
-	                    wrapper.appendChild(slide)
+                        var slide = document.createElement('DIV')
+                        slide.className = 'swiper-slide'
+                        slide.innerHTML = '<img src="' + el + '" />'
+                        wrapper.appendChild(slide)
                     }
                     if ($('.swiper-slide').length === 0) {
-                    	$('.swiper-container').css({
+                        $('.swiper-container').css({
                             'height': '0',
                             'padding-bottom': '0'
-	                    })
+                        })
                     }
                 })
                 $('.swiper-container').swiper({
@@ -403,61 +462,44 @@
                 })
             },
             getReview: function (page, count) {
-        		let self = this
+                let self = this
                 $.ajax({
                     url: '/discovery/getreview',
                     data: {
-                    	facilityId: self.facilityInfo.id,
+                        facilityId: self.facilityInfo.id,
                         page: page,
                         count: count
                     },
                     success: function (ret) {
                         if (ret.errno !== 0) {
-	                        return $.toast('获取失败，请重试')
+                            return $.toast('获取失败，请重试')
                         }
-	                    self.reviewInfo = ret.data.data
-                        self.ratify()
+                        self.reviewInfo = ret.data.data
                     },
                     error: function (err) {
-                    	console.log(err)
+                        console.log(err)
                         $.toast('获取失败，请重试')
                     }
                 })
             },
             escape: function (str) {
-        		if (typeof str !== 'string') {
-        			return str
+                if (typeof str !== 'string') {
+                    return str
                 }
                 return str.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&#xB0;/g, '˚')
             },
             toReview: function () {
-        		let self = this
-        		$.ajax({
+                let self = this
+                $.ajax({
                     url: '/discovery/review',
                     data: {
-                    	id: self.facilityInfo.id,
+                        id: self.facilityInfo.id,
                         title: self.facilityInfo.title
                     },
                     success: function () {
-	                    window.location.href = '/discovery/review'
+                        window.location.href = '/discovery/review'
                     }
                 })
-            },
-            ratify: function () {
-	            setTimeout(function () {
-		            $('.average-review .star, .review-item .star').raty({
-			            half: true,
-			            number: 5,
-			            score: function () {
-				            return $(this).attr('data-score')
-			            },
-			            path: '/static/js/raty/img',
-			            starOn: 'star-on-big.png',
-			            starOff: 'star-off-big.png',
-			            starHalf: 'star-half-big.png',
-			            readOnly: true
-		            })
-	            }, 0)
             },
             format: function (time) {
                 return new Date(time).Format("yyyy-MM-dd hh:mm")
@@ -466,19 +508,19 @@
     }).$mount('#page')
 
     Date.prototype.Format = function (fmt) { //author: meizz
-	    var o = {
-		    "M+": this.getMonth() + 1, //月份
-		    "d+": this.getDate(), //日
-		    "h+": this.getHours(), //小时
-		    "m+": this.getMinutes(), //分
-		    "s+": this.getSeconds(), //秒
-		    "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-		    "S": this.getMilliseconds() //毫秒
-	    };
-	    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-	    for (var k in o)
-		    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-	    return fmt;
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
     }
 </script>
 </body>

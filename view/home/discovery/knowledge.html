@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>欢乐冶</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <style>
+        * {
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .bar {
+            border-bottom: none;
+            padding-right: 0.2rem;
+        }
+
+        .bar.bar-nav {
+            height: 3rem;
+            background-color: #07518f;
+        }
+
+        .icon-arrow-left {
+            display: inline-block;
+            width: 0.9rem;
+            height: 1.4rem;
+            position: absolute;
+            top: 0.75rem;
+            z-index: 30;
+        }
+
+        h1.title {
+            color: white;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 3rem;
+            font-size: 20px;
+            letter-spacing: 0.2rem;
+        }
+
+        .tab-item.active {
+            color: #72bb38 !important;
+        }
+
+        .bar-nav ~ .content {
+            top: 3rem;
+            padding-bottom: 2.5rem;
+            background-color: #fff;
+        }
+
+        .content-list-item {
+            height: 9rem;
+        }
+
+        .item-content {
+            padding: 0.6rem;
+        }
+
+        .poster {
+            width: 5rem;
+            height: 5rem;
+            float: right;
+            margin-left: 0.4rem
+        }
+
+        .title-intro {
+            height: 5rem;
+            padding-right: 5.4rem;
+        }
+
+        .article-title {
+            display: -webkit-box;
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 1.25rem;
+            height: 2.5rem;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .article-intro {
+            font-size: 14px;
+            color: #a8a7a7;
+            height: 2.27rem;
+            line-height: 1.135rem;
+            margin-top: 0.23rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .author-uptadetime {
+            margin-top: 0.7rem;
+            font-size: 14px;
+            color: #a8a7a7;
+        }
+
+        .avatar {
+            float: left;
+            height: 1.6rem;
+            width: 1.6rem;
+            border-radius: 0.8rem;
+        }
+
+        .nickname, .updatetime {
+            display: inline-block;
+            height: 1.6rem;
+            line-height: 1.6rem;
+        }
+
+        .nickname {
+            overflow: hidden;
+            margin-left: 0.5rem;
+            width: calc(100% - 9rem);
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .updatetime {
+            float: right;
+            width: 6rem;
+            text-align: right;
+        }
+
+        .item-hr {
+            border-top: 1px solid #DCDCDC;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <header class="bar bar-nav">
+        <a href="javascript:window.history.go(-1)" class=" iconfont icon-arrow-left back"></a>
+        <h1 class="title">知识</h1>
+    </header>
+    <div class="content infinite-scroll" data-distance="50">
+        <div id="content-list">
+            <div class="content-item">
+                <div class="content-list">
+                    <div class="content-list-item" v-for="article in articles">
+                        <div class="item-content" :data-id="article.id" @click="toArticle">
+                            <img :src="article.poster||'/static/img/systemAvatar.jpeg'" alt="" class="poster">
+                            <div class="title-intro">
+                                <div class="article-title">{$ article.title $}</div>
+                                <div class="article-intro">{$ article.description $}</div>
+                            </div>
+                            <div class="author-uptadetime">
+                                <img :src="article.authorAvatar||'/static/img/systemAvatar.jpeg'" alt="" class="avatar">
+                                <span v-if="article.authorName==''" class="nickname">{$ article.col $}</span>
+                                <span v-else class="nickname">{$ article.authorName $}</span>
+                                <span class="updatetime">{$ getDateDiff(article.updateTime) $}</span>
+                            </div>
+                        </div>
+                        <div class="item-hr"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="infinite-scroll-preloader">
+            <div class="preloader"></div>
+        </div>
+    </div>
+    <nav class="bar bar-tab ">
+        <a class="tab-item external" href="/index">
+            <span class="icon iconfont icon-shouye"></span>
+            <span class="tab-label ">首页</span>
+        </a>
+        <a class="tab-item active external">
+            <span class="icon iconfont icon-yikeapp15"></span>
+            <span class="tab-label ">发现</span>
+        </a>
+        <a class="tab-item external" href="/group">
+            <span class="icon iconfont icon-xiaozufill"></span>
+            <span class="tab-label ">小组</span>
+        </a>
+        <a class="tab-item external" href="/user">
+            <span class="icon iconfont icon-wode"></span>
+            <span class="tab-label ">我的</span>
+        </a>
+    </nav>
+</div>
+
+
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script>
+    $.init();
+    let titleArr = ['过山车知识', '乘骑知识', '演出知识'];
+    let titleEle = document.getElementsByClassName('title')[0];
+    titleEle.innerText = titleArr[Number('{{tag}}' - 1)];
+
+
+    var vm = new Vue({
+        delimiters: ['{$', '$}'],
+        el: '#content-list',
+        data () {
+            return {
+                articles: [],
+                perPageItems: 10,
+                page: 1
+            }
+        },
+        created: function () {
+            this.getArticle(this.perPageItems, this.page);
+            console.log('test');
+        },
+        methods: {
+            getArticle: function (perPageItems, page) {
+                $('.infinite-scroll-preloader').show();
+                let self = this
+                $.ajax({
+                    url: '/discovery/getknowledge',
+                    data: {
+                        tag: '{{tag}}',
+                        count: perPageItems,
+                        page: page,
+                    },
+                    success: function (ret) {
+                        if (ret.errno === 0) {
+                            self.articles = self.articles.concat(ret.data.data)
+                            self.page++
+                            loading = false
+                            if (ret.data.totalPages == 1) {
+                                $.detachInfiniteScroll($('.infinite-scroll'))
+                                $('.infinite-scroll-preloader').hide();
+                            }
+                            return
+                        }
+                        if (ret.errmsg === 'no more') {
+                            $.toast('没有更多了，向我们反馈吧')
+                            $.detachInfiniteScroll($('.infinite-scroll'))
+                            $('.infinite-scroll-preloader').hide();
+                            return
+                        }
+                        $.toast('出了点小问题，请重试')
+                        $('.infinite-scroll-preloader').hide();
+                        return
+                    },
+                    error: function (err) {
+                        return $.toast('获取失败，请刷新重试')
+                    }
+                })
+            },
+            toArticle: function (e) {
+                console.log(e.currentTarget.dataset.id);
+                window.location.href = '/article/detail?articleid=' + e.currentTarget.dataset.id
+            },
+            getDateDiff: function (updateTime) {
+                let updateTimeStamp = Date.parse(updateTime);
+                let minute = 1000 * 60;
+                let hour = minute * 60;
+                let day = hour * 24;
+                let month = day * 30;
+                let year = month * 12;
+                let now = new Date().getTime();
+                let diffValue = now - updateTimeStamp;
+                if (diffValue < 0) {
+                    return;
+                }
+                let yearC = diffValue / year;
+                let monthC = diffValue / month;
+                let weekC = diffValue / (7 * day);
+                let dayC = diffValue / day;
+                let hourC = diffValue / hour;
+                let minC = diffValue / minute;
+                if (yearC >= 1) {
+                    result = "" + parseInt(monthC) + "年前";
+                }
+                else if (monthC >= 1) {
+                    result = "" + parseInt(monthC) + "月前";
+                }
+                else if (weekC >= 1) {
+                    result = "" + parseInt(weekC) + "周前";
+                }
+                else if (dayC >= 1) {
+                    result = "" + parseInt(dayC) + "天前";
+                }
+                else if (hourC >= 1) {
+                    result = "" + parseInt(hourC) + "小时前";
+                }
+                else if (minC >= 1) {
+                    result = "" + parseInt(minC) + "分钟前";
+                } else
+                    result = "刚刚";
+                return result;
+            }
+        }
+    })
+
+    $(document).on('infinite', '.infinite-scroll', function () {
+        $('.infinite-scroll-preloader').show()
+        if (loading) return;
+        loading = true
+        vm.getArticle(vm.perPageItems, vm.page)
+    })
+
+
+</script>
+
+</body>
+</html>

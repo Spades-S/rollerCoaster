@@ -73,20 +73,20 @@ var _class = function (_think$model$base) {
     }, {
         key: 'updateLikes',
         value: function () {
-            var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(articleid) {
+            var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(articleid, uid) {
                 var data, newLikes, likedata, oldLikes, index, lines;
                 return _regenerator2.default.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
                                 _context.next = 2;
-                                return this.field('likes').where({ id: 1 }).select();
+                                return this.field('likes').where({ uid: uid }).select();
 
                             case 2:
                                 data = _context.sent;
                                 newLikes = void 0;
 
-                                if (data[0].likes == "") {
+                                if (data[0].likes == null) {
                                     likedata = new Array();
 
                                     likedata.push(articleid);
@@ -103,7 +103,7 @@ var _class = function (_think$model$base) {
                                     newLikes = (0, _stringify2.default)(oldLikes);
                                 }
                                 _context.next = 7;
-                                return this.where({ id: 1 }).update({ likes: newLikes });
+                                return this.where({ uid: uid }).update({ likes: newLikes });
 
                             case 7:
                                 lines = _context.sent;
@@ -117,7 +117,7 @@ var _class = function (_think$model$base) {
                 }, _callee, this);
             }));
 
-            function updateLikes(_x) {
+            function updateLikes(_x, _x2) {
                 return _ref.apply(this, arguments);
             }
 
@@ -126,14 +126,14 @@ var _class = function (_think$model$base) {
     }, {
         key: 'getLikes',
         value: function () {
-            var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
+            var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(uid) {
                 var data;
                 return _regenerator2.default.wrap(function _callee2$(_context2) {
                     while (1) {
                         switch (_context2.prev = _context2.next) {
                             case 0:
                                 _context2.next = 2;
-                                return this.field('likes').where({ id: 1 }).select();
+                                return this.field('likes').where({ uid: uid }).select();
 
                             case 2:
                                 data = _context2.sent;
@@ -147,7 +147,7 @@ var _class = function (_think$model$base) {
                 }, _callee2, this);
             }));
 
-            function getLikes() {
+            function getLikes(_x3) {
                 return _ref2.apply(this, arguments);
             }
 
@@ -177,7 +177,7 @@ var _class = function (_think$model$base) {
                 }, _callee3, this);
             }));
 
-            function getAvatarInfoByUserId(_x2) {
+            function getAvatarInfoByUserId(_x4) {
                 return _ref3.apply(this, arguments);
             }
 
@@ -221,7 +221,7 @@ var _class = function (_think$model$base) {
                 }, _callee4, this, [[0, 7]]);
             }));
 
-            function sendMessage(_x3, _x4) {
+            function sendMessage(_x5, _x6) {
                 return _ref4.apply(this, arguments);
             }
 
@@ -260,7 +260,7 @@ var _class = function (_think$model$base) {
                 }, _callee5, this);
             }));
 
-            function register(_x5, _x6, _x7, _x8) {
+            function register(_x7, _x8, _x9, _x10) {
                 return _ref5.apply(this, arguments);
             }
 
@@ -312,7 +312,7 @@ var _class = function (_think$model$base) {
                 }, _callee6, this);
             }));
 
-            function logIntoSystem(_x9, _x10, _x11) {
+            function logIntoSystem(_x11, _x12, _x13) {
                 return _ref6.apply(this, arguments);
             }
 
@@ -328,7 +328,7 @@ var _class = function (_think$model$base) {
                         switch (_context7.prev = _context7.next) {
                             case 0:
                                 _context7.next = 2;
-                                return this.field('nickname, avatar').where({ uid: uid }).find();
+                                return this.field('id,nickname, avatar').where({ uid: uid }).find();
 
                             case 2:
                                 userInfo = _context7.sent;
@@ -342,7 +342,7 @@ var _class = function (_think$model$base) {
                 }, _callee7, this);
             }));
 
-            function getUserInfo(_x12) {
+            function getUserInfo(_x14) {
                 return _ref7.apply(this, arguments);
             }
 
@@ -358,7 +358,7 @@ var _class = function (_think$model$base) {
                         switch (_context8.prev = _context8.next) {
                             case 0:
                                 _context8.next = 2;
-                                return this.field('nickname, avatar, gender, birth, mail, city, introduction').where({ uid: uid }).find();
+                                return this.field('id, nickname, avatar, phoneNumber, gender, birth, mail, city, introduction').where({ uid: uid }).find();
 
                             case 2:
                                 userDetail = _context8.sent;
@@ -372,7 +372,7 @@ var _class = function (_think$model$base) {
                 }, _callee8, this);
             }));
 
-            function getUserDetail(_x13) {
+            function getUserDetail(_x15) {
                 return _ref8.apply(this, arguments);
             }
 
@@ -410,7 +410,7 @@ var _class = function (_think$model$base) {
                 }, _callee9, this);
             }));
 
-            function updateUserDetail(_x14, _x15) {
+            function updateUserDetail(_x16, _x17) {
                 return _ref9.apply(this, arguments);
             }
 
@@ -444,7 +444,7 @@ var _class = function (_think$model$base) {
                 }, _callee10, this);
             }));
 
-            function resetPassword(_x16, _x17) {
+            function resetPassword(_x18, _x19) {
                 return _ref10.apply(this, arguments);
             }
 
@@ -483,7 +483,7 @@ var _class = function (_think$model$base) {
                 }, _callee11, this);
             }));
 
-            function isPhoneNumExist(_x18) {
+            function isPhoneNumExist(_x20) {
                 return _ref11.apply(this, arguments);
             }
 
@@ -522,7 +522,7 @@ var _class = function (_think$model$base) {
                 }, _callee12, this);
             }));
 
-            function isNickNameExist(_x19) {
+            function isNickNameExist(_x21) {
                 return _ref12.apply(this, arguments);
             }
 
