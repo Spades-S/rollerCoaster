@@ -26,6 +26,7 @@
 
         .bar-nav ~ .content {
             top: 3rem;
+            overflow-x: hidden;
         }
 
         .icon-arrow-left {
@@ -308,16 +309,6 @@
                 </template>
 
             </div>
-            <div class="relative-article">
-                <div class="rel-article-name">相关文章</div>
-                <a class="article-item" src='#'>
-                    <img class="article-poster" src="/static/img/systemAvatar.jpeg" alt="">
-                    <div class="article-info">
-                        <div class="article-title">旅界一周：OFO获超7亿美元融资；宋城模式轻资产输出加速；新航推翔云商旅奖赏计划；神州租车开通国际租车业务</div>
-                        <div class="article-intro">在这里，了解旅游行业每周新闻。</div>
-                    </div>
-                </a>
-            </div>
         </div>
 
     </div>
@@ -397,26 +388,13 @@
                     },
                     method: 'GET',
                     success: function (res) {
-                        if(res.errno ===0 ){
+                        if (res.errno === 0) {
                             _this.facilityList = res.data;
 
                         }
                     }
                 })
             },
-            getRelativeArticles: function () {
-                let _this = this;
-                $.ajax({
-                    url:'/discovery/getrelativearticles',
-                    data:{
-                        id:'{{parkId}}',
-                    },
-                    method:'GET',
-                    success:function(res){
-
-                    }
-                })
-            }
         }
 
     })
