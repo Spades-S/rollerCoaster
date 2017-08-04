@@ -150,57 +150,75 @@
             float: right;
         }
 
-        hr {
-            margin: 0;
-            border: none;
-            border-bottom: 1px solid #ccc;
-        }
+        /*hr {*/
+            /*margin: 0;*/
+            /*border: none;*/
+            /*border-bottom: 1px solid #ccc;*/
+        /*}*/
 
         .item-detail {
             padding-left: 0.5rem;
             padding-right: 0.8rem;
             height: 0;
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.59);
+            background: #FFFFFF;
             transition: all 0.5s ease;
             font-size: 0;
+        }
+
+        .detail-border {
+            margin-top: 0.5rem;
+            border-top: 1px solid #dcdbdb;
+            border-right: 1px solid #dcdbdb;
+        }
+
+        .detail-key, .detial-value {
+            border-left: 1px solid #dcdbdb;
+            border-bottom: 1px solid #dcdbdb;
         }
 
         .detail-key {
             display: inline-block;
             padding-right: 0.5rem;
             overflow: auto;
-            width: 27%;
-            height: 1.5rem;
+            width: 4.5rem;
+            height: 1.6rem;
             font-size: 14px;
             line-height: 1.5rem;
             text-align: right;
+            background: #EEEEEE;
         }
 
         .detial-value {
             display: inline-block;
-            overflow-y: auto;
-            width: 73%;
+            height: 1.6rem;
+            padding-left: 0.5rem;
+            overflow: auto;
+            width: calc(100% - 4.5rem);
             font-size: 14px;
-            height: 1.5rem;
             line-height: 1.5rem;
             white-space: nowrap;
         }
-        .map-info-title{
+
+        .map-info-title {
             color: white;
             font-size: 14px;
-            background-color: rgba(0,155,255,0.8);
+            background-color: rgba(0, 155, 255, 0.8);
             line-height: 26px;
             padding: 0px 0 0 6px;
             font-weight: 700;
             letter-spacing: 1px
         }
-        .map-info-location{
+
+        .map-info-location {
             margin-left: 2.5rem;
             width: calc(100% - 2.5rem);
             font-size: 14px;
             line-height: 1rem;
             overflow: hidden;
+        }
+        .detail-hr{
+            border-top:1px solid #ccc;
         }
     </style>
 </head>
@@ -238,16 +256,20 @@
                             </div>
                         </div>
                     </div>
-                    <hr>
+                    <!--<hr>-->
                 </div>
                 <div class="item-detail">
-                    <div v-for="(detailItem,index) in getItemDetail(carItem)">
-                        <div v-if="index!=7||detailItem.value!=null" class="detail-key">{$ detailItem.key $}:</div>
-                        <div v-if="index!=7||detailItem.value!=null" class="detial-value">
-                            <span> {$ detailItem.value $}</span></div>
+                    <div class="detail-border">
+                        <template v-for="(detailItem,index) in getItemDetail(carItem)">
+                            <span class="detail-key">{$ detailItem.key $}:</span>
+                            <span v-if="index==7&&detailItem.value==null"
+                                  class="detial-value">-</span>
+                            <span v-else class="detial-value">{$ detailItem.value $}</span>
+                        </template>
                     </div>
 
                 </div>
+                <div class="detail-hr"></div>
             </div>
         </div>
     </div>
@@ -314,7 +336,7 @@
                     let itemDetail = e.currentTarget.childNodes[2];
                     if ($(itemDetail).height() === 0) {
                         $(itemDetail).css({
-                            height: '12rem',
+                            height: '13.8rem',
                         })
                     } else {
                         $(itemDetail).css({
@@ -372,8 +394,8 @@
                             offset: new AMap.Pixel(-5, -2),
                         })
                         let lnglat = new AMap.LngLat(item.longitude, item.latitude);
-                        item.distance =(lnglat.distance([longitude, latitude])/1000).toFixed(2);
-                        marker.content = "<div class='map-info-title'>🎢 "+item.title+" 过山车</div></div><img style='width:2rem;height:2rem;float:left'src=" + item.poster + "><div class='map-info-location'>" + item.location +"</div>";
+                        item.distance = (lnglat.distance([longitude, latitude]) / 1000).toFixed(2);
+                        marker.content = "<div class='map-info-title'>🎢 " + item.title + " 过山车</div></div><img style='width:2rem;height:2rem;float:left'src=" + item.poster + "><div class='map-info-location'>" + item.location + "</div>";
                         marker.on('click', markerClick);
                     }
 //                    map.setFitView();
