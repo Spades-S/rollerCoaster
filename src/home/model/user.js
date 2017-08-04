@@ -136,4 +136,9 @@ export default class extends think.model.base {
             return true
         }
     }
+    
+    async getUserGroups(uid) {
+        let res = await this.field('id, groups').where({uid: uid}).find()
+        return res
+    }
 }

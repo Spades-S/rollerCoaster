@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>创建小组</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+        .page{
+            background-color: #fff;
+        }
+        .bar{
+            height: 3rem;
+            background-color: #07518f;
+            border-bottom: none;
+        }
+        h1.title{
+            color: white;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 3rem;
+        }
+        .icon-arrow-left {
+            display: inline-block;
+            width: 0.9rem;
+            height: 1.4rem;
+            position: absolute;
+            top: 0.75rem;
+            z-index: 30;
+        }
+        .bar~.content{
+            top: 3rem;
+            background-color: #fff;
+        }
+        .list-block{
+            margin: 0;
+            font-size: .7rem;
+        }
+        .list-block .item-content.ta{
+            padding: .5rem 0 .5rem .75rem;
+        }
+        .list-block .item-inner{
+            border-bottom: none;
+        }
+        .list-block .item-title.label{
+            text-align: right;
+            padding-right: 1.5rem;
+        }
+        .list-block .item-title.label.ta{
+            align-self: flex-start;
+        }
+        .cover, .cover img{
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+        .list-block input[type=text]{
+            height: 1.4rem;
+        }
+        .list-block textarea, .list-block input[type=text], .list-block select{
+            padding-left: .5rem;
+            font-size: .6rem;
+            border: 1px solid #DCDCDC;
+            border-radius: .3rem;
+        }
+        .list-block select{
+            height: 1.4rem;
+            font-size: .6rem;
+        }
+        .button.button-big{
+            margin: 2rem .75rem;
+            background-color: #74B941;
+            color: #fff;
+            border: none;
+            height: 2rem;
+            line-height: 2rem;
+            font-size: .8rem;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <header class="bar bar-nav">
+        <a class=" iconfont icon-arrow-left back" href="javascript:window.history.go(-1)">
+        </a>
+        <h1 class="title">创建小组</h1>
+    </header>
+    <div class="content content-padded" id="content">
+        <div class="list-block">
+            <div :class="'item-content ' + (item.box === 'textarea' ? 'ta' : '')" v-for="item in list" v-if="item.belong!=='activity' || groupType">
+                <div class="item-inner">
+                    <div :class="'item-title label ' + (item.box === 'textarea' ? 'ta' : '')">{$ item.item $}</div>
+                    <div class="item-input">
+                        <input type="text" :data-name="item.en" v-if="!item.box" @input="typeInfo">
+                        <textarea :data-name="item.en" v-if="item.box==='textarea'" @input="typeInfo"></textarea>
+                        <select v-if="item.box==='select'" :data-name="item.en" @input="switchType">
+                            <option v-for="option, index in item.options" :value="index">{$ option $}</option>
+                        </select>
+                        <div class="cover" v-if="item.box==='cover'">
+                            <img src="/static/img/camera.png" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="button button-big" @click="createGroup">创建小组</div>
+    </div>
+</div>
+
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script>
+    $.init();
+
+    var vm = new Vue({
+        delimiters: ['{$', '$}'],
+        data () {
+        	return {
+        		groupInfo: {},
+                groupType: 0,
+                list: [{
+        			item: '封面上传',
+                    en: 'cover',
+                    box: 'cover'
+                }, {
+	                item: '小组名称',
+	                en: 'title'
+                }, {
+	                item: '主题',
+	                en: 'theme',
+                    box: 'select',
+                    options: ['过山车联盟', '黑暗乘骑基地', '演出爱好者', '同城活动', '其它']
+                }, {
+	                item: '描述',
+	                en: 'description',
+                    box: 'textarea'
+                }, {
+	                item: '类型',
+	                en: 'type',
+                    box: 'select',
+	                options: ['普通小组', '活动小组']
+                }, {
+	                item: '活动类型',
+                    belong: 'activity',
+	                en: 'activityType'
+                }, {
+	                item: '时间',
+	                belong: 'activity',
+	                en: 'activityTime'
+                }, {
+	                item: '地点',
+	                belong: 'activity',
+	                en: 'place'
+                }, {
+	                item: '乐园',
+	                belong: 'activity',
+	                en: 'park'
+                }, {
+	                item: '设施名称',
+	                belong: 'activity',
+	                en: 'facility'
+                }, {
+	                item: '拟参加人数',
+	                belong: 'activity',
+	                en: 'joinNumber'
+                }, {
+	                item: '备注',
+	                belong: 'activity',
+	                en: 'remark',
+                    box: 'textarea'
+                }, ]
+            }
+        },
+        methods: {
+        	typeInfo: function (e) {
+                this[e.currentTarget.dataset.name] = e.currentTarget.value
+	        },
+            switchType: function (e) {
+        		if (e.target.dataset.name === 'type') {
+			        this.groupType = parseInt(e.target.value)
+                } else {
+        			this.theme = parseInt(e.target.value)
+                }
+            },
+            createGroup: function () {
+                if (!this.title) {
+                	return $.toast('请填写小组名称')
+                }
+                if (this.groupType === 1) {
+                	if (!this.activityTime) {
+                		return $.toast('请填写活动时间')
+                    }
+                    if (!this.place) {
+                		return $.toast('请填写活动地点')
+                    }
+                }
+	            let data = {
+		            cover: $('.cover img')[0].src,
+                    title: this.title,
+                    theme: this.theme,
+                    description: this.description,
+                    groupType: this.groupType
+	            }
+                if (this.groupType === 1) {
+                	data.activityType = this.activityType
+                    data.activityTime = this.activityTime
+                    data.place = this.place
+                    data.park = this.park
+                    data.facility = this.facility
+                    data.joinNumber = this.joinNumber
+                    data.remark = this.remark
+                }
+                $.ajax({
+                    url: '/group/creategroup',
+                    data: data,
+                    method: 'POST',
+                    success: function (ret) {
+                        console.log(ret)
+                        window.location.href = '/group'
+                    }
+                })
+            }
+        }
+    }).$mount('#content')
+    
+    
+    
+</script>
+</body>
+</html>

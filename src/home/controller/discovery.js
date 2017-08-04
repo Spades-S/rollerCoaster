@@ -14,9 +14,10 @@ export default class extends base {
 		let cat = this.get('cat')
 		let count = this.get('count')
 		let page = this.get('page')
-		let position = JSON.parse(this.get('position'))
+		let position = this.get('position')
+		let radius = this.get('radius')
 		let facilityModel = this.model('facility')
-		let res = await facilityModel.getFacility(cat, count, page, position)
+		let res = await facilityModel.getFacility(cat, count, page, position, radius)
 		if(think.isEmpty(res.data)){
 			return this.fail('no more')
 		}
@@ -54,7 +55,11 @@ export default class extends base {
 			await this.session('facilityTitle', title)
 			return this.success(true)
 		} else {
+			this.assign('referer', this.header('referer'))
 			this.assign('title', await this.session('facilityTitle'))
+			this.assign('id', await this.session('facilityId'))
+			await this.session('facilityId', null)
+			await this.session('facilityTitle', null)
 			return this.display('discovery/review.html')
 		}
 	}
@@ -80,8 +85,38 @@ export default class extends base {
 			stars: this.post('stars'),
 			position: this.post('position'),
 			content: this.post('content'),
-			facilityId: await this.session('facilityId')
+			facilityId: this.post('facilityId')
 		})
+		return this.success(res)
+	}
+	
+	async factoryAction() {
+		return this.display('discovery/factory.html')
+	}
+	
+	async getfactorylistAction() {
+		let companyModel = this.model('company')
+		let res = await companyModel.getFactoryList()
+		return this.success(res)
+	}
+	
+	async factoryinfoAction() {
+		this.assign('id', this.get('id'))
+		return this.display('discovery/factoryinfo.html')
+	}
+	
+	async getfactoryinfoAction() {
+		let id = this.get('id')
+		let res = await this.model('company').getFactoryInfo(id)
+		if (think.isEmpty(res)) {
+			return this.fail(res)
+		}
+		return this.success(res)
+	}
+	
+	async getfacilitybycompanyidAction() {
+		let id = this.get('id')
+		let res = await this.model('facility').getFacilityByCompanyId(id)
 		return this.success(res)
 	}
 }

@@ -128,6 +128,12 @@
 <script>
     $.init;
 
+    let id = "{{ id }}"
+    console.log("{{ id }}")
+    if (!id){
+    	window.history.go(-1)
+    }
+
     $('.star').raty({
         half: true,
         number: 5,
@@ -162,7 +168,7 @@
 	        $('.button-big').addClass('disabled')
 	        $('.button-big').attr('disabled', true)
         }
-    }, 300))
+    }, 200))
 
     $('.options').on('click', '.option', function (e) {
     	let positionOption = $('.position-option')
@@ -188,10 +194,11 @@
             data: {
             	stars: $('.star').raty('score'),
                 position: $('.position-option').attr('data-position'),
-                content: $('textarea').val()
+                content: $('textarea').val(),
+                facilityId: "{{ id }}"
             },
             success: function (ret) {
-                console.log(ret)
+                window.history.go(-1)
             },
             error: function (err) {
                 console.log(err)

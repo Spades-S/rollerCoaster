@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>小组</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <style>
+        *{
+            -webkit-font-smoothing: antialiased;
+        }
+        .bar{
+            border-bottom: none;
+            padding-right: 0.2rem;
+        }
+        .bar.bar-nav{
+            height: 3rem;
+            background-color: #07518f;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+        .map-icon::before{
+            color: #fff;
+        }
+        .bar .searchbar{
+            width: 87%;
+            position: relative;
+            display: flex;
+            padding-right: 0;
+            align-items: center;
+            background: transparent;
+        }
+        .search-input{
+            width: 100%;
+            border-radius: .3rem;
+            box-sizing: content-box;
+            font-size: .6rem;
+        }
+        .searchbar .searchbar-cancel{
+            margin-left: .3rem;
+        }
+        .bar .searchbar .searchbar-cancel{
+            font-size: .7rem;
+            color: #fff;
+        }
+        .searchbar .search-input input {
+            height: 1.8rem;
+            margin: 0;
+        }
+        .search-input label+input {
+            padding-left: .7rem;
+        }
+        .icon-sousuo{
+            position: absolute;
+            line-height: 1.8rem;
+            right: .5rem;
+            color: #6EB732;
+        }
+        .tab-item{
+            text-align: center;
+        }
+        .tab-item.active{
+            color: #72bb38 !important;
+        }
+        .bar~.content{
+            top: 3rem;
+            background-color: #fff;
+            padding-bottom: 2.5rem;
+        }
+        .group-theme{
+            font-size: .8rem;
+            padding: .5rem;
+            background-color: #F5F4F9;
+        }
+        .group-item{
+            height: 4rem;
+            padding: .8rem .5rem;
+            display: flex;
+            border-bottom: 1px solid #F9F9F9;
+        }
+        .group-item>div{
+            display: inline-block;
+        }
+        .cover, .cover img{
+            height: 2.4rem;
+            width: 2.4rem;
+        }
+        .group-item-info{
+            flex: 1;
+            margin-left: 1rem;
+            position: relative;
+        }
+        .group-title{
+            font-size: .8rem;
+            line-height: 1.5rem;
+        }
+        .members, .group-type, .bottom{
+            line-height: 1rem;
+            font-size: .6rem;
+        }
+        .group-type{
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            padding: 0 .2rem;
+            background-color: #74B942;
+            border-radius: .3rem;
+        }
+        .bottom{
+            padding: .5rem;
+            text-align: center;
+        }
+        .bottom span {
+            padding: .2rem .5rem;
+            border-radius: .5rem;
+            border: 1px solid #74B942;
+            color: #74B942;
+        }
+        .activity{
+            margin-bottom: .5rem;
+            white-space: nowrap;
+            overflow-x: scroll;
+            background-color: #EEE;
+        }
+        .activity-cover{
+            display: inline-block;
+            margin: .8rem;
+        }
+        .activity-cover, .activity-cover img{
+            width: 8rem;
+            height: 5rem;
+            border-radius: .5rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+    <header class="bar bar-nav">
+        <div class="searchbar">
+            <div class="search-input">
+                <label class="search-icon iconfont icon-sousuo active "></label>
+                <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show'/>
+            </div>
+            <a class="searchbar-cancel">取消</a>
+        </div>
+        <a class="map-link external" href="/group/create"><div class="map-icon iconfont icon-dingwei"></div></a>
+    </header>
+    <div class="content" id="content">
+        <div class="activity">
+            <div class="activity-cover" v-for="item in activity" :data-id="item.id">
+                <img :src="item.cover" alt="">
+            </div>
+        </div>
+        <div class="my-group" v-if="myGroup">
+            <div v-for="group, index in myGroup">
+                <div class="group-theme" v-if="index === 0">我的小组</div>
+                <div class="group-item" :data-id="group.id">
+                    <div class="cover">
+                        <img :src="group.cover" alt="">
+                    </div>
+                    <div class="group-item-info">
+                        <div class="group-title">{$ group.title $}</div>
+                        <div class="members">成员数：{$ group.members $}</div>
+                        <div class="group-type" v-if="group.activityType">{$ group.activityType $}</div>
+                    </div>
+                </div>
+                <div class="bottom" v-if="index === myGroup.length - 1"><span>更多小组</span></div>
+            </div>
+        </div>
+        <div class="group">
+            <div v-for="group, index in groups">
+                <div class="group-theme" v-if="index === 0 || group.theme !== groups[index-1].theme">{$ themes[group.theme] $}</div>
+                <div class="group-item" :data-id="group.id">
+                    <div class="cover">
+                        <img :src="group.cover" alt="">
+                    </div>
+                    <div class="group-item-info">
+                        <div class="group-title">{$ group.title $}</div>
+                        <div class="members">成员数：{$ group.members $}</div>
+                        <div class="group-type" v-if="group.activityType">{$ group.activityType $}</div>
+                    </div>
+                </div>
+                <div class="bottom" v-if="index === groups.length - 1 || group.theme !== groups[index+1].theme"><span>更多小组</span></div>
+            </div>
+        </div>
+    </div>
+    <nav class="bar bar-tab ">
+        <a class="tab-item external" href="/index">
+            <span class="icon iconfont icon-shouye"></span>
+            <span class="tab-label ">首页</span>
+        </a>
+        <a class="tab-item external" href="/discovery">
+            <span class="icon iconfont icon-yikeapp15"></span>
+            <span class="tab-label ">发现</span>
+        </a>
+        <a class="tab-item active external" href="/group">
+            <span class="icon iconfont icon-xiaozufill"></span>
+            <span class="tab-label ">小组</span>
+        </a>
+        <a class="tab-item external" href="/user">
+            <span class="icon iconfont icon-wode"></span>
+            <span class="tab-label ">我的</span>
+        </a>
+    </nav>
+</div>
+
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script>
+    $.init();
+
+    let cookies = {}
+    document.cookie.split(';').forEach((el) => {
+	    cookies[el.split('=')[0]] = el.split('=')[1]
+    })
+
+    new Vue({
+        delimiters: ['{$', '$}'],
+        data () {
+        	return {
+        		groups: [],
+                myGroup: undefined,
+                activity: undefined,
+                themes: ['过山车联盟', '黑暗乘骑基地', '演出爱好者', '同城活动', '其它']
+            }
+        },
+        created: function () {
+        	let self = this
+	        $.ajax({
+		        url: '/group/getgroups',
+		        success: function (ret) {
+		        	if (ret.errno === 0) {
+				        self.groups = ret.data
+                    }
+		        }
+	        })
+            if (cookies.uid) {
+        		this.getActivity()
+        		this.getMyGroup(cookies.uid)
+            }
+        },
+        methods: {
+        	getMyGroup: function (uid) {
+        		let self = this
+                $.ajax({
+                    url: '/group/getmygroup',
+                    success: function (ret) {
+                    	if (ret.errno === 0) {
+		                    self.myGroup = ret.data
+                        }
+                    }
+                })
+            },
+            getActivity: function () {
+	            let self = this
+	            $.ajax({
+		            url: '/group/getactivity',
+		            success: function (ret) {
+		            	if (ret.errno === 0) {
+				            self.activity = ret.data
+                        }
+		            }
+	            })
+            }
+        }
+    }).$mount('#content')
+
+    $(document).on('click', '.group-item, .activity-cover', function (e) {
+        if(e.currentTarget.dataset.id){
+            window.location.href = '/group/' + e.currentTarget.dataset.id
+        }
+    })
+</script>
+</body>
+</html>
