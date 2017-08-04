@@ -37,6 +37,11 @@ export default class extends think.model.base{
 		return res
 	}
 	
+	async getGroupInfo(id) {
+		let res = this.field('id, title, theme, cover, description, members').where({id: id}).find()
+		return res
+	}
+	
 	async createGroup(data) {
 		/*let reflect = {
 			title: 'title',

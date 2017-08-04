@@ -41,6 +41,68 @@
             top: 3rem;
             background-color: #fff;
         }
+        .detail{
+            padding: .6rem .8rem;
+            background-color: #F5F5F5;
+            border-bottom: 1px solid #F9F9F9;
+        }
+        .group-detail{
+            width: 100%;
+            display: flex;
+        }
+        .cover, .cover img{
+            display: inline-block;
+            height: 3rem;
+            width: 3rem;
+        }
+        .group-item-info{
+            display: inline-block;
+            flex: 1;
+            margin-left: 1rem;
+            position: relative;
+        }
+        .group-title{
+            line-height: 2rem;
+        }
+        .members{
+            line-height: 1rem;
+            font-size: .7rem;
+        }
+        .button-container{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: .5rem 0 0 0;
+            font-size: .7rem;
+            text-align: center;
+        }
+        .span-18{
+            flex: 5
+        }
+        .span-13{
+            flex: 3
+        }
+        .btn{
+            font-size: .6rem;
+            margin: .2rem;
+            padding: .2rem .3rem;
+            border-radius: .3rem;
+            color: #fff;
+        }
+        .desc, .share{
+            background-color: #0F528D;
+        }
+        .join{
+            background: #74B941;
+        }
+        .quit{
+            color: #999;
+            background-color: #F5F5F5;
+            border: 1px solid #D5D5D5;
+        }
+        .write{
+            background-color: #F19725;
+        }
     </style>
 </head>
 <body>
@@ -50,7 +112,34 @@
         <a href="" class="iconfont icon-arrow-left back"></a>
     </header>
     <div class="content" id="content">
-        <div class="detail"></div>
+        <div class="detail">
+            <div v-if="groupInfo" class="group-detail">
+                <div class="cover">
+                    <img :src="groupInfo.cover" alt="">
+                </div>
+                <div class="group-item-info">
+                    <div class="group-title">{$ groupInfo.title $}</div>
+                    <div class="members">成员数：{$ groupInfo.members $}</div>
+                </div>
+            </div>
+            <div class="button-container">
+                <div class="span-18">
+                    <div class="btn desc">小组简介</div>
+                </div>
+                <div class="span-13">
+                    <div class="btn share">分享</div>
+                </div>
+                <div class="span-18">
+                    <div class="btn join">加入小组</div>
+                </div>
+                <div class="span-18">
+                    <div class="btn quit">退出小组</div>
+                </div>
+                <div class="span-18">
+                    <div class="btn write">发帖</div>
+                </div>
+            </div>
+        </div>
         <div class="list-block"></div>
     </div>
 </div>
@@ -62,6 +151,27 @@
 <script>
     $.init()
 
+    new Vue({
+        delimiters: ['{$', '$}'],
+        data () {
+        	return {
+        		groupInfo: undefined
+            }
+        },
+        created: function () {
+        	let self = this
+            $.ajax({
+                url: '/group/getgroupinfo',
+                data: {
+                	id: "{{ id }}"
+                },
+                success: function (ret) {
+                    self.groupInfo = ret.data
+                    console.log(self.groupInfo)
+                }
+            })
+        }
+    }).$mount('#content')
 
 </script>
 </body>

@@ -69,4 +69,13 @@ export default class extends base {
 		this.assign('id', this.get('id'))
 		return this.display('group/posts.html')
 	}
+	
+	async getgroupinfoAction() {
+		let id = this.get('id')
+		let res = await this.model('group').getGroupInfo(id)
+		if(think.isEmpty(res)) {
+			return this.fail(false)
+		}
+		return this.success(res)
+	}
 }

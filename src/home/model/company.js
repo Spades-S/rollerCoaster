@@ -4,11 +4,11 @@
  */
 'use strict'
 
-export default class extends think.model.base {
-	init(...args) {
-		super.init(...args)
-		this.tableName = 'company'
-	}
+class Company extends think.model.base {
+    init(...args) {
+        super.init(...args)
+        this.tableName = 'company'
+    }
 	
 	async getFactoryList() {
 		let res = await this.field('id, title').where({type: 2}).select()
@@ -19,15 +19,6 @@ export default class extends think.model.base {
 		let res = await this.where({id: id}).find()
 		return res
 	}
-}
-
-'use strict'
-
-class Company extends think.model.base {
-    init(...args) {
-        super.init(...args)
-        this.tableName = 'company'
-    }
 
     async getCompanyDetailById(id) {
         let res = await this.field('title, location, openTime, status, phoneNumber, website, owner, poster').where({id: id}).find();
