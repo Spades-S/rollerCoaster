@@ -4,26 +4,6 @@
 'use strict'
 
 class Facility extends think.model.base {
-
-	init(...args) {
-		super.init(...args)
-		this.tableName = 'facility'
-	}
-	async getFacility(cat, count, page, position, radius) {
-		let tude = position.split(',').map(el => {
-			return parseFloat(el)
-		})
-		radius = parseInt(radius)
-		let latitudeRange = [tude[1] - radius, tude[1] + radius]
-		let longitudeRange = [tude[0] - radius, tude[0] + radius]
-		console.log(latitudeRange, radius)
-		let res = await this.field('id, title, poster, rating, price, geolocation').where({
-			category: cat,
-			latitude: {'>': latitudeRange[0], '<': latitudeRange[1]},
-			longitude: {'>': longitudeRange[0], '<': longitudeRange[1]}
-		}).page(page, count).countSelect()
-		return res
-	}
 	
 
     init(...args) {
@@ -31,10 +11,10 @@ class Facility extends think.model.base {
         this.tableName = 'facility'
     }
 
-    async getFacility(cat, count, page, position) {
-        console.log(position);
-        let latitudeRange = [parseFloat(position.latitude) - 1, parseFloat(position.latitude) + 1]
-        let longitudeRange = [parseFloat(position.longitude)- 1, parseFloat(position.longitude) + 1]
+    async getFacility(cat, count, page, position, radius) {
+    	radius = parseInt(radius)
+        let latitudeRange = [parseFloat(position.latitude) - radius, parseFloat(position.latitude) + radius]
+        let longitudeRange = [parseFloat(position.longitude)- radius, parseFloat(position.longitude) + radius]
         let res = await this.field('id, title, poster, rating, price, geolocation').where({
             category: cat,
             latitude: {'>': latitudeRange[0], '<': latitudeRange[1]},

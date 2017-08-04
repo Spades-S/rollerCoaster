@@ -157,7 +157,8 @@ export default class extends base {
         let page = this.get('page')
         let position = JSON.parse(this.get('position'))
         let facilityModel = this.model('facility')
-        let res = await facilityModel.getFacility(cat, count, page, position)
+	    let radius = this.get('radius')
+        let res = await facilityModel.getFacility(cat, count, page, position, radius)
         if (think.isEmpty(res.data)) {
             return this.fail('no more')
         }
@@ -172,7 +173,6 @@ export default class extends base {
         let dGeo = this.config('dGeo');
         let data = await companyModel.getnearbycompany(1, position, dGeo, page, count);
         return this.success(data);
-
     }
 
 
@@ -239,6 +239,7 @@ export default class extends base {
             await this.session('facilityTitle', title)
             return this.success(true)
         } else {
+	        this.assign('id', await this.session('facilityId'))
             this.assign('title', await this.session('facilityTitle'))
             return this.display('discovery/review.html')
         }

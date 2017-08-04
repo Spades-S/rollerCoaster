@@ -158,21 +158,9 @@
 
 
     let id = "{{ id }}"
-    console.log("{{ id }}")
     if (!id){
     	window.history.go(-1)
     }
-
-    $('.star').raty({
-        half: true,
-        number: 5,
-	    path: '/static/js/raty/img',
-	    starOn: 'star-on-big.png',
-	    starOff: 'star-off-big.png',
-	    starHalf: 'star-half-big.png'
-    })
-
-
 
     $(document).on('click', function (e) {
         if (!/option/.test(e.target.className)) {
