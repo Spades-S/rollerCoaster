@@ -25,6 +25,11 @@
         .bar.bar-nav {
             height: 3rem;
             background-color: #07518f;
+
+        }
+
+        .default-header {
+            height: 3rem;
             display: flex;
             align-items: center;
             justify-content: space-around;
@@ -225,54 +230,91 @@
             font-size: .7rem;
             color: #999;
         }
+
+        .toogle-disappear {
+            display: none;
+        }
+
+        .icon-arrow-left {
+            position: absolute;
+            z-index: 30;
+            display: inline-block;
+            width: 2rem;
+            height: 100%;
+            padding-top: 0.75rem;
+        }
+
+        h1.title {
+            color: white;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 3rem;
+            letter-spacing: 0.1rem;
+        }
+
+        .disappear {
+            display: none;
+        }
+
+        .show {
+            display: block;
+        }
     </style>
 </head>
 <body>
-<div class="page">
+<div class="page" id="page">
     <header class="bar bar-nav">
-        <div class="searchbar">
-            <div class="search-input">
-                <form action="">
-                    <label class="search-icon iconfont icon-sousuo active "></label>
-                    <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show'/>
-                </form>
+        <div class="default-header" :class="{disappear:disappear}">
+            <div class="searchbar">
+                <div class="search-input">
+                    <form action="">
+                        <label class="search-icon iconfont icon-sousuo active "></label>
+                        <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show'/>
+                    </form>
+                </div>
+                <a class="searchbar-cancel">取消</a>
             </div>
-            <a class="searchbar-cancel">取消</a>
+            <a class="map-link external" href="/discovery/map">
+                <div class="map-icon iconfont icon-dingwei"></div>
+            </a>
         </div>
-        <a class="map-link external" href="/discovery/map">
-            <div class="map-icon iconfont icon-dingwei"></div>
-        </a>
+        <div class="toogle-disappear" :class="{show:disappear}">
+
+            <a class=" iconfont icon-arrow-left external" href="/discovery"></a>
+            <h1 class="title">附近{$ cats[activeIndex].short $}</h1>
+        </div>
     </header>
+
     <div class="content infinite-scroll" data-distance="50">
-        <div class="content-tab">
+        <div class="content-tab" :class="{disappear:disappear}">
             <div class="content-tab-item active" data-index="0">过山车</div>
             <div class="content-tab-item" data-index="1">黑暗乘骑</div>
             <div class="content-tab-item" data-index="2">演出</div>
         </div>
         <div id="content-list">
             <div class="content-item">
-                <div class="content-nav">
-                    <a class="content-nav-item" href="#">
+                <div class="content-nav" :class="{disappear:disappear}">
+                    <a class="content-nav-item" href="#" @click="toogleDisplay">
                         <div class="content-icon rollercoaster-icon">
-                            <img class="content-icon-img" src="static/img/icon/rollercoaster2.svg">
+                            <img class="content-icon-img" src="/static/img/icon/rollercoaster2.svg">
                         </div>
                         <div class="content-nav-item-text">附近{$ cats[activeIndex].short $}</div>
                     </a>
                     <a class="content-nav-item external" href="/discovery/parklist">
                         <div class="content-icon park-icon">
-                            <img class="content-icon-img" src="static/img/icon/park.svg">
+                            <img class="content-icon-img" src="/static/img/icon/park.svg">
                         </div>
                         <div class="content-nav-item-text">乐园</div>
                     </a>
                     <a class="content-nav-item">
                         <div class="content-icon factory-icon">
-                            <img class="content-icon-img" src="static/img/icon/factory.svg">
+                            <img class="content-icon-img" src="/static/img/icon/factory.svg">
                         </div>
                         <div class="content-nav-item-text">厂商</div>
                     </a>
                     <a class="content-nav-item external" :href="'/discovery/knowledge?type='+activeIndex">
                         <div class="content-icon knowledge-icon">
-                            <img class="content-icon-img" src="static/img/icon/knowledge.svg">
+                            <img class="content-icon-img" src="/static/img/icon/knowledge.svg">
                         </div>
                         <div class="content-nav-item-text">{$ cats[activeIndex].name $}知识</div>
                     </a>
@@ -351,7 +393,7 @@
 
     var vm = new Vue({
         delimiters: ['{$', '$}'],
-        el: '#content-list',
+        el: '#page',
         data () {
             return {
                 cats: [{
@@ -367,7 +409,8 @@
                 facilityList: [],
                 activeIndex: 0,
                 perPageItems: 10,
-                page: 1
+                page: 1,
+                disappear: false,
             }
         },
         created: function () {
@@ -404,7 +447,7 @@
                             self.facilityList = self.facilityList.concat(ret.data.data)
                             self.page++
                             loading = false
-                            if(ret.data.totalPages == 1){
+                            if (ret.data.totalPages == 1) {
                                 $.detachInfiniteScroll($('.infinite-scroll'))
                                 $('.infinite-scroll-preloader').hide();
                             }
@@ -455,6 +498,9 @@
                 s = Math.round(s * 10000) / 10000.0
 
                 return s
+            },
+            toogleDisplay: function () {
+                this.disappear = true;
             }
         }
     })
