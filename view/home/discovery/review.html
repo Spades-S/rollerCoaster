@@ -157,6 +157,11 @@
     star.init();
 
 
+    let id = "{{ id }}"
+    if (!id){
+    	window.history.go(-1)
+    }
+
     $(document).on('click', function (e) {
         if (!/option/.test(e.target.className)) {
             $('.options').css('display', 'none')
@@ -182,7 +187,7 @@
             $('.button-big').addClass('disabled')
             $('.button-big').attr('disabled', true)
         }
-    }, 300))
+    }, 200))
 
     $('.options').on('click', '.option', function (e) {
         let positionOption = $('.position-option')
@@ -208,10 +213,11 @@
             data: {
                 stars: star.get(),
                 position: $('.position-option').attr('data-position'),
-                content: $('textarea').val()
+                content: $('textarea').val(),
+                facilityId: "{{ id }}"
             },
             success: function (ret) {
-                console.log(ret)
+                window.history.go(-1)
             },
             error: function (err) {
                 console.log(err)

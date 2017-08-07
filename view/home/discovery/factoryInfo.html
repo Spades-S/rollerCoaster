@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>厂商信息</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+        .page{
+            background-color: #fff;
+        }
+        .bar{
+            height: 3rem;
+            background-color: #07518f;
+            border-bottom: none;
+        }
+        h1.title{
+            color: white;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 3rem;
+        }
+        .icon-arrow-left {
+            display: inline-block;
+            width: 0.9rem;
+            height: 1.4rem;
+            position: absolute;
+            top: 0.75rem;
+            z-index: 30;
+        }
+        .bar~.content{
+            top: 3rem;
+        }
+        .poster{
+            text-align: center;
+            border-bottom: 10px solid #F9F9F9;
+        }
+        .detail-item{
+            display: flex;
+            font-size: .7rem;
+            border-bottom: 1px solid #ECECEC;
+            border-left: 1px solid #ECECEC;
+            border-right: 1px solid #ECECEC;
+        }
+        .detail-item:first-of-type{
+            border-top: 1px solid #ECECEC;
+        }
+        .detail-item-left, .detail-item-right{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: .3rem .5rem;
+        }
+        .detail-item-left{
+            width: 35%;
+            text-align: right;
+            background-color: #F9F9F9;
+            border-right: 1px solid #ECECEC;
+        }
+        .detail-item-right{
+            width: 65%;
+        }
+        .facility{
+            margin-top: 1rem;
+            overflow-x: scroll;
+            white-space: nowrap;
+            font-size: .7rem;
+            border: 1px solid #ECECEC;
+        }
+        thead{
+            background-color: #EEE;
+        }
+        td{
+            padding: .2rem 1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <header class="bar bar-nav"><a href="" class="iconfont icon-arrow-left back"></a>
+        <h1 class="title">厂商信息</h1>
+    </header>
+    <div class="content" id="content">
+        <div class="poster">
+            <div class="logo" v-if="factoryInfo.logo "><img :src="factoryInfo.logo || null" alt=""></div>
+            <h2 class="factory-title">{$ factoryInfo.title $}</h2>
+        </div>
+        <div class="detail content-padded">
+            <div class="detail-item" v-for="item in list" v-if="factoryInfo[item.en]">
+                <div class="detail-item-left">{$ item.item $}</div>
+                <div class="detail-item-right">{$ factoryInfo[item.en] $}</div>
+            </div>
+        </div>
+        <div class="facility content-padded" v-if="facilities && facilities.length > 0">
+            <table>
+                <thead>
+                <tr>
+                    <td>设备名称</td>
+                    <td>种类</td>
+                    <td>设计</td>
+                    <td>投入运营时间</td>
+                    <td>状态</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="facility, index in facilities" :style="'background-color: ' + (index % 2 === 1 ? '#F9F9F9' : '')">
+                    <td>{$ facility.title $}</td>
+                    <td>{$ facility.type $}</td>
+                    <td>{$ facility.style $}</td>
+                    <td>{$ facility.openTime $}</td>
+                    <td>{$ facility.status $}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script>
+    $.init();
+    new Vue({
+        delimiters: ['{$', '$}'],
+        data () {
+        	return {
+        		factoryInfo: {},
+                facilities: [],
+                list: [{
+        			item: '地址',
+                    en: 'location'
+                }, {
+        			item: '成立时间',
+                    en: 'openTime'
+                }, {
+	                item: '电话',
+	                en: 'phoneNumber'
+                }, {
+	                item: '网站',
+	                en: 'officialSite'
+                }, {
+	                item: '公司状况',
+	                en: 'status'
+                }, {
+	                item: '关闭时间',
+	                en: 'closeTime'
+                }, {
+	                item: '拥有者',
+	                en: 'owner'
+                }]
+            }
+        },
+        created: function () {
+        	let id = "{{ id }}"
+        	this.getFactoryInfo(id)
+            this.getFacilities(id)
+        },
+        methods: {
+        	getFactoryInfo: function (id) {
+		        let self = this
+		        $.ajax({
+			        url: '/discovery/getfactoryinfo',
+			        data: {
+				        id: id
+			        },
+			        success: function (ret) {
+				        if (ret.errno === 0) {
+					        return self.factoryInfo = ret.data
+				        } else {
+					        return $.toast('获取失败，请刷新重试')
+				        }
+			        },
+			        error: function (err) {
+				        $.toast('获取失败，请刷新重试')
+			        }
+		        })
+            },
+            getFacilities: function (id) {
+                let self = this
+	            $.ajax({
+		            url: '/discovery/getfacilitybycompanyid',
+		            data: {
+			            id: id
+		            },
+		            success: function (ret) {
+			            if (ret.errno !== 0) {
+				            return $.toast('获取失败，请刷新重试')
+			            }
+			            return self.facilities = ret.data
+		            },
+		            error: function (err) {
+			            $.toast('获取失败，请刷新重试')
+		            }
+	            })
+            }
+        }
+    }).$mount('#content')
+
+    // `id`, `type`, `title`, `logo`, `poster`, `location`, `geolocation`, `openTime`, `status`, `closeTime`, `phoneNumber`, `website`, `owner`, `street`, `officialSite`, `formerNames`, `formerStatus`, `specificCategory`, `notes`, `etymology`, `models`, `rcLink`
+</script>
+</body>
+</html>

@@ -3,12 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Expires" CONTENT="0">
+    <meta http-equiv="Cache-Control" CONTENT="no-cache">
+    <meta http-equiv="Pragma" CONTENT="no-cache">
     <title>欢乐冶</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
     <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/iconfont/iconfont.css">
@@ -231,7 +233,7 @@
             color: #999;
         }
 
-        .toogle-disappear {
+        .toogle-display{
             display: none;
         }
 
@@ -262,9 +264,10 @@
     </style>
 </head>
 <body>
-<div class="page" id="page">
+<div class="page" >
     <header class="bar bar-nav">
-        <div class="default-header" :class="{disappear:disappear}">
+
+        <div class="default-header" >
             <div class="searchbar">
                 <div class="search-input">
                     <form action="">
@@ -273,19 +276,20 @@
                     </form>
                 </div>
                 <a class="searchbar-cancel">取消</a>
+
             </div>
             <a class="map-link external" href="/discovery/map">
                 <div class="map-icon iconfont icon-dingwei"></div>
             </a>
         </div>
-        <div class="toogle-disappear" :class="{show:disappear}">
+        <div class="toogle-display" >
 
             <a class=" iconfont icon-arrow-left external" href="/discovery"></a>
-            <h1 class="title">附近{$ cats[activeIndex].short $}</h1>
+            <h1 class="title">附近</h1>
         </div>
     </header>
 
-    <div class="content infinite-scroll" data-distance="50">
+    <div class="content infinite-scroll" data-distance="5">
         <div class="content-tab" :class="{disappear:disappear}">
             <div class="content-tab-item active" data-index="0">过山车</div>
             <div class="content-tab-item" data-index="1">黑暗乘骑</div>
@@ -295,24 +299,30 @@
             <div class="content-item">
                 <div class="content-nav" :class="{disappear:disappear}">
                     <a class="content-nav-item" href="#" @click="toogleDisplay">
+
                         <div class="content-icon rollercoaster-icon">
                             <img class="content-icon-img" src="/static/img/icon/rollercoaster2.svg">
                         </div>
                         <div class="content-nav-item-text">附近{$ cats[activeIndex].short $}</div>
                     </a>
                     <a class="content-nav-item external" href="/discovery/parklist">
+
                         <div class="content-icon park-icon">
                             <img class="content-icon-img" src="/static/img/icon/park.svg">
                         </div>
                         <div class="content-nav-item-text">乐园</div>
+
                     </a>
-                    <a class="content-nav-item">
+                    <a class="content-nav-item external" href="/discovery/factory">
+
                         <div class="content-icon factory-icon">
                             <img class="content-icon-img" src="/static/img/icon/factory.svg">
                         </div>
                         <div class="content-nav-item-text">厂商</div>
+
                     </a>
                     <a class="content-nav-item external" :href="'/discovery/knowledge?type='+activeIndex">
+
                         <div class="content-icon knowledge-icon">
                             <img class="content-icon-img" src="/static/img/icon/knowledge.svg">
                         </div>
@@ -393,7 +403,7 @@
 
     var vm = new Vue({
         delimiters: ['{$', '$}'],
-        el: '#page',
+        el: '#content-list',
         data () {
             return {
                 cats: [{
@@ -411,6 +421,7 @@
                 perPageItems: 10,
                 page: 1,
                 disappear: false,
+                radius: 1
             }
         },
         created: function () {
@@ -427,6 +438,7 @@
             activeIndex: function (newVal) {
                 this.page = 1
                 this.facilityList = []
+
                 this.getFacility(this.perPageItems, this.page, position)
             }
         },
@@ -434,37 +446,54 @@
             getFacility: function (perPageItems, page, position) {
                 $('.infinite-scroll-preloader').show();
                 let self = this
+
                 $.ajax({
                     url: '/discovery/getfacility',
                     data: {
                         cat: Number(self.activeIndex) + 1,
                         count: perPageItems,
                         page: page,
-                        position: JSON.stringify(position)
+                        position: JSON.stringify(position),
+                        radius: self.radius
                     },
                     success: function (ret) {
-                        if (ret.errno === 0) {
-                            self.facilityList = self.facilityList.concat(ret.data.data)
-                            self.page++
-                            loading = false
-                            if (ret.data.totalPages == 1) {
-                                $.detachInfiniteScroll($('.infinite-scroll'))
-                                $('.infinite-scroll-preloader').hide();
+                    	if(ret.errno === 0){
+                    		let list = ret.data.data
+		                    for (let i in list) {
+			                    list[i].distance = self.convertToKilometers(list[i].geolocation)
+		                    }
+		                    list.sort((a, b) => {
+			                    return a.distance - b.distance
+		                    })
+
+		                    self.facilityList = self.facilityList.concat(list)
+		                    self.page ++
+                            if(ret.data.totalPages === 1){
+                                self.radius ++
+                                self.getFacility(self.perPageItems, self.page, position, self.radius)
                             }
                             return
                         }
-                        if (ret.errmsg === 'no more') {
+                        if(ret.errmsg === 'no more'){
+                            if (self.activeIndex === 0) {
+                                self.radius ++
+                                self.getFacility(self.perPageItems, self.page, position, self.radius)
+                                return
+                            }
                             $.toast('没有更多了，向我们反馈吧')
                             $.detachInfiniteScroll($('.infinite-scroll'))
-                            $('.infinite-scroll-preloader').hide();
                             return
                         }
                         $.toast('出了点小问题，请重试')
-                        $('.infinite-scroll-preloader').hide();
                         return
                     },
                     error: function (err) {
                         return $.toast('获取失败，请刷新重试')
+
+                    },
+                    complete: function (ret) {
+                        loading = false
+                        $('.infinite-scroll-preloader').hide();
                     }
                 })
             },
@@ -501,23 +530,28 @@
             },
             toogleDisplay: function () {
                 this.disappear = true;
+                $('.content-tab').addClass('disappear');
+                $('.default-header').addClass('disappear');
+                $('h1.title').html('附近'+this.cats[this.activeIndex].short);
+                $('.toogle-display').addClass('show');
             }
         }
     })
-
     $(document).on('infinite', '.infinite-scroll', function () {
         $('.infinite-scroll-preloader').show()
         if (loading) return;
         loading = true
-        console.log(position);
-        vm.getFacility(vm.perPageItems, vm.page, position)
+
+        vm.getFacility(vm.perPageItems, vm.page, position, vm.radius)
+
     })
 
     $('.content-tab').on('click', '.content-tab-item', function (e) {
         $('.content-tab-item.active').removeClass('active')
         $(this).addClass('active')
-        vm.activeIndex = $(this).data('index')
+        vm.activeIndex = parseInt($(this).data('index'))
     })
+
 
 </script>
 

@@ -1,3 +1,7 @@
+
+/**
+ * Created by fuyazhou on 17/8/2.
+ */
 'use strict'
 
 class Company extends think.model.base {
@@ -5,6 +9,16 @@ class Company extends think.model.base {
         super.init(...args)
         this.tableName = 'company'
     }
+	
+	async getFactoryList() {
+		let res = await this.field('id, title').where({type: 2}).select()
+		return res
+	}
+	
+	async getFactoryInfo(id) {
+		let res = await this.where({id: id}).find()
+		return res
+	}
 
     async getCompanyDetailById(id) {
         let res = await this.field('title, location, openTime, status, phoneNumber, website, owner, poster').where({id: id}).find();
@@ -28,3 +42,4 @@ class Company extends think.model.base {
 
 }
 export default Company;
+
