@@ -182,7 +182,6 @@ export default class extends base {
             city: this.post('city')
         }
         if (avatarCropped) {
-            console.log('inner');
             let avatarBase64 = avatarCropped.split(',')[1];
             let avatarBinary = new Buffer(avatarBase64, 'base64').toString('binary');
             let userRowData = await userModel.getUserInfo(uid);
