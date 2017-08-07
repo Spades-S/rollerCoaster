@@ -38,27 +38,11 @@ export default class extends think.model.base{
 	}
 	
 	async getGroupInfo(id) {
-		let res = this.field('id, title, theme, cover, description, members').where({id: id}).find()
+		let res = this.where({id: id}).find()
 		return res
 	}
 	
 	async createGroup(data) {
-		/*let reflect = {
-			title: 'title',
-			theme: 'theme',
-			description: 'description',
-			groupType: 'groupType',
-			activityType: 'activityType',
-			activityTime: 'activityTime',
-			place: 'place',
-			park: 'park',
-			facility: 'facility',
-			joinNumber: 'joinNumber',
-			remark: 'remark',
-			creatorName: 'nickname',
-			creatorAvatar: 'avatar',
-			creatorId: 'id'
-		}*/
 		let reflect = ['nickname', 'avatar', 'id']
 		let reflected = ['creatorName', 'creatorAvatar', 'creatorId']
 		for(let i in reflected) {
@@ -66,7 +50,36 @@ export default class extends think.model.base{
 			delete data[reflect[i]]
 		}
 		let res = await this.add(data)
+		let userModel = this.model('user')
+		await userModel.updateMyGroup(res, data.creatorId)
+		await this.updateGroupMembers(res, data.creatorId)
 		return res
+	}
+	
+	async updateGroupMembers(groupId, id) {
+		let res = await this.field('id, membersId').where({id: groupId}).find()
+		let membersId = res.membersId ? JSON.parse(res.membersId).push(id) : [id]
+		await this.where({id: groupId}).update({membersId: JSON.stringify(membersId)})
+	}
+	
+	async addGroupMember(groupId, userId) {
+		let groupMembers = await this.field('id, membersId').where({id: groupId}).find()
+		console.log(groupId)
+		let membersId = groupMembers.membersId ? JSON.parse(groupMembers.membersId) : []
+		membersId.push(userId)
+		let res = await this.where({id: groupId}).update({membersId: JSON.stringify(membersId)})
+		console.log(res)
+		return res
+	}
+	
+	async deleteGroupMember(groupId, userId) {
+		let groupMembers = await this.field('id, membersId').where({id: groupId}).find()
+		let membersId = JSON.parse(groupMembers.membersId)
+		if (membersId.indexOf(userId) > -1) {
+			membersId.splice(membersId.indexOf(userId), 1)
+			await this.where({id: groupId}).update({membersId: JSON.stringify(membersId)})
+		}
+		return true
 	}
 }
 

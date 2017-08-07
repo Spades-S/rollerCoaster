@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>发帖</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+        .page{
+            background-color: #fff;
+        }
+        .bar{
+            height: 3rem;
+            background-color: #07518f;
+            border-bottom: none;
+        }
+        h1.title{
+            color: white;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 3rem;
+        }
+        .icon-arrow-left {
+            display: inline-block;
+            width: 0.9rem;
+            height: 1.4rem;
+            position: absolute;
+            top: 0.75rem;
+            z-index: 30;
+        }
+        .bar~.content{
+            top: 3rem;
+            height: calc(100% - 3rem);
+            background-color: #fff;
+            position: relative;
+        }
+        .post-title, .post-content, .button{
+            width: 90%;
+            margin: 1rem auto;
+        }
+        input, textarea{
+            width: 100%;
+            padding: .4rem .8rem;
+            border: 1px solid #DCDCDC;
+            border-radius: .3rem;
+            font-size: .7rem;
+        }
+        .button.button-big{
+            height: 1.8rem;
+            line-height: 1.8rem;
+            font-size: .8rem;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <header class="bar bar-nav"><a href="" class="iconfont icon-arrow-left back"></a>
+        <h1 class="title">发帖</h1>
+    </header>
+    <div class="content" id="content">
+        <div class="post-title">
+            <input type="text" placeholder="请输入标题" @input="typeTitle">
+        </div>
+        <div class="post-content">
+            <textarea type="text" placeholder="请输入内容" rows="7"  @input="typeContent"></textarea>
+        </div>
+        <div :class="'button button-big ' + button.class" :disabled="button.disabled" @click="post">发表帖子</div>
+    </div>
+</div>
+
+
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script>
+    $.init();
+
+    new Vue({
+        delimiters: ['{$', '$}'],
+        data: {
+        	title: '',
+            content: ''
+        },
+        methods: {
+            typeTitle: function (e) {
+                this.title = e.currentTarget.value
+            },
+	        typeContent: function (e) {
+		        this.content = e.target.value
+	        },
+            post: function () {
+                let self = this
+                $.ajax({
+                    url: '/group/submitpost',
+                    method: 'POST',
+                    data: {
+                    	title: self.title,
+                        content: self.content,
+                        groupId: "{{ groupId }}"
+                    },
+                    success: function (ret) {
+                        if(ret.errno === 0){
+                        	window.location.href = '/group/' + "{{ groupId }}"
+                        }
+                    }
+                })
+            }
+        },
+        computed: {
+        	button: function () {
+                if(this.title&&this.content){
+                	return {
+                		disabled: false,
+                        class: ''
+                    }
+                } else {
+	                return {
+		                disabled: true,
+		                class: 'disabled'
+	                }
+                }
+	        }
+        }
+    }).$mount('#content')
+</script>
+</body>
+</html>

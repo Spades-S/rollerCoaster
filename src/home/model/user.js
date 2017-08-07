@@ -142,4 +142,23 @@ export default class extends think.model.base {
         let res = await this.field('id, groups').where({uid: uid}).find()
         return res
     }
+	
+	async getUserGroupsById(id) {
+		let res = await this.field('id, groups').where({id: id}).find()
+		return res
+	}
+    
+    async updateMyGroup(groupId, id) {
+        let res = await this.getUserGroupsById(id)
+        let groups
+        if (res.groups) {
+	        groups = JSON.parse(res.groups)
+            groups.push(groupId)
+        } else {
+            groups = [groupId]
+        }
+        console.log('groups', groups)
+        let updateRes = await this.where({id: id}).update({groups: JSON.stringify(groups)})
+        return updateRes
+    }
 }

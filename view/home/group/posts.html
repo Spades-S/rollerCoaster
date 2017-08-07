@@ -39,7 +39,9 @@
         }
         .bar~.content{
             top: 3rem;
+            height: calc(100% - 3rem);
             background-color: #fff;
+            position: relative;
         }
         .detail{
             padding: .6rem .8rem;
@@ -92,16 +94,111 @@
         .desc, .share{
             background-color: #0F528D;
         }
-        .join{
+        .join, .quit{
             background: #74B941;
+            border: none;
         }
         .quit{
-            color: #999;
-            background-color: #F5F5F5;
-            border: 1px solid #D5D5D5;
+            background-color: #A33;
         }
         .write{
             background-color: #F19725;
+        }
+        .detailInfo{
+            width: 100%;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 11;
+        }
+        .detailInfo .list-block{
+            font-size: .7rem;
+            width: 90%;
+            margin: 0 auto;
+            padding: .2rem 0;
+            background-color: #FFF;
+            border-radius: 1rem;
+        }
+        .list-block .item-content{
+            min-height: 1rem;
+            padding-left: 0;
+            width: 100%;
+        }
+        .list-block .item-inner{
+            min-height: 1rem;
+            padding: .2rem 0;
+            width: 100%;
+            margin: 0 auto;
+            border-bottom: none;
+        }
+        .list-block .item-title {
+            width: 40%;
+            text-align: right;
+            padding-right: 1rem;
+            color: #8C8C8C;
+        }
+        .list-block .item-after {
+            width: 60%;
+            text-align: left;
+        }
+        .mask{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, .3);
+            z-index: 10;
+        }
+        .btn.disabled{
+            color: #8C8C8C;
+            background-color: #F5F5F5;
+            border: 1px solid #D5D5D5;
+        }
+        .post-item{
+            padding: .3rem .5rem;
+            border-bottom: 1px solid #DCDCDC;
+        }
+        .post-row{
+            display: flex;
+            align-items: center;
+            font-size: .8rem;
+        }
+        .post-row.info{
+            padding-left: 2rem;
+            font-size: .7rem;
+            position: relative;
+            color: #999;
+        }
+        .post-comments{
+            width: 1.2rem;
+            margin-left: .3rem;
+            margin-right: .4rem;
+            font-size: .5rem;
+            text-align: center;
+            background-color: #6EB732;
+            border-radius: .15rem;
+            position: relative;
+            color: #fff;
+        }
+        .post-comments::before{
+            content: '';
+            width: 0;
+            height: 0;
+            border-top: .5rem solid #6EB732;
+            border-left: .1rem solid transparent;
+            border-right: .1rem solid transparent;
+            position: absolute;
+            top: .7rem;
+            transform: translateX(-3px) rotate(30deg);
+        }
+        .post-title{
+            flex: 1;
+        }
+        .post-time{
+            position: absolute;
+            right: 0;
         }
     </style>
 </head>
@@ -130,55 +227,40 @@
                     <div class="btn share">分享</div>
                 </div>
                 <div class="span-18">
-                    <div class="btn join">加入小组</div>
+                    <button :class="'btn join ' + (groupInfo.userInThisGroup ? 'disabled' : '')" :disabled="groupInfo.userInThisGroup ? true : false"  @click="joinGroup">加入小组</button>
                 </div>
                 <div class="span-18">
-                    <div class="btn quit">退出小组</div>
+                    <button :class="'btn quit ' + (groupInfo.userInThisGroup ? '' : 'disabled')" :disabled="groupInfo.userInThisGroup ? false : true" @click="quitGroup">退出小组</button>
                 </div>
                 <div class="span-18">
-                    <div class="btn write">发帖</div>
+                    <div class="btn write" @click="toPost">发帖</div>
                 </div>
             </div>
         </div>
-        <div class="list-block"></div>
-        <div class="detailInfo">
-            <div class="item-content">
-                <div class="item-title">小组类型</div>
-                <div class="item-after"></div>
-            </div>
-            <div class="item-content">
-                <div class="item-title">创建人</div>
-                <div class="item-after"></div>
-            </div>
-            <div class="item-content">
-                <div class="item-title">创建时间</div>
-                <div class="item-after"></div>
-            </div>
-            <div class="item-content">
-                <div class="item-title">简介</div>
-                <div class="item-after"></div>
-            </div>
-            <div class="item-content">
-                <div class="item-title">成员数</div>
-                <div class="item-after"></div>
-            </div>
-            <div class="item-content">
-                <div class="item-title">活动时间</div>
-                <div class="item-after"></div>
-            </div>
-            <div class="item-content">
-                <div class="item-title">活动地点</div>
-                <div class="item-after"></div>
-            </div>
-            <div class="item-content">
-                <div class="item-title">乐园</div>
-                <div class="item-after"></div>
-            </div>
-            <div class="item-content">
-                <div class="item-title">设施</div>
-                <div class="item-after"></div>
+        <div class="post-list">
+            <div class="post-item" v-for="post in posts">
+                <div class="post-row">
+                    <div class="post-comments">{$ post.comments $}</div>
+                    <div class="post-title">{$ post.title $}</div>
+                </div>
+                <div class="post-row info">
+                    <div class="post-avatar" v-if="post.authorAvatar">{$ post.authorAvatar $}</div>
+                    <div class="post-name">{$ post.authorName $}</div>
+                    <div class="post-time">{$ new Date(post.updateTime).Format('yyyy-MM-dd hh:mm') $}</div>
+                </div>
             </div>
         </div>
+        <div class="detailInfo" v-if="groupDetailShow">
+            <div class="list-block">
+                <div class="item-content" v-for="item in detailList" v-if="groupInfo[item.en]">
+                    <div class="item-inner">
+                        <div class="item-title">{$ item.item $}</div>
+                        <div class="item-after">{$ groupInfo[item.en] $}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mask" v-if="groupDetailShow" @click="hideDetail"></div>
     </div>
 </div>
 
@@ -193,53 +275,42 @@
         delimiters: ['{$', '$}'],
         data () {
         	return {
-        		groupInfo: undefined,
-                detialList: [{
+        		groupInfo: {},
+                posts: undefined,
+		        groupDetailShow: false,
+                joinDisabled: false,
+                quitDisabled: false,
+                detailList: [{
         			item: '类型',
-                    en: ''
+                    en: 'groupType'
                 }, {
 	                item: '创建人',
-	                en: ''
+	                en: 'creatorName'
                 }, {
 	                item: '创建时间',
-	                en: ''
+	                en: 'createTime'
                 }, {
 	                item: '简介',
-	                en: ''
+	                en: 'description'
                 }, {
 	                item: '成员数',
-	                en: ''
+	                en: 'members'
                 }, {
 	                item: '活动时间',
-	                en: ''
+	                en: 'activityTime'
                 }, {
 	                item: '活动地点',
-	                en: ''
+	                en: 'place'
                 }, {
 	                item: '乐园',
-	                en: ''
+	                en: 'park'
                 }, {
 	                item: '设备',
-	                en: ''
+	                en: 'facility'
                 }, {
 	                item: '备注',
-	                en: ''
-                }, {
-	                item: '',
-	                en: ''
-                }, {
-	                item: '',
-	                en: ''
-                }, {
-	                item: '',
-	                en: ''
-                }, {
-	                item: '',
-	                en: ''
-                }, {
-	                item: '',
-	                en: ''
-                }, ]
+	                en: 'remark'
+                }]
             }
         },
         created: function () {
@@ -251,17 +322,94 @@
                 },
                 success: function (ret) {
                     self.groupInfo = ret.data
-                    console.log(self.groupInfo)
+                    self.groupInfo.createTime = new Date(self.groupInfo.createTime).Format("yyyy-MM-dd")
+                    self.getPosts()
                 }
             })
         },
         methods: {
+        	getPosts: function () {
+                let self = this
+                $.ajax({
+                    url: '/group/getposts',
+                    data: {
+                    	id: "{{ id }}"
+                    },
+                    success: function (ret) {
+                        self.posts = ret.data.data
+                    }
+                })
+	        },
         	showDetail: function () {
+                this.groupDetailShow = !this.groupDetailShow
+	        },
+            hideDetail: function () {
+	            this.groupDetailShow = !this.groupDetailShow
+            },
+            toPost: function () {
+        		if(/uid/.test(document.cookie)) {
+			        window.location.href="/group/" +this.groupInfo.id+ "/post"
+                } else {
+        			$.toast('您需要登录才能进行发帖')
+                    setTimeout(function () {
+                        window.location.href = '/user/login'
+                    }, 1000)
+                }
 
-	        }
+            },
+            joinGroup: function () {
+	            if(!/uid/.test(document.cookie)) {
+		            $.toast('您需要登录才能加入小组')
+		            setTimeout(function () {
+			            window.location.href = '/user/login'
+		            }, 1000)
+                    return
+	            }
+                let self = this
+                $.ajax({
+                    url: '/group/joingroup',
+	                method: 'POST',
+	                data: {
+		                groupId: self.groupInfo.id
+	                },
+                    success: function (ret) {
+                        if(ret.errno === 0) {
+	                        window.location.href = window.location.href
+                        }
+                    }
+                })
+            },
+            quitGroup: function () {
+        		let self = this
+                $.ajax({
+                    url: '/group/quitgroup',
+                    method: 'POST',
+                    data: {
+                    	groupId: self.groupInfo.id
+                    },
+                    success: function (ret) {
+                        window.location.href = window.location.href
+                    }
+                })
+            }
         }
     }).$mount('#content')
 
+    Date.prototype.Format = function (fmt) {
+	    var o = {
+		    "M+": this.getMonth() + 1, //月份
+		    "d+": this.getDate(), //日
+		    "h+": this.getHours(), //小时
+		    "m+": this.getMinutes(), //分
+		    "s+": this.getSeconds(), //秒
+		    "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+		    "S": this.getMilliseconds() //毫秒
+	    };
+	    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+	    for (var k in o)
+		    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+	    return fmt;
+    }
 </script>
 </body>
 </html>
