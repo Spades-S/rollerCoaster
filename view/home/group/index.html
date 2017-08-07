@@ -153,7 +153,7 @@
         <a class="map-link external" href="/group/create"><div class="map-icon iconfont icon-dingwei"></div></a>
     </header>
     <div class="content" id="content">
-        <div class="activity">
+        <div class="activity" v-if="activity && activity.length > 0">
             <div class="activity-cover" v-for="item in activity" :data-id="item.id">
                 <img :src="item.cover" alt="">
             </div>

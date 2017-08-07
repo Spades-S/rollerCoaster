@@ -124,7 +124,7 @@
             </div>
             <div class="button-container">
                 <div class="span-18">
-                    <div class="btn desc">小组简介</div>
+                    <div class="btn desc" @click="showDetail">小组简介</div>
                 </div>
                 <div class="span-13">
                     <div class="btn share">分享</div>
@@ -141,6 +141,44 @@
             </div>
         </div>
         <div class="list-block"></div>
+        <div class="detailInfo">
+            <div class="item-content">
+                <div class="item-title">小组类型</div>
+                <div class="item-after"></div>
+            </div>
+            <div class="item-content">
+                <div class="item-title">创建人</div>
+                <div class="item-after"></div>
+            </div>
+            <div class="item-content">
+                <div class="item-title">创建时间</div>
+                <div class="item-after"></div>
+            </div>
+            <div class="item-content">
+                <div class="item-title">简介</div>
+                <div class="item-after"></div>
+            </div>
+            <div class="item-content">
+                <div class="item-title">成员数</div>
+                <div class="item-after"></div>
+            </div>
+            <div class="item-content">
+                <div class="item-title">活动时间</div>
+                <div class="item-after"></div>
+            </div>
+            <div class="item-content">
+                <div class="item-title">活动地点</div>
+                <div class="item-after"></div>
+            </div>
+            <div class="item-content">
+                <div class="item-title">乐园</div>
+                <div class="item-after"></div>
+            </div>
+            <div class="item-content">
+                <div class="item-title">设施</div>
+                <div class="item-after"></div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -155,7 +193,53 @@
         delimiters: ['{$', '$}'],
         data () {
         	return {
-        		groupInfo: undefined
+        		groupInfo: undefined,
+                detialList: [{
+        			item: '类型',
+                    en: ''
+                }, {
+	                item: '创建人',
+	                en: ''
+                }, {
+	                item: '创建时间',
+	                en: ''
+                }, {
+	                item: '简介',
+	                en: ''
+                }, {
+	                item: '成员数',
+	                en: ''
+                }, {
+	                item: '活动时间',
+	                en: ''
+                }, {
+	                item: '活动地点',
+	                en: ''
+                }, {
+	                item: '乐园',
+	                en: ''
+                }, {
+	                item: '设备',
+	                en: ''
+                }, {
+	                item: '备注',
+	                en: ''
+                }, {
+	                item: '',
+	                en: ''
+                }, {
+	                item: '',
+	                en: ''
+                }, {
+	                item: '',
+	                en: ''
+                }, {
+	                item: '',
+	                en: ''
+                }, {
+	                item: '',
+	                en: ''
+                }, ]
             }
         },
         created: function () {
@@ -170,6 +254,11 @@
                     console.log(self.groupInfo)
                 }
             })
+        },
+        methods: {
+        	showDetail: function () {
+
+	        }
         }
     }).$mount('#content')
 
