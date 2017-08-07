@@ -17,20 +17,24 @@
             box-sizing: border-box;
             -webkit-font-smoothing: antialiased;
         }
-        .page{
+
+        .page {
             background-color: #fff;
         }
-        .bar{
+
+        .bar {
             height: 3rem;
             background-color: #07518f;
             border-bottom: none;
         }
-        h1.title{
+
+        h1.title {
             color: white;
             line-height: 3rem;
             letter-spacing: 5px;
             border-image-width: 0;
         }
+
         .icon-arrow-left {
             display: inline-block;
             width: 0.9rem;
@@ -39,55 +43,64 @@
             top: 0.75rem;
             z-index: 30;
         }
-        .bar-nav~.content{
+
+        .bar-nav ~ .content {
             top: 3rem;
         }
-        .basicInfo{
+
+        .basicInfo {
             height: 8rem;
             position: relative;
             padding-top: 1rem;
-            background-image: url("/static/img/thelivingtribunal.jpeg");
             border: none;
         }
-        .avatar, .avatar-img{
+
+        .avatar, .avatar-img {
             width: 4.2rem;
             height: 4.2rem;
             border-radius: 50%;
             margin: 0 auto;
         }
-        .edit{
+
+        .edit {
             font-size: 1rem;
             position: absolute;
             line-height: 3rem;
             right: 1rem;
             color: #fff;
         }
-        .nickname{
+
+        .nickname {
             font-size: 1.1rem;
             text-align: center;
             padding-top: .5rem;
-            color: white;
+            color: #7d7979;
         }
-        .detail{
+
+        .detail {
             width: 100%;
             font-size: .7rem;
         }
-        .detail-row{
+
+        .detail-row {
             display: flex;
             padding: .8rem 1rem;
             box-sizing: border-box;
             border-bottom: 1px solid #efefef;
         }
-        .detail-title, .detail-info, .detail-edit{
+
+        .detail-title, .detail-info, .detail-edit {
             display: inline-block;
             width: 50%;
             box-sizing: border-box;
         }
-        .detail-info, .detail-edit{
+
+        .detail-info, .detail-edit {
             text-align: right;
             color: #9E9E9E;
         }
-        .detail-edit a{
+
+        .detail-edit a {
             color: #9E9E9E;
         }
     </style>
@@ -95,25 +108,26 @@
 <body>
 <div class="page">
     <header class="bar bar-nav">
-        <a class=" iconfont icon-arrow-left back "></a>
+        <a class=" iconfont icon-arrow-left back" href="/user"></a>
         <h1 class="title">我的</h1>
         <a class="edit iconfont icon-bianji external" href="/user/edit"></a>
     </header>
     <div class="content" id="content">
-        <div class="basicInfo">
-            <div class="avatar"><img src="/static/img/thelivingtribunal.jpeg" alt="" class="avatar-img"></div>
-            <div class="nickname">{$ userDetail.nickname $}</div>
-        </div>
-        <div class="detail">
-            <div class="detail-row" v-for="detail, idnex in details">
-                <div class="detail-title">{$ detail.title $}</div>
-                <div class="detail-info" v-if="detail.value">{$ detail.value $}</div>
-                <div class="detail-edit" v-else="detail.value"><a class="external" href="/user/edit">填写</a></div>
+        <template>
+            <div class="basicInfo" id="basicInfo">
+                <div class="avatar"><img :src="getAvatar" alt="" class="avatar-img"></div>
+                <div class="nickname">{$ userDetail.nickname $}</div>
             </div>
-        </div>
+            <div class="detail">
+                <div class="detail-row" v-for="detail, index in details">
+                    <div class="detail-title">{$ detail.title $}</div>
+                    <div class="detail-info" v-if="detail.value">{$ detail.value $}</div>
+                    <div class="detail-edit" v-else><a class="external" href="/user/edit">填写</a></div>
+                </div>
+            </div>
+        </template>
     </div>
 </div>
-
 
 
 <script type="text/javascript " src="/static/vue/vue.js "></script>
@@ -127,52 +141,60 @@
     new Vue({
         delimiters: ['{$', '$}'],
         data() {
-        	return {
-        		userDetail: {},
+            return {
+                userDetail: {},
                 details: []
             }
         },
         created: function () {
-            this.getUserDetail()
+            this.getUserDetail();
         },
         methods: {
-        	getUserDetail: function () {
-        		let self = this
-		        $.ajax({
-			        url: '/user/getuserdetail',
-			        success: function (ret) {
-				        if(ret.errno === 0){
-				        	let data = ret.data
+            getUserDetail: function () {
+                let self = this;
+                let gender = [null, '女', '男'];
+                $.ajax({
+                    url: '/user/getuserdetail',
+                    success: function (ret) {
+                        if (ret.errno === 0) {
+                            let data = ret.data
                             self.details = [{
-				        		title: '性别',
-                                value: data.gender
-                            },{
-				        		title: '生日',
+                                title: '性别',
+                                value: gender[data.gender]
+                            }, {
+                                title: '生日',
                                 value: data.birth
-                            },{
-				        		title: '邮箱',
+                            }, {
+                                title: '邮箱',
                                 value: data.mail
-                            },{
-				        		title: '城市',
-                                value: decodeURI(data.city)
-                            },{
-				        		title: '个人简介',
+                            }, {
+                                title: '城市',
+//                                value: decodeURI(data.city)
+                                value: data.city
+                            }, {
+                                title: '个人简介',
                                 value: data.introduction
                             }]
-				        	self.userDetail = ret.data
+                            self.userDetail = ret.data
                             console.log(ret)
                         } else {
-				        	$.toast('登录失败，请重新登录')
+                            $.toast('登录失败，请重新登录')
                             setTimeout(function () {
                                 window.location.href = '/user/login'
                             }, 1000)
                         }
-			        },
+                    },
                     error: function (err) {
-			        	$.toast('出了点小问题，请重试')
+                        $.toast('出了点小问题，请重试')
                     }
-		        })
-	        }
+                })
+            }
+        },
+        computed: {
+            getAvatar: function () {
+                let avatarSubAddr = this.userDetail.avatar || '/systemAvatar.jpeg';
+                return '/static/img' + avatarSubAddr;
+            }
         }
     }).$mount('#content')
 

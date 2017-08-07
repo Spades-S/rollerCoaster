@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>小组</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+        .page{
+            background-color: #fff;
+        }
+        .bar{
+            height: 3rem;
+            background-color: #07518f;
+            border-bottom: none;
+        }
+        h1.title{
+            color: white;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 3rem;
+        }
+        .icon-arrow-left {
+            display: inline-block;
+            width: 0.9rem;
+            height: 1.4rem;
+            position: absolute;
+            top: 0.75rem;
+            z-index: 30;
+        }
+        .bar~.content{
+            top: 3rem;
+            background-color: #fff;
+        }
+        .detail{
+            padding: .6rem .8rem;
+            background-color: #F5F5F5;
+            border-bottom: 1px solid #F9F9F9;
+        }
+        .group-detail{
+            width: 100%;
+            display: flex;
+        }
+        .cover, .cover img{
+            display: inline-block;
+            height: 3rem;
+            width: 3rem;
+        }
+        .group-item-info{
+            display: inline-block;
+            flex: 1;
+            margin-left: 1rem;
+            position: relative;
+        }
+        .group-title{
+            line-height: 2rem;
+        }
+        .members{
+            line-height: 1rem;
+            font-size: .7rem;
+        }
+        .button-container{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: .5rem 0 0 0;
+            font-size: .7rem;
+            text-align: center;
+        }
+        .span-18{
+            flex: 5
+        }
+        .span-13{
+            flex: 3
+        }
+        .btn{
+            font-size: .6rem;
+            margin: .2rem;
+            padding: .2rem .3rem;
+            border-radius: .3rem;
+            color: #fff;
+        }
+        .desc, .share{
+            background-color: #0F528D;
+        }
+        .join{
+            background: #74B941;
+        }
+        .quit{
+            color: #999;
+            background-color: #F5F5F5;
+            border: 1px solid #D5D5D5;
+        }
+        .write{
+            background-color: #F19725;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <header class="bar bar-nav">
+        <h1 class="title">小组</h1>
+        <a href="" class="iconfont icon-arrow-left back"></a>
+    </header>
+    <div class="content" id="content">
+        <div class="detail">
+            <div v-if="groupInfo" class="group-detail">
+                <div class="cover">
+                    <img :src="groupInfo.cover" alt="">
+                </div>
+                <div class="group-item-info">
+                    <div class="group-title">{$ groupInfo.title $}</div>
+                    <div class="members">成员数：{$ groupInfo.members $}</div>
+                </div>
+            </div>
+            <div class="button-container">
+                <div class="span-18">
+                    <div class="btn desc" @click="showDetail">小组简介</div>
+                </div>
+                <div class="span-13">
+                    <div class="btn share">分享</div>
+                </div>
+                <div class="span-18">
+                    <div class="btn join">加入小组</div>
+                </div>
+                <div class="span-18">
+                    <div class="btn quit">退出小组</div>
+                </div>
+                <div class="span-18">
+                    <div class="btn write">发帖</div>
+                </div>
+            </div>
+        </div>
+        <div class="list-block"></div>
+        <div class="detailInfo">
+            <div class="item-content">
+                <div class="item-title">小组类型</div>
+                <div class="item-after"></div>
+            </div>
+            <div class="item-content">
+                <div class="item-title">创建人</div>
+                <div class="item-after"></div>
+            </div>
+            <div class="item-content">
+                <div class="item-title">创建时间</div>
+                <div class="item-after"></div>
+            </div>
+            <div class="item-content">
+                <div class="item-title">简介</div>
+                <div class="item-after"></div>
+            </div>
+            <div class="item-content">
+                <div class="item-title">成员数</div>
+                <div class="item-after"></div>
+            </div>
+            <div class="item-content">
+                <div class="item-title">活动时间</div>
+                <div class="item-after"></div>
+            </div>
+            <div class="item-content">
+                <div class="item-title">活动地点</div>
+                <div class="item-after"></div>
+            </div>
+            <div class="item-content">
+                <div class="item-title">乐园</div>
+                <div class="item-after"></div>
+            </div>
+            <div class="item-content">
+                <div class="item-title">设施</div>
+                <div class="item-after"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script>
+    $.init()
+
+    new Vue({
+        delimiters: ['{$', '$}'],
+        data () {
+        	return {
+        		groupInfo: undefined,
+                detialList: [{
+        			item: '类型',
+                    en: ''
+                }, {
+	                item: '创建人',
+	                en: ''
+                }, {
+	                item: '创建时间',
+	                en: ''
+                }, {
+	                item: '简介',
+	                en: ''
+                }, {
+	                item: '成员数',
+	                en: ''
+                }, {
+	                item: '活动时间',
+	                en: ''
+                }, {
+	                item: '活动地点',
+	                en: ''
+                }, {
+	                item: '乐园',
+	                en: ''
+                }, {
+	                item: '设备',
+	                en: ''
+                }, {
+	                item: '备注',
+	                en: ''
+                }, {
+	                item: '',
+	                en: ''
+                }, {
+	                item: '',
+	                en: ''
+                }, {
+	                item: '',
+	                en: ''
+                }, {
+	                item: '',
+	                en: ''
+                }, {
+	                item: '',
+	                en: ''
+                }, ]
+            }
+        },
+        created: function () {
+        	let self = this
+            $.ajax({
+                url: '/group/getgroupinfo',
+                data: {
+                	id: "{{ id }}"
+                },
+                success: function (ret) {
+                    self.groupInfo = ret.data
+                    console.log(self.groupInfo)
+                }
+            })
+        },
+        methods: {
+        	showDetail: function () {
+
+	        }
+        }
+    }).$mount('#content')
+
+</script>
+</body>
+</html>

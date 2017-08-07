@@ -14,23 +14,27 @@
     <link rel="stylesheet" href="/static/iconfont/iconfont.css">
 
     <style>
-        *{
+        * {
             -webkit-font-smoothing: antialiased;
         }
-        .bar{
+
+        .bar {
             border-bottom: none;
         }
-        .bar.bar-nav{
+
+        .bar.bar-nav {
             height: 3rem;
             background-color: #07518f;
             display: flex;
             align-items: center;
             justify-content: space-around;
         }
-        .map-icon::before{
+
+        .map-icon::before {
             color: #fff;
         }
-        .bar .searchbar{
+
+        .bar .searchbar {
             width: 87%;
             position: relative;
             display: flex;
@@ -38,61 +42,238 @@
             align-items: center;
             background: transparent;
         }
-        .search-input{
+
+        .search-input {
             width: 100%;
             border-radius: .3rem;
             box-sizing: content-box;
             font-size: .6rem;
         }
-        .searchbar .searchbar-cancel{
+
+        .searchbar .searchbar-cancel {
             margin-left: .3rem;
         }
-        .bar .searchbar .searchbar-cancel{
+
+        .bar .searchbar .searchbar-cancel {
             font-size: .7rem;
             color: #fff;
         }
+
         .searchbar .search-input input {
             height: 1.8rem;
             margin: 0;
         }
-        .search-input label+input {
+
+        .search-input label + input {
             padding-left: .7rem;
         }
-        .icon-sousuo{
+
+        .icon-sousuo {
             position: absolute;
             line-height: 1.8rem;
             right: .5rem;
             color: #6EB732;
         }
-        .bar~.content{
+
+        .bar ~ .content {
             top: 3rem;
         }
-        #container{
+
+        #container {
             width: 100%;
-            height: calc(100% - 3rem);
+            height: calc(100% - 2.2rem);
+        }
+
+        .nearby-car {
+            position: absolute;
+            z-index: 10000;
+            bottom: 0;
+            width: 100%;
+            height: 2.2rem;
+
+            transition: all 0.5s;
+
+        }
+
+        .display {
+            /*height: calc(100% - 10rem);*/
+            transition: all 0.5s;
+
+            background: #eee;
+        }
+
+        .display .icon-arrow-top:before {
+            content: "\e823";
+        }
+
+        .icon-arrow-top, .name {
+            height: 1.1rem;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .item-list {
+            overflow-y: auto;
+        }
+
+        .item-content {
+            padding: 0.7rem 1rem 0.7rem 0.7rem;
+            height: 4.4rem;
+            background: #FFF;
+        }
+
+        .poster {
+            float: left;
+            width: 3rem;
+            height: 3rem;
+        }
+
+        .text-content {
+            padding-left: 3.6rem;
+            margin-top: 0.12rem;
+        }
+
+        .car-title {
+            overflow: hidden;
+            font-size: 16px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .price-distance {
+            margin-top: 0.7rem;
+            color: #8a8282;
+            font-size: 13px;
+        }
+
+        .distance {
+            float: right;
+        }
+
+        /*hr {*/
+            /*margin: 0;*/
+            /*border: none;*/
+            /*border-bottom: 1px solid #ccc;*/
+        /*}*/
+
+        .item-detail {
+            padding-left: 0.5rem;
+            padding-right: 0.8rem;
+            height: 0;
+            overflow: hidden;
+            background: #FFFFFF;
+            transition: all 0.5s ease;
+            font-size: 0;
+        }
+
+        .detail-border {
+            margin-top: 0.5rem;
+            border-top: 1px solid #dcdbdb;
+            border-right: 1px solid #dcdbdb;
+        }
+
+        .detail-key, .detial-value {
+            border-left: 1px solid #dcdbdb;
+            border-bottom: 1px solid #dcdbdb;
+        }
+
+        .detail-key {
+            display: inline-block;
+            padding-right: 0.5rem;
+            overflow: auto;
+            width: 4.5rem;
+            height: 1.6rem;
+            font-size: 14px;
+            line-height: 1.5rem;
+            text-align: right;
+            background: #EEEEEE;
+        }
+
+        .detial-value {
+            display: inline-block;
+            height: 1.6rem;
+            padding-left: 0.5rem;
+            overflow: auto;
+            width: calc(100% - 4.5rem);
+            font-size: 14px;
+            line-height: 1.5rem;
+            white-space: nowrap;
+        }
+
+        .map-info-title {
+            color: white;
+            font-size: 14px;
+            background-color: rgba(0, 155, 255, 0.8);
+            line-height: 26px;
+            padding: 0px 0 0 6px;
+            font-weight: 700;
+            letter-spacing: 1px
+        }
+
+        .map-info-location {
+            margin-left: 2.5rem;
+            width: calc(100% - 2.5rem);
+            font-size: 14px;
+            line-height: 1rem;
+            overflow: hidden;
+        }
+        .detail-hr{
+            border-top:1px solid #ccc;
         }
     </style>
 </head>
 <body>
 
-    <div class="page">
-        <header class="bar bar-nav">
-            <div class="searchbar">
-                <div class="search-input">
-                    <form action="">
-                        <label class="search-icon iconfont icon-sousuo active "></label>
-                        <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show'/>
-                    </form>
-                </div>
-                <a class="searchbar-cancel">取消</a>
+<div class="page">
+    <header class="bar bar-nav">
+        <div class="searchbar">
+            <div class="search-input">
+                <form action="">
+                    <label class="search-icon iconfont icon-sousuo active "></label>
+                    <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show'/>
+                </form>
             </div>
-            <div class="map-icon iconfont icon-dingwei"></div>
-        </header>
-        <div class="content">
-            <div id="container"></div>
+            <a class="searchbar-cancel">取消</a>
+        </div>
+        <div class="map-icon iconfont icon-dingwei"></div>
+    </header>
+    <div class="content">
+        <div id="container"></div>
+    </div>
+    <div class="nearby-car" :class="{display:display}" id="nearby-car">
+        <div class="iconfont icon-arrow-top" @click=toggleDisplay></div>
+        <div class="name" @click=toggleDisplay>附近的车</div>
+        <div class="item-list">
+            <div v-for="carItem in nearbyCars " @click="displayDetail($event)">
+                <div class="item">
+                    <div class="item-content">
+                        <img class="poster" :src="carItem.poster" alt="">
+                        <div class="text-content">
+                            <div class="car-title">{$ carItem.title$}</div>
+                            <div class="price-distance">
+                                <span class="price">价格: 50 / 人</span>
+                                <span class="distance">距离: {$ carItem.distance $} km</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<hr>-->
+                </div>
+                <div class="item-detail">
+                    <div class="detail-border">
+                        <template v-for="(detailItem,index) in getItemDetail(carItem)">
+                            <span class="detail-key">{$ detailItem.key $}:</span>
+                            <span v-if="index==7&&detailItem.value==null"
+                                  class="detial-value">-</span>
+                            <span v-else class="detial-value">{$ detailItem.value $}</span>
+                        </template>
+                    </div>
+
+                </div>
+                <div class="detail-hr"></div>
+            </div>
         </div>
     </div>
-
+</div>
 
 
 <script type="text/javascript " src="/static/vue/vue.js "></script>
@@ -100,27 +281,154 @@
 <script src="/static/js/raty/jquery.raty.js"></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=521f8907ee9a1459f01a4d66d2a36b99"></script>
+<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
 <script>
     $.init();
+    let $vm = new Vue({
+        delimiters: ['{$', '$}'],
+        el: '#nearby-car',
+        data: {
+            nearbyCars: [],
+            display: false,
+        },
+        updated: function () {
+            if (this.nearbyCars.length === 1) {
+                $('.item-detail').css({
+                    height: '12rem',
+                })
+            }
+        },
+        methods: {
+            toggleDisplay: function () {
+                if (this.display) {
+                    $('.nearby-car').css({
+                        height: '2.2rem',
+                    })
+                    this.display = false;
+                } else {
+                    this.display = true;
+                    leftHeight = screen.height * 0.6;
+                    $('.nearby-car').css({
+                        height: leftHeight + 'px',
+                    })
+                    $('.item-list').css({
+                        height: (leftHeight - 44) + 'px',
+                    })
+                }
 
-    let map = new AMap.Map('container', {
-	    resizeEnable: true,
-        zoom: 11
-    })
-    AMap.plugin(['AMap.ToolBar', 'AMap.Scale', 'AMap.Geolocation', 'AMap.PlaceSearch', 'AMap.Autocomplete'], function () {
-	    var toolBar = new AMap.ToolBar()
-        var scale = new AMap.Scale()
-        var geolocation = new AMap.Geolocation({
-            useNative: true
+
+            },
+            getItemDetail: function (detail) {
+                let result = [];
+                let keyArray = ['地点', '乐园', '类型', '状态', '模型', '制作', '开放时间', '关闭时间'];
+                let indexArray = ['location', 'park', 'style', 'status', 'model', 'make', 'openTime', 'closeTime'];
+                for (let i = 0; i < keyArray.length; i++) {
+                    let detailItem = {
+                        key: keyArray[i],
+                        value: detail[indexArray[i]],
+                    }
+                    result.push(detailItem);
+                }
+                return result;
+            },
+            displayDetail: function (e) {
+                if (this.nearbyCars.length > 1) {
+                    let itemDetail = e.currentTarget.childNodes[2];
+                    if ($(itemDetail).height() === 0) {
+                        $(itemDetail).css({
+                            height: '13.8rem',
+                        })
+                    } else {
+                        $(itemDetail).css({
+                            height: '0',
+                        })
+                    }
+
+                }
+
+            }
+
+
+        }
+
+    });
+
+    var map, geolocation;
+    map = new AMap.Map('container', {
+        resizeEnable: true,
+        zoom: 11,
+    });
+    map.plugin(['AMap.Geolocation', 'AMap.Geocoder', 'AMap.AdvancedInfoWindow'], function () {
+        geolocation = new AMap.Geolocation({
+            enableHighAccuracy: true,
+            timeout: 10000,
+            buttonOffset: new AMap.Pixel(10, 20),
+//            zoomToAccuracy: true,
+            buttonPosition: 'LB'
+        });
+        geocoder = new AMap.Geocoder();
+        map.addControl(geolocation);
+        geolocation.getCurrentPosition();
+        AMap.event.addListener(geolocation, 'complete', onComplete);//返回定位信息
+        AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+    });
+
+    function onComplete(data) {
+        let longitude = data.position.getLng(), latitude = data.position.getLat();
+        $.ajax({
+            url: '/discovery/nearbycars',
+            method: 'GET',
+            data: {
+                lng: longitude,
+                lat: latitude,
+            },
+            success: function (res) {
+                if (res.errno === 0) {
+                    $vm.nearbyCars = res.data;
+                    let infoWindow = new AMap.AdvancedInfoWindow();
+                    for (let item of res.data) {
+                        let marker = new AMap.Marker({
+                            position: [item.longitude, item.latitude],
+                            title: item.title,
+                            map: map,
+                            offset: new AMap.Pixel(-5, -2),
+                        })
+                        let lnglat = new AMap.LngLat(item.longitude, item.latitude);
+                        item.distance = (lnglat.distance([longitude, latitude]) / 1000).toFixed(2);
+                        marker.content = "<div class='map-info-title'>🎢 " + item.title + " 过山车</div></div><img style='width:2rem;height:2rem;float:left'src=" + item.poster + "><div class='map-info-location'>" + item.location + "</div>";
+                        marker.on('click', markerClick);
+                    }
+//                    map.setFitView();
+                    function markerClick(e) {
+                        infoWindow.setContent(e.target.content);
+                        infoWindow.open(map, e.target.getPosition());
+
+                    }
+
+
+                }
+
+            }
         })
-        var placeSearch = new AMap.PlaceSearch()
-        var autoComplete = new AMap.Autocomplete()
-	    map.addControl(toolBar)
-        map.addControl(scale)
-        map.addControl(geolocation)
-        map.addControl(placeSearch)
-        map.addControl(autoComplete)
-    })
+    }
+
+    function onError(data) {
+        $.toast('定位失败，请刷新重试');
+
+//        /*************开发测试内容*************/
+//        $.ajax({
+//            url: '/discovery/gettestdata',
+//            method: 'GET',
+//            success: function (res) {
+//                if (res.errno === 0) {
+//                    $vm.nearbyCars = res.data;
+//                }
+//
+//            }
+//        })
+
+    }
+
 
 </script>
 </body>

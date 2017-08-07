@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>欢乐冶</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <style>
+        .page {
+            background: #fff;
+        }
+
+        .bar {
+            position: static;
+            height: 3rem;
+            background-color: #07518f;
+            color: white;
+            border: none;
+        }
+
+        .bar-nav ~ .content {
+            top: 3rem;
+            overflow-x: hidden;
+        }
+
+        .icon-arrow-left {
+            display: inline-block;
+            position: absolute;
+            width: 3rem;
+            height: 3rem;
+            padding-top: 0.65rem;
+            z-index: 30;
+        }
+
+        header h1.title {
+            color: white;
+            margin-top: 0.3rem;
+            font-size: 20px;
+            letter-spacing: 5px;
+            font-weight: 400;
+        }
+
+        .show-box {
+            position: relative;
+            width: 100%;
+            height: 35%;
+        }
+
+        .image-box {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .image-box img {
+            float: left;
+            width: 100%;
+            height: 100%;
+        }
+
+        .dot-box {
+            position: relative;
+            top: -1.5rem;
+            right: 1rem;
+            text-align: right;
+        }
+
+        .dot-box span {
+            display: inline-block;
+            margin-right: 0.3rem;
+            width: 0.4rem;
+            height: 0.4rem;
+            border-radius: 0.2rem;
+            background: grey;
+        }
+
+        .dot-box span.active {
+            background: #fff;
+        }
+
+        .park-info {
+            margin-top: 1rem;
+        }
+
+        .park-title {
+            text-align: center;
+            font-size: 19px;
+            font-weight: 500;
+        }
+
+        .park-info-detail {
+            font-size: 0;
+            margin: 0.6rem 0.5rem 0 0.5rem;
+            border-right: 1px solid #dcdbdb;
+            border-top:1px solid #dcdbdb;
+
+        }
+
+        .pid-key, .pid-value {
+            display: inline-block;
+            font-size: 14px;
+            line-height: 1.3rem;
+            border-left: 1px solid #dcdbdb;
+            border-bottom: 1px solid #dcdbdb;
+        }
+
+        .pid-key {
+            width: 4.5rem;
+            padding-right: 0.5rem;
+            text-align: right;
+            color: #808080;
+            background: #EEEEEE;
+
+        }
+
+        .pid-value {
+            width: calc(100% - 4.5rem);
+            padding-left: 0.5rem;
+        }
+
+        .facility-list {
+            margin-top: 1rem;
+            font-size: 0rem;
+            font-weight: 300;
+
+        }
+
+        .fac-list-content {
+            overflow: auto;
+            border: 1px solid #dad5d5;
+        }
+
+        .facility-list span {
+            display: inline-block;
+            padding: 0 0.4rem;
+            font-size: 0.74rem;
+
+        }
+
+        .listItem-grey span {
+            background: #EEEEEE;
+        }
+
+        .fac-list-head {
+            height: 1.4rem;
+            /*width: 100%;*/
+            line-height: 1.4rem;
+            white-space: nowrap;
+        }
+
+        .fac-list-body {
+            white-space: nowrap;
+        }
+
+        .fac-list-body span {
+            overflow: hidden;
+            -ms-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .fac-name {
+            width: 8rem;
+
+        }
+
+        .fac-type {
+            width: 4rem;
+        }
+
+        .fac-design {
+            width: 5rem;
+        }
+
+        .fac-runtime {
+            width: 6rem;
+        }
+
+        .fac-status {
+            width: 4rem;
+        }
+
+        .fac-closetime {
+            width: 6rem;
+
+        }
+
+        .rel-article-name {
+            margin-top: 1rem;
+            padding-left: 0.4rem;
+            background: #EEEEEE;
+            line-height: 2rem;
+            font-size: 0.74rem;
+        }
+
+        .article-item {
+            display: block;
+            height: 5rem;
+            padding: 0.5rem;
+        }
+
+        .article-poster {
+            width: 4rem;
+            height: 4rem;
+            float: right;
+            margin-left: 0.4rem;
+        }
+
+        .article-title {
+            height: 2rem;
+            padding-bottom: 0.3rem;
+            text-overflow: ellipsis;
+            font-size: 17px;
+            overflow: hidden;
+            line-height: 2rem;
+            white-space: nowrap;
+            color: #848484;
+            font-weight: 300;
+
+        }
+
+        .article-intro {
+            height: 2rem;
+            font-size: 14px;
+            color: #9e9c9c;
+            overflow: hidden;
+            line-height: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            text-overflow: ellipsis;
+            font-weight: 300;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<div class="page-group">
+    <div class="page page-current" id="page">
+        <header class="bar bar-nav">
+            <a class=" iconfont icon-arrow-left back" href="javascript:window.history.go(-1)">
+            </a>
+            <h1 class='title'>乐园</h1>
+        </header>
+        <div class="content">
+
+
+            <div class="show-box" v-if="poster.length>0">
+                <div class="image-box">
+                    <template v-for="posterItem in poster">
+                        <img :src="posterItem" alt="">
+                    </template>
+                    <img :src="poster[0]" alt="">
+                </div>
+                <div class="dot-box">
+                    <template v-for="(posterItem,index) in poster">
+                        <span :rel="index"></span>
+                    </template>
+
+                </div>
+            </div>
+            <div class="park-info" id="park-info">
+                <div class="park-title">上海迪士尼乐园</div>
+                <div class="park-info-detail">
+                    <template v-for="item in textDetail">
+                        <span class="pid-key">{$ item.key $}:</span>
+                        <span class="pid-value">{$ item.value $}</span>
+                    </template>
+                </div>
+            </div>
+            <div class="facility-list" v-if="facilityList.length>0">
+                <template>
+                    <div class=fac-list-content>
+                        <div class="fac-list-head listItem-grey">
+                            <span class="fac-name">设备名称</span>
+                            <span class="fac-type">种类</span>
+                            <span class="fac-design">设计</span>
+                            <span class="fac-runtime">投入运行时间</span>
+                            <span class="fac-status">状态</span>
+                            <span class="fac-closetime">关闭时间</span>
+                        </div>
+                        <div class="fac-list-body">
+                            <template v-for="(facility, index) in facilityList">
+                                <div v-if="index%2!=0" class="listItem-grey">
+                                    <span class="fac-name">{$facility.title$}</span>
+                                    <span class="fac-type">{$facility.type$}</span>
+                                    <span class="fac-design">{$facility.style$}</span>
+                                    <span class="fac-runtime">{$facility.openTime$}</span>
+                                    <span class="fac-status">{$facility.status$}</span>
+                                    <span class="fac-closetime"
+                                          v-if="facility.closeTime!=null">{$facility.closeTime$}</span>
+                                    <span class="fac-closetime" v-else>-</span>
+                                </div>
+                                <div v-else>
+                                    <span class="fac-name">{$facility.title$}</span>
+                                    <span class="fac-type">{$facility.type$}</span>
+                                    <span class="fac-design">{$facility.style$}</span>
+                                    <span class="fac-runtime">{$facility.openTime$}</span>
+                                    <span class="fac-status">{$facility.status$}</span>
+                                    <span class="fac-closetime"
+                                          v-if="facility.closeTime!=null">{$facility.closeTime$}</span>
+                                    <span class="fac-closetime" v-else>-</span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script>
+    $.init();
+    let $vm = new Vue({
+        delimiters: ['{$', '$}'],
+        el: '#page',
+        data(){
+            return {
+                parkInfo: {},
+                textDetail: [],
+                poster: [],
+                facilityList: [],
+                articles: [],
+            }
+
+        },
+        created: function () {
+            this.getParkDetail();
+            this.getFacilityList();
+
+
+        },
+        updated: function () {
+            if (this.poster.length > 1) {
+                swiper();
+            }
+        },
+        methods: {
+            getParkDetail: function () {
+                let _this = this;
+                $.ajax({
+                    url: '/discovery/getparkdetailinfo',
+                    data: {
+                        id: "{{parkId}}"
+                    },
+                    method: 'GET',
+                    success: function (res) {
+                        if (res.errno === 0) {
+                            _this.parkInfo = res.data;
+                            _this.getDetail();
+                        }
+
+                    }
+                })
+            },
+            getDetail: function () {
+                let result = [];
+                let keyArray = ['地址', '状态', '电话', '网址', '所有者', '开放时间'];
+                let indexArray = ['location', 'status', 'phoneNumber', 'website', 'owner', 'openTime'];
+                for (let i = 0; i < keyArray.length; i++) {
+                    this.parkInfo[indexArray[i]] = this.parkInfo[indexArray[i]] || '——';
+                    let item = {
+                        key: keyArray[i],
+                        value: this.parkInfo[indexArray[i]],
+                    }
+                    result.push(item);
+                }
+                this.textDetail = result;
+                if (this.parkInfo.poster != '') {
+                    let posterArr = this.parkInfo.poster.split(',');
+                    this.poster = posterArr.splice(0, 5)
+                }
+            },
+            getFacilityList: function () {
+                let _this = this;
+                $.ajax({
+                    url: '/discovery/getfacilitylist',
+                    data: {
+                        id: '{{parkId}}'
+                    },
+                    method: 'GET',
+                    success: function (res) {
+                        if (res.errno === 0) {
+                            _this.facilityList = res.data;
+
+                        }
+                    }
+                })
+            },
+        }
+
+    })
+
+
+    function swiper() {
+        $('.image-box').css({
+            width: '100%'
+        });
+        let imageBox = $('.show-box').children('.image-box')[0];
+        let dotBox = $('.show-box').children('.dot-box')[0];
+        let dotArray = $(dotBox).children('span');
+        $(dotArray[0]).addClass('active');
+        let imgNum = $(imageBox).children().length;
+//            let activeId = parseInt($(dotBox).children('.active').attr('rel'));
+        let nextId = 0;
+        let activeId = 0;
+        let delayDuartion = 3000;
+        let animateDuration = 800;
+        let imageWidthSum = $(imageBox).width() * imgNum;
+        let imageBoxWidth = $(imageBox).width();
+        $('.image-box img').width(imageBoxWidth);
+        $(imageBox).width(imageWidthSum);
+        let intervalId = setInterval(rotate, delayDuartion);
+
+        function rotate() {
+            nextId = (activeId + 1) % imgNum;
+            if (activeId == 0) {
+                $(imageBox).css({
+                    left: 0,
+                })
+            }
+            $(imageBox).animate({left: "-" + nextId * imageBoxWidth + "px"}, animateDuration);
+            if (nextId === (imgNum - 1)) {
+                nextId = 0;
+            }
+
+            $(dotArray[activeId]).removeClass('active');
+            $(dotArray[nextId]).addClass('active');
+            activeId = nextId;
+        }
+    }
+
+
+</script>
+</body>
+
+</html>

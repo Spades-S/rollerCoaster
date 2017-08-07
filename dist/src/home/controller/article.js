@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
 var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
@@ -11,10 +15,6 @@ var _regenerator2 = _interopRequireDefault(_regenerator);
 var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
-
-var _stringify = require('babel-runtime/core-js/json/stringify');
-
-var _stringify2 = _interopRequireDefault(_stringify);
 
 var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
 
@@ -52,41 +52,55 @@ var _class = function (_base) {
 
     (0, _createClass3.default)(_class, [{
         key: 'detailAction',
-        value: function detailAction() {
-            var articleId = this.get('articleid');
-
-            if (checkLogin(this)) {
-                console.log('Login checked!');
-
-                // to be finished
-            } else {
-                if (!this.cookie('readList')) {
-                    var readList = new Array();
-                    readList.push(parseInt(articleId));
-
-                    this.cookie('readList', (0, _stringify2.default)(readList));
-                } else {
-                    var _readList = JSON.parse(this.cookie('readList'));
-                    if (_readList.indexOf(parseInt(articleId)) < 0) {
-                        _readList.push(parseInt(articleId));
-                        this.cookie('readList', (0, _stringify2.default)(_readList));
-                    }
-                }
-            }
-            this.assign('articleid', articleId);
-            return this.display('article/detail.html');
-        }
-    }, {
-        key: 'addcommentAction',
         value: function () {
             var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
-                var userid, articleid, timestamp, content, userModel, authorInfo, authorAvatar, authorName, articleModel, data;
+                var articleId;
                 return _regenerator2.default.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
+                                articleId = this.get('articleid');
+
+
+                                if (checkLogin(this)) {
+                                    console.log('Login checked!');
+
+                                    // to be finished
+                                } else {
+                                        /* let readList = (await this.session('readList')) || []
+                                        if (readList.indexOf(parseInt(articleId)) < 0) {
+                                         readList.push(parseInt(articleId));
+                                        }
+                                        await this.session('readList', readList) */
+                                    }
+                                this.assign('articleid', articleId);
+                                return _context.abrupt('return', this.display('article/detail.html'));
+
+                            case 4:
+                            case 'end':
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, this);
+            }));
+
+            function detailAction() {
+                return _ref.apply(this, arguments);
+            }
+
+            return detailAction;
+        }()
+    }, {
+        key: 'addcommentAction',
+        value: function () {
+            var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
+                var userid, articleid, timestamp, content, userModel, authorInfo, authorAvatar, authorName, articleModel, data;
+                return _regenerator2.default.wrap(function _callee2$(_context2) {
+                    while (1) {
+                        switch (_context2.prev = _context2.next) {
+                            case 0:
                                 if (!this.isPost()) {
-                                    _context.next = 16;
+                                    _context2.next = 16;
                                     break;
                                 }
 
@@ -95,70 +109,22 @@ var _class = function (_base) {
                                 timestamp = this.post('timestamp');
                                 content = this.post('content');
                                 userModel = this.model('user');
-                                _context.next = 8;
+                                _context2.next = 8;
                                 return userModel.getAvatarInfoByUserId(parseInt(userid));
 
                             case 8:
-                                authorInfo = _context.sent;
+                                authorInfo = _context2.sent;
                                 authorAvatar = authorInfo[0].avatar;
                                 authorName = authorInfo[0].nickname;
                                 articleModel = this.model('comment');
-                                _context.next = 14;
+                                _context2.next = 14;
                                 return articleModel.addComment(parseInt(userid), parseInt(articleid), authorAvatar, authorName, content, parseInt(timestamp));
 
                             case 14:
-                                data = _context.sent;
-                                return _context.abrupt('return', this.success(data));
-
-                            case 16:
-                            case 'end':
-                                return _context.stop();
-                        }
-                    }
-                }, _callee, this);
-            }));
-
-            function addcommentAction() {
-                return _ref.apply(this, arguments);
-            }
-
-            return addcommentAction;
-        }()
-    }, {
-        key: 'refresharticlesAction',
-        value: function () {
-            var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
-                var greyList, invisibleList, readList, currentPage, perPageNum, articleModel, data;
-                return _regenerator2.default.wrap(function _callee2$(_context2) {
-                    while (1) {
-                        switch (_context2.prev = _context2.next) {
-                            case 0:
-                                greyList = [];
-                                invisibleList = [];
-
-                                if (this.cookie('readList') !== '') {
-                                    readList = JSON.parse(this.cookie('readList'));
-
-                                    if (readList.length > 5) {
-                                        greyList = readList.splice(-5, 5);
-                                        invisibleList = readList;
-                                    } else {
-                                        greyList = readList;
-                                    }
-                                }
-                                currentPage = this.get('currentPage');
-                                perPageNum = this.get('perPageNums');
-                                articleModel = this.model('article');
-                                _context2.next = 8;
-                                return articleModel.getPerPageItems(perPageNum, currentPage, invisibleList);
-
-                            case 8:
                                 data = _context2.sent;
-
-                                data.greyList = greyList;
                                 return _context2.abrupt('return', this.success(data));
 
-                            case 11:
+                            case 16:
                             case 'end':
                                 return _context2.stop();
                         }
@@ -166,31 +132,69 @@ var _class = function (_base) {
                 }, _callee2, this);
             }));
 
-            function refresharticlesAction() {
+            function addcommentAction() {
                 return _ref2.apply(this, arguments);
             }
 
-            return refresharticlesAction;
+            return addcommentAction;
         }()
     }, {
-        key: 'getarticlebyarticleidAction',
+        key: 'refresharticlesAction',
         value: function () {
             var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3() {
-                var articleid, articleModel, data;
+                var greyList, invisibleList, readList, currentPage, perPageNum, articleModel, data;
                 return _regenerator2.default.wrap(function _callee3$(_context3) {
                     while (1) {
                         switch (_context3.prev = _context3.next) {
                             case 0:
-                                articleid = this.get('articleid');
-                                articleModel = this.model('article');
+                                greyList = [];
+                                invisibleList = [];
                                 _context3.next = 4;
-                                return articleModel.getArticleItemByid(articleid);
+                                return this.session('readList');
 
                             case 4:
+                                _context3.t0 = _context3.sent;
+
+                                if (_context3.t0) {
+                                    _context3.next = 7;
+                                    break;
+                                }
+
+                                _context3.t0 = [];
+
+                            case 7:
+                                readList = _context3.t0;
+
+                                /*if (readList) {
+                                 /!* if (readList.length > 5) { *!/
+                                  greyList = readList // .splice(-5, 5);
+                                  // console.log('greyList', greyList)
+                                  invisibleList = readList;
+                                 /!* } else {
+                                        greyList = readList;
+                                    } *!/
+                                }*/
+                                currentPage = this.get('currentPage');
+                                perPageNum = this.get('perPageNums');
+                                articleModel = this.model('article');
+                                _context3.next = 13;
+                                return articleModel.getPerPageItems(perPageNum, currentPage, readList);
+
+                            case 13:
                                 data = _context3.sent;
+
+                                data.data.forEach(function (el) {
+                                    if (readList.indexOf(el.id) === -1) {
+                                        readList.push(el.id);
+                                    }
+                                });
+                                _context3.next = 17;
+                                return this.session('readList', readList);
+
+                            case 17:
                                 return _context3.abrupt('return', this.success(data));
 
-                            case 6:
+                            case 18:
                             case 'end':
                                 return _context3.stop();
                         }
@@ -198,17 +202,17 @@ var _class = function (_base) {
                 }, _callee3, this);
             }));
 
-            function getarticlebyarticleidAction() {
+            function refresharticlesAction() {
                 return _ref3.apply(this, arguments);
             }
 
-            return getarticlebyarticleidAction;
+            return refresharticlesAction;
         }()
     }, {
-        key: 'getrelativearticleAction',
+        key: 'getarticlebyarticleidAction',
         value: function () {
             var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4() {
-                var articleid, articleModel, authoridRowData, col, relativeArticles;
+                var articleid, articleModel, data;
                 return _regenerator2.default.wrap(function _callee4$(_context4) {
                     while (1) {
                         switch (_context4.prev = _context4.next) {
@@ -216,23 +220,13 @@ var _class = function (_base) {
                                 articleid = this.get('articleid');
                                 articleModel = this.model('article');
                                 _context4.next = 4;
-                                return articleModel.getColByArticleId(articleid);
+                                return articleModel.getArticleItemByid(articleid);
 
                             case 4:
-                                authoridRowData = _context4.sent;
-                                col = authoridRowData[0].col;
-                                _context4.next = 8;
-                                return articleModel.getRelativeArticlesByCol(col, articleid);
+                                data = _context4.sent;
+                                return _context4.abrupt('return', this.success(data));
 
-                            case 8:
-                                relativeArticles = _context4.sent;
-
-                                if (relativeArticles.length >= 2) {
-                                    relativeArticles = relativeArticles.slice(0, 2);
-                                }
-                                return _context4.abrupt('return', this.success(relativeArticles));
-
-                            case 11:
+                            case 6:
                             case 'end':
                                 return _context4.stop();
                         }
@@ -240,36 +234,39 @@ var _class = function (_base) {
                 }, _callee4, this);
             }));
 
-            function getrelativearticleAction() {
+            function getarticlebyarticleidAction() {
                 return _ref4.apply(this, arguments);
             }
 
-            return getrelativearticleAction;
+            return getarticlebyarticleidAction;
         }()
     }, {
-        key: 'refreshlikesAction',
+        key: 'getrelativearticleAction',
         value: function () {
             var _ref5 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5() {
-                var likes, articleid, articleModel, art_lines, userModel, data;
+                var articleid, articleModel, authoridRowData, col, relativeArticles;
                 return _regenerator2.default.wrap(function _callee5$(_context5) {
                     while (1) {
                         switch (_context5.prev = _context5.next) {
                             case 0:
-                                likes = this.post('likes');
-                                articleid = this.post('articleid');
+                                articleid = this.get('articleid');
                                 articleModel = this.model('article');
-                                _context5.next = 5;
-                                return articleModel.updateLikesByArticleId(articleid, likes);
+                                _context5.next = 4;
+                                return articleModel.getColByArticleId(articleid);
 
-                            case 5:
-                                art_lines = _context5.sent;
-                                userModel = this.model('user');
-                                _context5.next = 9;
-                                return userModel.updateLikes(articleid);
+                            case 4:
+                                authoridRowData = _context5.sent;
+                                col = authoridRowData[0].col;
+                                _context5.next = 8;
+                                return articleModel.getRelativeArticlesByCol(col, articleid);
 
-                            case 9:
-                                data = _context5.sent;
-                                return _context5.abrupt('return', this.success(data));
+                            case 8:
+                                relativeArticles = _context5.sent;
+
+                                if (relativeArticles.length >= 2) {
+                                    relativeArticles = relativeArticles.slice(0, 2);
+                                }
+                                return _context5.abrupt('return', this.success(relativeArticles));
 
                             case 11:
                             case 'end':
@@ -279,39 +276,60 @@ var _class = function (_base) {
                 }, _callee5, this);
             }));
 
-            function refreshlikesAction() {
+            function getrelativearticleAction() {
                 return _ref5.apply(this, arguments);
             }
 
-            return refreshlikesAction;
+            return getrelativearticleAction;
         }()
     }, {
-        key: 'getlikestatusAction',
+        key: 'refreshlikesAction',
         value: function () {
             var _ref6 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6() {
-                var articleid, userModel, rowdata, likes, data;
+                var likes, uid, articleid, articleModel, art_lines, userModel, data, likecookie, newlikearray;
                 return _regenerator2.default.wrap(function _callee6$(_context6) {
                     while (1) {
                         switch (_context6.prev = _context6.next) {
                             case 0:
-                                articleid = this.get('articleid');
-                                userModel = this.model('user');
-                                _context6.next = 4;
-                                return userModel.getLikes();
+                                likes = this.post('likes');
+                                uid = this.cookie('uid');
+                                articleid = parseInt(this.post('articleid'));
+                                articleModel = this.model('article');
+                                _context6.next = 6;
+                                return articleModel.updateLikesByArticleId(articleid, likes);
 
-                            case 4:
-                                rowdata = _context6.sent;
-                                likes = JSON.parse(rowdata[0].likes);
-                                data = void 0;
+                            case 6:
+                                art_lines = _context6.sent;
 
-                                if (likes.indexOf(articleid) >= 0) {
-                                    data = true;
-                                } else {
-                                    data = false;
+                                if (!uid) {
+                                    _context6.next = 15;
+                                    break;
                                 }
+
+                                userModel = this.model('user');
+                                _context6.next = 11;
+                                return userModel.updateLikes(articleid, uid);
+
+                            case 11:
+                                data = _context6.sent;
                                 return _context6.abrupt('return', this.success(data));
 
-                            case 9:
+                            case 15:
+                                likecookie = this.cookie('likecookie');
+                                newlikearray = [];
+
+                                if (likecookie) {
+                                    newlikearray = JSON.parse(likecookie);
+                                    if (newlikearray.indexOf(articleid) < 0) {
+                                        newlikearray.push(articleid);
+                                    }
+                                } else {
+                                    newlikearray.push(articleid);
+                                }
+                                this.cookie('likecookie', (0, _stringify2.default)(newlikearray));
+                                return _context6.abrupt('return', this.success());
+
+                            case 20:
                             case 'end':
                                 return _context6.stop();
                         }
@@ -319,36 +337,57 @@ var _class = function (_base) {
                 }, _callee6, this);
             }));
 
-            function getlikestatusAction() {
+            function refreshlikesAction() {
                 return _ref6.apply(this, arguments);
             }
 
-            return getlikestatusAction;
+            return refreshlikesAction;
         }()
     }, {
-        key: 'getcommentbyarticleidAction',
+        key: 'getlikestatusAction',
         value: function () {
             var _ref7 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7() {
-                var articleid, commentModel, comment, commentLength;
+                var uid, articleid, likes, userModel, rowdata, data;
                 return _regenerator2.default.wrap(function _callee7$(_context7) {
                     while (1) {
                         switch (_context7.prev = _context7.next) {
                             case 0:
-                                articleid = this.get('articleid');
-                                commentModel = this.model('comment');
-                                _context7.next = 4;
-                                return commentModel.getCommentByPostId(parseInt(articleid));
+                                uid = this.cookie('uid');
+                                articleid = parseInt(this.get('articleid'));
+                                likes = [];
 
-                            case 4:
-                                comment = _context7.sent;
-                                commentLength = comment.length;
-
-                                if (commentLength >= 2) {
-                                    comment = comment.splice(0, 2);
+                                if (!uid) {
+                                    _context7.next = 11;
+                                    break;
                                 }
-                                return _context7.abrupt('return', this.success({ commentLength: commentLength, commentContent: comment }));
 
-                            case 8:
+                                userModel = this.model('user');
+                                _context7.next = 7;
+                                return userModel.getLikes(uid);
+
+                            case 7:
+                                rowdata = _context7.sent;
+
+                                likes = JSON.parse(rowdata[0].likes);
+                                _context7.next = 12;
+                                break;
+
+                            case 11:
+                                if (this.cookie('likecookie')) {
+                                    likes = JSON.parse(this.cookie('likecookie'));
+                                }
+
+                            case 12:
+                                data = void 0;
+
+                                if (likes.indexOf(articleid) >= 0) {
+                                    data = true;
+                                } else {
+                                    data = false;
+                                }
+                                return _context7.abrupt('return', this.success(data));
+
+                            case 15:
                             case 'end':
                                 return _context7.stop();
                         }
@@ -356,8 +395,45 @@ var _class = function (_base) {
                 }, _callee7, this);
             }));
 
-            function getcommentbyarticleidAction() {
+            function getlikestatusAction() {
                 return _ref7.apply(this, arguments);
+            }
+
+            return getlikestatusAction;
+        }()
+    }, {
+        key: 'getcommentbyarticleidAction',
+        value: function () {
+            var _ref8 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8() {
+                var articleid, commentModel, comment, commentLength;
+                return _regenerator2.default.wrap(function _callee8$(_context8) {
+                    while (1) {
+                        switch (_context8.prev = _context8.next) {
+                            case 0:
+                                articleid = this.get('articleid');
+                                commentModel = this.model('comment');
+                                _context8.next = 4;
+                                return commentModel.getCommentByPostId(parseInt(articleid));
+
+                            case 4:
+                                comment = _context8.sent;
+                                commentLength = comment.length;
+
+                                if (commentLength >= 2) {
+                                    comment = comment.splice(0, 2);
+                                }
+                                return _context8.abrupt('return', this.success({ commentLength: commentLength, commentContent: comment }));
+
+                            case 8:
+                            case 'end':
+                                return _context8.stop();
+                        }
+                    }
+                }, _callee8, this);
+            }));
+
+            function getcommentbyarticleidAction() {
+                return _ref8.apply(this, arguments);
             }
 
             return getcommentbyarticleidAction;

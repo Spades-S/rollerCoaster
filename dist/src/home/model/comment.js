@@ -75,7 +75,7 @@ var Comment = function (_think$model$base) {
                                     "authorName": authorName,
                                     "postId": articleid,
                                     "content": content,
-                                    "timestamp": timestamp
+                                    "updateTime": timestamp
                                 });
 
                             case 3:
@@ -113,7 +113,7 @@ var Comment = function (_think$model$base) {
                         switch (_context2.prev = _context2.next) {
                             case 0:
                                 _context2.next = 2;
-                                return this.field('authorAvatar, authorName, content, timestamp').where({ postid: postid }).select();
+                                return this.field('authorAvatar, authorName, content, updateTime').where({ postid: postid }).select();
 
                             case 2:
                                 data = _context2.sent;
@@ -143,7 +143,7 @@ var Comment = function (_think$model$base) {
                         switch (_context3.prev = _context3.next) {
                             case 0:
                                 _context3.next = 2;
-                                return this.field('authorAvatar, authorName, content, timestamp').order('id DESC').where({ postId: postId }).page(currentPage, number).countSelect();
+                                return this.field('authorAvatar, authorName, content, updateTime').order('id DESC').where({ postId: postId }).page(currentPage, number).countSelect();
 
                             case 2:
                                 data = _context3.sent;

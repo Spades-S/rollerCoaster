@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>我的信息</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <!--<link rel="stylesheet" href="/static/css/articleDetail.css">-->
+    <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page {
+            background-color: #fff;
+        }
+
+        .bar {
+            height: 3rem;
+            background-color: #07518f;
+            border-bottom: none;
+        }
+
+        h1.title {
+            color: white;
+            line-height: 3rem;
+            letter-spacing: 5px;
+            border-image-width: 0;
+        }
+
+        .icon-arrow-left {
+            display: inline-block;
+            width: 0.9rem;
+            height: 1.4rem;
+            position: absolute;
+            top: 0.75rem;
+            z-index: 30;
+        }
+
+        .bar-nav ~ .content {
+            top: 3rem;
+            background: #EEE;
+        }
+
+        .content {
+            height: calc(100% - 3rem);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .like-item {
+            overflow: hidden;
+            height: 8.5rem;
+            transition: all 1s ease;
+            margin: 1rem 0.7rem;
+            padding: 0.3rem 0.5rem;
+            background: #FFF;
+            -webkit-border-radius: 0.5rem;
+            -moz-border-radius: 0.5rem;
+            border-radius: 0.5rem;
+            -webkit-box-shadow: 1px 1px 5px #a59c9c, 1px -1px 5px #a59c9c, -1px 0px 5px #a59c9c;
+            -moz-box-shadow: 1px 1px 5px #a59c9c, 1px -1px 5px #a59c9c, -1px 0px 5px #a59c9c;
+            box-shadow: 1px 1px 5px #a59c9c, 1px -1px 5px #a59c9c, -1px 0px 5px #a59c9c;
+        }
+
+        .avatar {
+            float: left;
+            width: 1.6rem;
+            height: 1.6rem;
+            -webkit-border-radius: 0.8rem;
+            -moz-border-radius: 0.8rem;
+            border-radius: 0.8rem;
+
+        }
+
+        .article-info-text {
+            padding-left: 2.3rem;
+            height: 1.6rem;
+
+        }
+
+        .userName {
+            font-size: 12px;
+            color: #7f7f7f;
+            width: 5rem;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .updateTime, .cancle-like {
+            font-size: 10px;
+            color: #9c9c9c;
+        }
+
+        .cancle-like {
+            float: right;
+            padding-top: 0.8rem;
+        }
+
+        hr {
+            border: none;
+            border-bottom: 1px solid #d2d0d0;
+        }
+
+        .article-content {
+            display: block;
+            color: #000;
+        }
+
+        .article-img {
+            float: right;
+            width: 5rem;
+            height: 5rem;
+
+        }
+
+        .article-content-text {
+            padding-right: 5.3rem;
+            height: 5rem;
+        }
+
+        .article-title, .article-intro {
+            font-size: 16px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            text-overflow: ellipsis;
+        }
+
+        .article-intro {
+            font-size: 14px;
+            margin-top: 0.5rem;
+            color: #737070;
+        }
+
+    </style>
+</head>
+<body>
+<div class="page">
+    <header class="bar bar-nav">
+        <a class=" iconfont icon-arrow-left back "></a>
+        <h1 class="title">喜欢</h1>
+    </header>
+    <div class="likes content infinite-scroll infinite-scroll-bottom" data-distance="5">
+        <div id="article-list">
+            <template v-for="item in likeArticles">
+                <div class="like-item" :id="'item'+item.id">
+                    <div class="article-info">
+                        <img class="avatar" :src='getAuthorAvatar(item.authorAvatar)' alt="">
+                        <div class="article-info-text">
+                            <div class="cancle-like" :data-id="item.id" @click="cancleLike">取消喜欢</div>
+                            <div class="userName">{$getAuthorName(item.authorName, item.col)$}</div>
+                            <div class="updateTime">{$getTime(item.updateTime)$}</div>
+
+                        </div>
+
+                    </div>
+                    <hr>
+                    <a class="article-content external" :href="'/article/detail?articleid='+item.id">
+                        <img class="article-img" :src="'/static/img'+item.poster" alt="">
+                        <div class="article-content-text">
+                            <div class="article-title">{$ item.title $}</div>
+                            <div class="article-intro">{$ item.description $}<</div>
+
+                        </div>
+                    </a>
+                </div>
+            </template>
+        </div>
+        <div class="infinite-scroll-preloader">
+            <div class="preloader"></div>
+        </div>
+
+
+    </div>
+</div>
+
+
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
+
+<script>
+    $.init();
+    let $vm = new Vue({
+        delimiters: ['{$', '$}'],
+        el: '#article-list',
+        data: {
+            likeArticles: [],
+            liftHeight: 112,
+            currentPage: '',
+        },
+        methods: {
+            getAuthorName: function (username, col) {
+                return username || col;
+            },
+            getAuthorAvatar: function (avatar) {
+                if (avatar) {
+                    return '/static/img' + avatar;
+                } else {
+                    return '/static/img/systemAvatar.jpeg';
+                }
+            },
+            getTime: function (time) {
+                let timeDisplay = new Date(time).Format("yyyy-MM-dd hh:mm:ss");
+                return timeDisplay;
+            },
+            cancleLike: function (e) {
+                let articleid = e.target.getAttribute('data-id');
+                let itemid = 'item' + articleid;
+                $('#' + itemid).css({
+                    "height": '0',
+                    "padding": '0',
+                    "margin-top": '0',
+                });
+                this.liftHeight += 112;
+                $.ajax({
+                    url: '/user/canclelike',
+                    data: {
+                        articleid: articleid,
+                    },
+                    method: 'POST',
+                    success: function () {
+
+                    }
+                })
+
+            }
+        }
+    })
+    let perPageItems = 10;
+    let pageLoading = false;
+    getLikesofOnePage(perPageItems, true);
+
+    $(document).on('infinite', '.likes', function () {
+        console.log('infinite');
+        if (pageLoading) return;
+        pageLoading = true;
+        getLikesofOnePage(perPageItems, false);
+    })
+    function getLikesofOnePage(num, firstFlag) {
+        if (firstFlag == true) {
+            $vm.currentPage = 1;
+        } else {
+            $vm.currentPage += 1;
+        }
+        $.ajax({
+            url: '/user/getlikes',
+            data: {
+                num: num,
+                currentPage: $vm.currentPage,
+            },
+            success: function (res) {
+                if (res.errno === 0) {
+                    for (let item of res.data.data) {
+                        $vm.likeArticles.push(item);
+                    }
+
+                    pageLoading = false;
+                    if (res.data.currentPage == res.data.totalPages || res.data.totalPages == 0) {
+                        $.detachInfiniteScroll($('.infinite-scroll'));
+                        $('.infinite-scroll-preloader').remove();
+                    }
+                } else if (res.errno == 1001) {
+                    $.detachInfiniteScroll($('.infinite-scroll'));
+                    $('.infinite-scroll-preloader').remove();
+                    $.toast('还没有喜欢的文章哦~');
+                }
+            }
+        })
+    }
+    Date.prototype.Format = function (fmt) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
+
+</script>
+</body>
+</html>

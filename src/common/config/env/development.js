@@ -17,6 +17,7 @@ export default {
 
             }
         }
-    }
+    },
+    avatarBasePath: '/Users/spades/Documents/PROJECT/roller coaster/rollerCoaster/www/static/img',
 
 };

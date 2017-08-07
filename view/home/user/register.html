@@ -106,16 +106,21 @@
         </header>
         <div class="content center" id="content">
             <h1 class="green">欢迎加入欢乐冶</h1>
+
             <div class="item-input">
                 <input type="number" class="phone" @input="getValue" placeholder="手机号">
             </div>
             <div class="item-input code">
                 <input type="number" class="code" @input="getCode" placeholder="验证码">
-                <button :class="'rt-code button button-small green' + codeButtonClass" :disabled="codeButtonIsDisabled"
-                        @click="retryAfter">{$ codetext $}
-                </button>
+                <template>
+                    <button :class="'rt-code button button-small green' + codeButtonClass"
+                            :disabled="codeButtonIsDisabled"
+                            @click="retryAfter">{$ codetext $}
+                    </button>
+                </template>
             </div>
-            <div class="agreement">点击下一步代表您已阅读并同意<a href="/user/agreement.html" class="green">用户使用协议</a></div>
+
+            <div class="agreement">点击下一步代表您已阅读并同意<a href="/user/agreement" class="green external">用户使用协议</a></div>
             <button :class="'next button    ' + submitClass" :disabled="submitDisabled" @click="verifyCode">下一步</button>
         </div>
     </div>
@@ -159,7 +164,7 @@
                 $.ajax({
                     url: '/user/getvfcode',
                     data: {
-                        account: _this.value
+                        account: _this.value,
                     },
                     method: 'POST'
                 }).success(function (ret) {

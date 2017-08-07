@@ -121,7 +121,7 @@ var Article = function (_think$model$base) {
                         switch (_context2.prev = _context2.next) {
                             case 0:
                                 _context2.next = 2;
-                                return this.alias('article').field('title, authorAvatar, authorName, content, updatetime, likes, col').where({ id: id }).select();
+                                return this.alias('article').field('title, authorAvatar, authorName, content, updateTime, likes, col').where({ id: id }).select();
 
                             case 2:
                                 data = _context2.sent;
@@ -234,6 +234,66 @@ var Article = function (_think$model$base) {
             }
 
             return updateLikesByArticleId;
+        }()
+    }, {
+        key: 'getLikeArticles',
+        value: function () {
+            var _ref6 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6(ids, currentPage, num) {
+                var articles;
+                return _regenerator2.default.wrap(function _callee6$(_context6) {
+                    while (1) {
+                        switch (_context6.prev = _context6.next) {
+                            case 0:
+                                _context6.next = 2;
+                                return this.field('id, title, poster, authorAvatar, authorName, col, description, updateTime').page(currentPage, num).where({ id: ['IN', ids] }).countSelect();
+
+                            case 2:
+                                articles = _context6.sent;
+                                return _context6.abrupt('return', articles);
+
+                            case 4:
+                            case 'end':
+                                return _context6.stop();
+                        }
+                    }
+                }, _callee6, this);
+            }));
+
+            function getLikeArticles(_x10, _x11, _x12) {
+                return _ref6.apply(this, arguments);
+            }
+
+            return getLikeArticles;
+        }()
+    }, {
+        key: 'decreaseLikeNumber',
+        value: function () {
+            var _ref7 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7(id) {
+                var data;
+                return _regenerator2.default.wrap(function _callee7$(_context7) {
+                    while (1) {
+                        switch (_context7.prev = _context7.next) {
+                            case 0:
+                                _context7.next = 2;
+                                return this.where({ id: id }).decrement('likes');
+
+                            case 2:
+                                data = _context7.sent;
+                                return _context7.abrupt('return', data);
+
+                            case 4:
+                            case 'end':
+                                return _context7.stop();
+                        }
+                    }
+                }, _callee7, this);
+            }));
+
+            function decreaseLikeNumber(_x13) {
+                return _ref7.apply(this, arguments);
+            }
+
+            return decreaseLikeNumber;
         }()
     }]);
     return Article;

@@ -159,9 +159,6 @@
                 let type = this.holder
                 let content = $('#feedback-input').val()
                 let contact = $('.contact-input').val()
-
-                console.log(type)
-
                 if (type === '请选择您要反馈的问题类型') {
                 	return $.toast('请选择您反馈的问题类型')
                 }
@@ -178,7 +175,6 @@
                         contact: contact
                     },
                     success: function (ret) {
-                    	console.log(ret)
                     	if(ret.errno === 0){
 		                    $.toast('反馈成功')
 		                    setTimeout(function () {
@@ -191,7 +187,6 @@
                     },
                     error: function (err) {
 	                    $.toast('发送失败，请重试')
-                        console.log(err)
                     }
                 })
             }

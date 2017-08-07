@@ -7,7 +7,7 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
     <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/css/articleDetail.css">
@@ -15,25 +15,30 @@
     <link rel="stylesheet" href="/static/css/index.css">
     <link rel="stylesheet" href="/static/iconfont/iconfont.css">
     <style>
-        .bar.bar-tab{
+        .bar.bar-tab {
             background: #f7f7f8;
             height: 2.5rem;
         }
-        .content{
+
+        .content {
             padding-top: .8rem;
         }
-        .md, .btm{
+
+        .md, .btm {
             line-height: 2rem;
         }
-        .content{
+
+        .content {
             background-color: #F9F9F9;
             padding-top: .8rem;
         }
-        .content-padded{
+
+        .content-padded {
             margin: 0;
             -webkit-font-smoothing: antialiased;
         }
-        .content-top{
+
+        .content-top {
             margin: .8rem 0;
             padding: .5rem;
             display: flex;
@@ -44,7 +49,8 @@
             align-items: center;
             position: relative;
         }
-        .avatar{
+
+        .avatar {
             height: 3rem;
             width: 3rem;
             margin: 0 .5rem;
@@ -52,51 +58,72 @@
             border-radius: 50%;
             overflow: hidden;
         }
-        .avatar-img{
+
+        .avatar-img {
             width: 100%;
             height: 100%;
         }
-        .nickname{
+
+        .nickname {
             padding-left: 1rem;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: calc(100% - 6.5rem);
         }
-        .icon-arrow-right:before{
+
+        .icon-arrow-right:before {
             color: #CCC;
             position: absolute;
             top: .5rem;
             right: 0;
         }
-        .md, .btm{
+
+        a.md, a.btm {
+            display: block;
+            color: #444;
+        }
+
+        .md, .btm {
             line-height: 2rem;
             border: 1px solid #F9F9F9;
             background-color: #FFF;
             padding: .3rem .5rem;
             color: #3d4145;
         }
-        .content-bottom{
+
+        .content-bottom {
             margin: .8rem 0;
         }
-        .content .iconfont:before{
+
+        .content .iconfont:before {
             width: 1.5rem;
             height: 1.5rem;
             font-size: .9rem;
             padding: 0 1rem;
         }
-        .icon-xihuan{
+
+        .icon-xihuan {
             color: #D5162D;
         }
-        .icon-jiangbei{
+
+        .icon-jiangbei {
             color: #FD8F25;
         }
-        .icon-qizhi{
+
+        .icon-qizhi {
             color: #1AA1E6;
         }
-        .icon-iconset0116{
+
+        .icon-iconset0116 {
             color: #50B000;
         }
-        .icon-yijianfankui{
+
+        .icon-yijianfankui {
             color: #FD9133;
         }
-        .icon-guanyuwomen{
+
+        .icon-guanyuwomen {
             color: #1D568E;
         }
 
@@ -111,19 +138,23 @@
         <div class="content" id="content">
             <div class="content-top content-padded" v-if="userInfo">
                 <div class="avatar">
-                    <img src="/static/img/thelivingtribunal.jpeg" alt="" class="avatar-img">
+                    <img :src="getAvatar" alt="" class="avatar-img">
                 </div>
-                <div class="nickname">{ userInfo.nickname }</div>
+                <template>
+                    <div class="nickname">{$ userInfo.nickname $}</div>
+                </template>
                 <a class="iconfont icon-arrow-right external" href="/user/detail"></a>
             </div>
             <div class="content-middle content-padded" v-if="userInfo">
-                <div class="likes md"><span class="iconfont icon-xihuan"></span>喜欢</div>
-                <div class="achieve md"><span class="iconfont icon-jiangbei"></span>成就</div>
-                <div class="activity md"><span class="iconfont icon-qizhi"></span>活动</div>
-                <div class="log md"><span class="iconfont icon-iconset0116"></span>刷车日志</div>
+                <a class="likes md external" href="/user/like"><span class="iconfont icon-xihuan"></span>喜欢</a>
+                <a class="achieve md"><span class="iconfont icon-jiangbei"></span>成就</a>
+                <a class="activity md"><span class="iconfont icon-qizhi"></span>活动</a>
+                <a class="log md"><span class="iconfont icon-iconset0116"></span>刷车日志</a>
             </div>
             <div class="content-bottom content-padded" v-if="userInfo">
-                <a href="/user/feedback" class="external"><div class="auggestion btm"><span class="iconfont icon-yijianfankui"></span>意见反馈</div></a>
+                <a href="/user/feedback" class="external">
+                    <div class="auggestion btm"><span class="iconfont icon-yijianfankui"></span>意见反馈</div>
+                </a>
                 <div class="about btm"><span class="iconfont icon-guanyuwomen"></span>关于我们</div>
             </div>
         </div>
@@ -150,7 +181,6 @@
 </div>
 
 
-
 <script type="text/javascript " src="/static/vue/vue.js "></script>
 <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
@@ -159,29 +189,35 @@
     $.init();
 
     new Vue({
-        delimiters: ['{', '}'],
+        delimiters: ['{$', '$}'],
         data() {
-        	return {
-        		userInfo: ''
+            return {
+                userInfo: ''
             }
         },
         created: function () {
-	        $.ajax({
-		        url: '/user/getuserinfo',
-		        success: (res) => {
-		        	if(res.errno === 0){
-				        this.userInfo = res.data
+            $.ajax({
+                url: '/user/getuserinfo',
+                success: (res) => {
+                    if (res.errno === 0) {
+                        this.userInfo = res.data
                     } else {
-		        		$.toast('登录态失效，请重新登录')
+                        $.toast('登录态失效，请重新登录')
                         setTimeout(function () {
                             window.location.href = '/user/login'
                         }, 1000)
                     }
-		        },
+                },
                 error: (err) => {
-		        	$.toast('出了点小问题，请重试')
+                    $.toast('出了点小问题，请重试')
                 }
-	        })
+            })
+        },
+        computed: {
+            getAvatar: function () {
+                let avatarSubAddr = this.userInfo.avatar || '/systemAvatar.jpeg';
+                return '/static/img' + avatarSubAddr;
+            }
         }
     }).$mount('#content')
 </script>
