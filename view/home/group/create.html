@@ -266,6 +266,9 @@
                 }
             },
             createGroup: function () {
+                if(!this.cover){
+                    return $.toast('请上传群组封面');
+                }
                 if (!this.title) {
                     return $.toast('请填写小组名称')
                 }
@@ -313,7 +316,8 @@
         $('.cropperContainer').css({
             display: 'none',
         })
-        $('.cover-input').val('');
+        $('.cover-input').val(null);
+        console.log('close crop');
     })
 
     $('.cover-input').on('change', function () {
@@ -342,14 +346,19 @@
             })
             $('#crop-image').cropper(options).cropper('replace', dataUrl);
             $('#crop-image').on('ready', function () {
-                $('.cover-confirm').on('click', function () {
+                $('.cover-confirm').off().on('click', function () {
+                    console.log($('#crop-image').cropper('getCroppedCanvas'));
                     let coverCropped = $('#crop-image').cropper('getCroppedCanvas').toDataURL();
+                    console.log(typeof coverCropped);
+
+                    vm.cover = coverCropped;
                     $('.cover img').attr('src', coverCropped);
                     $('.cropperContainer').css({
                         display: 'none',
                     })
-                    $('#cover-input').val('');
                     $('#crop-image').cropper('destroy');
+                    $('#cover-input').val('');
+
                 })
 
             })

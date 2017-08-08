@@ -394,7 +394,7 @@
 
 
             $('#crop-image').on('ready', function () {
-                $('.avatar-confirm').on('click', function () {
+                $('.avatar-confirm').off().on('click', function () {
                     let avatarCropped = $('#crop-image').cropper('getCroppedCanvas').toDataURL();
                     vm.userDetail.avatarCropped = avatarCropped;
                     $('.edit-avatar img').attr('src', avatarCropped);

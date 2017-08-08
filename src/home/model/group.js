@@ -8,14 +8,14 @@ export default class extends think.model.base {
         super.init(...args)
         this.tableName = 'groups'
     }
-    async checkBeforeCreate(title){
-        let res = await this.field('id').where({title:title}).select();
+
+    async checkBeforeCreate(title) {
+        let res = await this.field('id').where({title: title}).select();
         return res;
     }
 
     async getGroups() {
         let res = await this.query('select a.id, a.title, a.theme, a.cover, a.members, a.groupType, a.activityType, a.updateTime from groups a where 3> (select count(*) from groups b where a.theme = b.theme and a.id<b.id) order by a.theme, a.updateTime desc')
-
         return res
     }
 
@@ -69,6 +69,7 @@ export default class extends think.model.base {
             data[reflected[i]] = data[reflect[i]]
             delete data[reflect[i]]
         }
+        data.members = 1;
         let res = await this.add(data)
         return res
     }
