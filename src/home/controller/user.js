@@ -187,7 +187,7 @@ export default class extends base {
             let userRowData = await userModel.getUserInfo(uid);
             let basePath = this.config('avatarBasePath');
             let detailPath = '/avatar/' + userRowData.id + '.png';
-            fs.writeFileSync(basePath + detailPath, avatarBinary, 'binary', function (err) {
+            fs.writeFile(basePath + detailPath, avatarBinary, 'binary', function (err) {
                 console.log(err);
             });
             userDetail.avatar = detailPath;

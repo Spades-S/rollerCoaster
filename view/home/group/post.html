@@ -15,20 +15,24 @@
             box-sizing: border-box;
             -webkit-font-smoothing: antialiased;
         }
-        .page{
+
+        .page {
             background-color: #fff;
         }
-        .bar{
+
+        .bar {
             height: 3rem;
             background-color: #07518f;
             border-bottom: none;
         }
-        h1.title{
+
+        h1.title {
             color: white;
             overflow: hidden;
             text-overflow: ellipsis;
             line-height: 3rem;
         }
+
         .icon-arrow-left {
             display: inline-block;
             width: 0.9rem;
@@ -37,27 +41,63 @@
             top: 0.75rem;
             z-index: 30;
         }
-        .bar~.content{
+
+        .bar ~ .content {
             top: 3rem;
             height: calc(100% - 3rem);
             background-color: #fff;
             position: relative;
         }
-        .post-title, .post-content, .button{
+
+        .post-title, .post-content, .button {
             width: 90%;
             margin: 1rem auto;
         }
-        input, textarea{
+
+        input, textarea {
             width: 100%;
             padding: .4rem .8rem;
             border: 1px solid #DCDCDC;
             border-radius: .3rem;
             font-size: .7rem;
         }
-        .button.button-big{
+
+        .button.button-big {
             height: 1.8rem;
             line-height: 1.8rem;
             font-size: .8rem;
+        }
+
+        .post-image {
+            width: 95%;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            margin-left: 5%;
+            font-size: 0;
+        }
+
+        .image-item {
+            display: inline-block;
+            position: relative;
+            margin-right: 5%;
+            margin-top: 0.4rem;
+            width: 28%;
+        }
+
+        .image-item img {
+            vertical-align: top;
+            width: 100%;
+            height: 100%;
+        }
+
+        #image-input {
+            position: absolute;
+            top: 0;
+            left:0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+
         }
     </style>
 </head>
@@ -71,7 +111,16 @@
             <input type="text" placeholder="请输入标题" @input="typeTitle">
         </div>
         <div class="post-content">
-            <textarea type="text" placeholder="请输入内容" rows="7"  @input="typeContent"></textarea>
+            <textarea type="text" placeholder="请输入内容" rows="7" @input="typeContent"></textarea>
+        </div>
+        <div class="post-image">
+            <div class="image-item" v-for="dataUrl in dataUrls">
+                <img :src="dataUrl" alt="">
+            </div>
+            <div class="image-item" v-if="dataUrls.length<9">
+                <img src="/static/img/camera.png" alt="" id="img-camera">
+                <input name="image-input" type="file" id="image-input">
+            </div>
         </div>
         <div :class="'button button-big ' + button.class" :disabled="button.disabled" @click="post">发表帖子</div>
     </div>
@@ -84,53 +133,82 @@
 <script>
     $.init();
 
-    new Vue({
+    let vm = new Vue({
         delimiters: ['{$', '$}'],
         data: {
-        	title: '',
-            content: ''
+            title: '',
+            content: '',
+            dataUrls: [],
+        },
+        updated: function () {
+            $('.image-item img').height(screen.width * 0.27);
         },
         methods: {
             typeTitle: function (e) {
                 this.title = e.currentTarget.value
             },
-	        typeContent: function (e) {
-		        this.content = e.target.value
-	        },
+            typeContent: function (e) {
+                this.content = e.target.value
+            },
             post: function () {
                 let self = this
                 $.ajax({
                     url: '/group/submitpost',
                     method: 'POST',
                     data: {
-                    	title: self.title,
+                        title: self.title,
                         content: self.content,
+                        poster: JSON.stringify(self.dataUrls),
                         groupId: "{{ groupId }}"
                     },
                     success: function (ret) {
-                        if(ret.errno === 0){
-                        	window.location.href = '/group/' + "{{ groupId }}"
+                        if (ret.errno === 0) {
+//                            window.location.href = '/group/' + "{{ groupId }}"
                         }
                     }
                 })
             }
         },
         computed: {
-        	button: function () {
-                if(this.title&&this.content){
-                	return {
-                		disabled: false,
+            button: function () {
+                if (this.title && this.content) {
+                    return {
+                        disabled: false,
                         class: ''
                     }
                 } else {
-	                return {
-		                disabled: true,
-		                class: 'disabled'
-	                }
+                    return {
+                        disabled: true,
+                        class: 'disabled'
+                    }
                 }
-	        }
+            }
         }
     }).$mount('#content')
+
+
+    $('#image-input').on('change', function () {
+        if (!(window.FileReader && window.File && window.FileList && window.Blob )) {
+            return $.toast('当前浏览器不支持图片上传');
+        }
+        let file = this.files[0];
+        let allowTypeList = ['jpg', 'jpeg', 'png'];
+        let lowerFileType = file.name.split('.').pop().toLowerCase();
+        if (allowTypeList.indexOf(lowerFileType) < 0) {
+            return $.toast('图片格式不正确!');
+        }
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function (event) {
+            let dataUrl = event.target.result;
+//            let imageItem = {
+//                src: dataUrl
+//            }
+            vm.dataUrls.push(dataUrl);
+            $('#image-input').val('');
+        }
+
+    })
 </script>
 </body>
 </html>

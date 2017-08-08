@@ -71,9 +71,10 @@ export default class extends base {
             let avatarBinary = new Buffer(avatarBase64, 'base64').toString('binary');
             let basePath = this.config('avatarBasePath');
             let detailPath = '/groupcover/' + groupid + '.png';
-            fs.writeFileSync(basePath + detailPath, avatarBinary, 'binary', function (err) {
-                console.log(err);
-                return _this.fail(1010, 'write err');
+            fs.writeFile(basePath + detailPath, avatarBinary, 'binary', function (err) {
+                if (err) {
+                    console.log('write err');
+                }
             });
             let lines = await groupModel.updateCover(groupid, detailPath);
             if (think.isEmpty(lines)) {
@@ -100,6 +101,7 @@ export default class extends base {
         let userModel = this.model('user')
         let articleModel = this.model('article')
         let userInfo = await userModel.getUserInfo(uid)
+        let posterArr = JSON.parse(this.post('poster'));
         if (think.isEmpty((userInfo))) {
             return this.fail('not login')
         }
@@ -116,8 +118,25 @@ export default class extends base {
 
         if (think.isEmpty(res)) {
             return this.fail('post failed')
+        } else {
+            let basePath = this.config('avatarBasePath');
+            let poster = [];
+            posterArr.forEach(function (item, index) {
+                let detailPath = '/article/' + res + 'dot' + index + '.png';
+                console.log('/article/' + res + 'dot' + index + '.png');
+                let posterBase64 = item.split(',')[1];
+                let posterBinary = new Buffer(posterBase64, 'base64').toString('binary');
+                poster.push(detailPath);
+                fs.writeFile(basePath + detailPath, posterBinary, 'binary', function (err) {
+                    if (err){
+                        console.log(err);
+                    }
+                });
+            })
+            let line = await articleModel.updatePoster(res, JSON.stringify(poster));
+            return this.success(line);
+
         }
-        return this.success(res)
 
 
     }
