@@ -261,4 +261,16 @@ export default class extends base {
             return this.fail('feedback error')
         }
     }
+    
+    async activityAction() {
+        return this.display('user/activity.html')
+    }
+    
+    async getmyactivityAction() {
+        let res = await this.model('user').field('id, cover, title, members, activityTime').where({
+            groupType: 1
+            // other query paremeters
+        })
+        
+    }
 }

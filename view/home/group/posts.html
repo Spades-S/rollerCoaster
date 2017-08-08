@@ -336,7 +336,9 @@
                     	id: "{{ id }}"
                     },
                     success: function (ret) {
-                        self.posts = ret.data.data
+                        self.posts = ret.data.data.sort((a, b) => {
+	                        return new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime()
+                        })
                     }
                 })
 	        },
@@ -355,7 +357,6 @@
                         window.location.href = '/user/login'
                     }, 1000)
                 }
-
             },
             joinGroup: function () {
 	            if(!/uid/.test(document.cookie)) {

@@ -52,36 +52,27 @@ export default class extends think.model.base{
 		let res = await this.add(data)
 		let userModel = this.model('user')
 		await userModel.updateMyGroup(res, data.creatorId)
-		await this.updateGroupMembers(res, data.creatorId)
+		await this.addGroupMember(res, data.creatorId)
 		return res
 	}
 	
-	async updateGroupMembers(groupId, id) {
-		let res = await this.field('id, membersId').where({id: groupId}).find()
-		let membersId = res.membersId ? JSON.parse(res.membersId).push(id) : [id]
-		await this.where({id: groupId}).update({membersId: JSON.stringify(membersId)})
-	}
-	
 	async addGroupMember(groupId, userId) {
-		let groupMembers = await this.field('id, membersId').where({id: groupId}).find()
-		console.log(groupId)
+		let groupMembers = await this.field('id, members, membersId').where({id: groupId}).find()
 		let membersId = groupMembers.membersId ? JSON.parse(groupMembers.membersId) : []
 		membersId.push(userId)
-		let res = await this.where({id: groupId}).update({membersId: JSON.stringify(membersId)})
-		console.log(res)
+		let members = parseInt(groupMembers.members) + 1
+		let res = await this.where({id: groupId}).update({membersId: JSON.stringify(membersId), members: members})
 		return res
 	}
 	
 	async deleteGroupMember(groupId, userId) {
-		let groupMembers = await this.field('id, membersId').where({id: groupId}).find()
+		let groupMembers = await this.field('id, members, membersId').where({id: groupId}).find()
 		let membersId = JSON.parse(groupMembers.membersId)
 		if (membersId.indexOf(userId) > -1) {
 			membersId.splice(membersId.indexOf(userId), 1)
-			await this.where({id: groupId}).update({membersId: JSON.stringify(membersId)})
+			let members = parseInt(groupMembers.members) - 1
+			await this.where({id: groupId}).update({membersId: JSON.stringify(membersId), members: members})
 		}
 		return true
 	}
 }
-
-
-// id, title, theme, description, groupType, activityType, createTime, place, park, facility, joinNumber, remark, members, creatorName, creatorAvatar, creatorId, activityTime

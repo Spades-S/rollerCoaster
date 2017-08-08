@@ -111,6 +111,7 @@
             padding: 0 .2rem;
             background-color: #74B942;
             border-radius: .3rem;
+            color: #fff;
         }
         .bottom{
             padding: .5rem;
@@ -168,7 +169,7 @@
                     <div class="group-item-info">
                         <div class="group-title">{$ group.title $}</div>
                         <div class="members">成员数：{$ group.members $}</div>
-                        <div class="group-type" v-if="group.activityType">{$ group.activityType $}</div>
+                        <div class="group-type" v-if="group.activityType">{$ group.groupType === 1 ? '活动' : group.activityType $}</div>
                     </div>
                 </div>
                 <div class="bottom" v-if="index === myGroup.length - 1"><span>更多小组</span></div>
@@ -184,7 +185,7 @@
                     <div class="group-item-info">
                         <div class="group-title">{$ group.title $}</div>
                         <div class="members">成员数：{$ group.members $}</div>
-                        <div class="group-type" v-if="group.activityType">{$ group.activityType $}</div>
+                        <div class="group-type" v-if="group.activityType">{$ group.groupType === 1 ? '活动' : group.activityType $}</div>
                     </div>
                 </div>
                 <div class="bottom" v-if="index === groups.length - 1 || group.theme !== groups[index+1].theme"><span>更多小组</span></div>
