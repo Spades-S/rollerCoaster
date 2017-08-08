@@ -37,8 +37,8 @@ export default class extends think.model.base {
         return data;
     }
 
-    async getAvatarInfoByUserId(id) {
-        let data = await this.field('avatar, nickname').where({id: id}).select();
+    async getAuthorInfoByUserUid(uid) {
+        let data = await this.field('id, avatar, nickname').where({uid: uid}).select();
         return data;
     }
 

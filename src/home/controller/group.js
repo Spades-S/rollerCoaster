@@ -95,6 +95,11 @@ export default class extends base {
         return this.display('group/post.html')
     }
 
+    postdetailAction() {
+        this.assign('id', Number(this.get('id')));
+        return this.display('group/postdetail.html');
+    }
+
     async submitpostAction() {
         let uid = this.cookie('uid')
 
@@ -128,7 +133,7 @@ export default class extends base {
                 let posterBinary = new Buffer(posterBase64, 'base64').toString('binary');
                 poster.push(detailPath);
                 fs.writeFile(basePath + detailPath, posterBinary, 'binary', function (err) {
-                    if (err){
+                    if (err) {
                         console.log(err);
                     }
                 });
@@ -186,6 +191,16 @@ export default class extends base {
         let userId = userInfo.id
         let res = groupModel.deleteGroupMember(this.post('groupId'), userId)
         return this.success(res)
+    }
+
+    async getpostcontentAction(){
+        let id = Number(this.get('id'));
+        let articleModel = this.model('article');
+        let data = await articleModel.getArticleItemByid(id);
+        if(think.isEmpty(data)){
+            return this.fail(1000, 'no message');
+        }
+        return this.success(data);
     }
 
 }

@@ -22,24 +22,24 @@ class Article extends think.model.base {
 
     async getArticleItemByid(id) {
         let data = await this.alias('article')
-
-            .field('title, authorAvatar, authorName, content, updateTime, likes, col')
+            .field('title, authorAvatar, authorName, content, updateTime, likes, col, poster')
             .where({id: id}).select();
 
         return data;
 
     }
 
+
     async getColByArticleId(articleid) {
         let authorid = await this.field('col').where({id: articleid}).select();
         return authorid;
     }
 
-    async getRelativeArticlesByCol(col, articleid) {
-        let relativeArticles = await this.field('id, title, description, poster').order('updateTime DESC').where({
+    async getRelativeArticlesByCol(col, articleid,type) {
+        let relativeArticles = await this.field('id, title, description, poster, authorName').order('updateTime DESC').where({
             col: col,
             id: ['!=', articleid],
-            type: 0
+            type: type
         }).select();
         return relativeArticles;
     }

@@ -22,15 +22,16 @@ export default class extends base {
 
     async addcommentAction() {
         if (this.isPost()) {
-            let userid = this.post("userid");
+            let uid = this.cookie('uid');
             let articleid = this.post('articleid');
             let content = this.post('content');
             let userModel = this.model('user');
-            let authorInfo = await userModel.getAvatarInfoByUserId(parseInt(userid));
+            let authorInfo = await userModel.getAuthorInfoByUserUid(uid);
             let authorAvatar = authorInfo[0].avatar;
             let authorName = authorInfo[0].nickname;
+            let authorId = authorInfo[0].id;
             let commentModel = this.model('comment');
-            let data = await commentModel.addComment(parseInt(userid), parseInt(articleid), authorAvatar, authorName, content);
+            let data = await commentModel.addComment(parseInt(authorId), parseInt(articleid), authorAvatar, authorName, content);
             return this.success(data);
         }
     }
@@ -69,10 +70,11 @@ export default class extends base {
 
     async getrelativearticleAction() {
         let articleid = this.get('articleid');
+        let type = this.get('type');
         let articleModel = this.model('article');
         let authoridRowData = await articleModel.getColByArticleId(articleid);
         let col = authoridRowData[0].col;
-        let relativeArticles = await articleModel.getRelativeArticlesByCol(col, articleid);
+        let relativeArticles = await articleModel.getRelativeArticlesByCol(col, articleid, type);
         if (relativeArticles.length >= 2) {
             relativeArticles = relativeArticles.slice(0, 2);
         }
@@ -82,9 +84,9 @@ export default class extends base {
 
     async refreshlikesAction() {
         let likes = this.post('likes');
-// <<<<<<< HEAD
         let uid = this.cookie('uid');
         let articleid = parseInt(this.post('articleid'));
+        console.log(articleid);
         let articleModel = this.model('article');
         let art_lines = await articleModel.updateLikesByArticleId(articleid, likes);
         if (uid) {
