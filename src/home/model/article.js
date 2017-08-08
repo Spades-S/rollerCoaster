@@ -65,6 +65,11 @@ class Article extends think.model.base {
         let data = await this.field('id, title, poster, authorAvatar, authorName, col, description, updateTime').order('updateTime DESC').where({tag: tag, type: 0}).page(page, number).countSelect();
         return data;
     }
+	
+	async addPost(post) {
+		let res = await this.add(post)
+        return res
+	}
 
 }
 

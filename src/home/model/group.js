@@ -46,39 +46,44 @@ export default class extends think.model.base {
         return res
     }
 
-    async createGroup(data) {
-        /*let reflect = {
-         title: 'title',
-         theme: 'theme',
-         description: 'description',
-         groupType: 'groupType',
-         activityType: 'activityType',
-         activityTime: 'activityTime',
-         place: 'place',
-         park: 'park',
-         facility: 'facility',
-         joinNumber: 'joinNumber',
-         remark: 'remark',
-         creatorName: 'nickname',
-         creatorAvatar: 'avatar',
-         creatorId: 'id'
-         }*/
-        let reflect = ['nickname', 'avatar', 'id']
-        let reflected = ['creatorName', 'creatorAvatar', 'creatorId']
-        for (let i in reflected) {
-            data[reflected[i]] = data[reflect[i]]
-            delete data[reflect[i]]
-        }
-        data.members = 1;
-        let res = await this.add(data)
-        return res
-    }
+
 
     async updateCover(id, cover) {
         let lines = await this.where({id: id}).update({cover: cover});
         return lines;
     }
+    async createGroup(data) {
+        let reflect = ['nickname', 'avatar', 'id']
+        let reflected = ['creatorName', 'creatorAvatar', 'creatorId']
+        for(let i in reflected) {
+            data[reflected[i]] = data[reflect[i]]
+            delete data[reflect[i]]
+        }
+        let res = await this.add(data)
+        let userModel = this.model('user')
+        await userModel.updateMyGroup(res, data.creatorId)
+        await this.addGroupMember(res, data.creatorId)
+        return res
+    }
+
+    async addGroupMember(groupId, userId) {
+        let groupMembers = await this.field('id, members, membersId').where({id: groupId}).find()
+        let membersId = groupMembers.membersId ? JSON.parse(groupMembers.membersId) : []
+        membersId.push(userId)
+        let members = parseInt(groupMembers.members) + 1
+        let res = await this.where({id: groupId}).update({membersId: JSON.stringify(membersId), members: members})
+        return res
+    }
+
+    async deleteGroupMember(groupId, userId) {
+        let groupMembers = await this.field('id, members, membersId').where({id: groupId}).find()
+        let membersId = JSON.parse(groupMembers.membersId)
+        if (membersId.indexOf(userId) > -1) {
+            membersId.splice(membersId.indexOf(userId), 1)
+            let members = parseInt(groupMembers.members) - 1
+            await this.where({id: groupId}).update({membersId: JSON.stringify(membersId), members: members})
+        }
+        return true
+    }
 }
 
-
-// id, title, theme, description, groupType, activityType, createTime, place, park, facility, joinNumber, remark, members, creatorName, creatorAvatar, creatorId, activityTime
