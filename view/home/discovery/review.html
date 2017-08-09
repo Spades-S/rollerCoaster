@@ -158,8 +158,8 @@
 
 
     let id = "{{ id }}"
-    if (!id){
-    	window.history.go(-1)
+    if (!id) {
+        window.history.go(-1)
     }
 
     $(document).on('click', function (e) {
@@ -211,7 +211,7 @@
             url: '/discovery/addreview',
             method: 'POST',
             data: {
-                stars: star.get(),
+                stars: star.get('#star'),
                 position: $('.position-option').attr('data-position'),
                 content: $('textarea').val(),
                 facilityId: "{{ id }}"

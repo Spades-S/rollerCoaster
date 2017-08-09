@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../../../src/common/config/cookie.js"],"names":["host","path"],"mappings":";;;;;AAAA;;;;kBAIe;AACdA,QAAM,cADQ;AAEdC,QAAM;AAFQ,C","file":"cookie.js","sourcesContent":["/**\n * Created by fuyazhou on 17/7/12.\n */\n\nexport default {\n\thost: 'huanleye.net',\n\tpath: '/'\n}"]}

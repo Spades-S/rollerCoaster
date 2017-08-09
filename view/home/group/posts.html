@@ -15,20 +15,24 @@
             box-sizing: border-box;
             -webkit-font-smoothing: antialiased;
         }
-        .page{
+
+        .page {
             background-color: #fff;
         }
-        .bar{
+
+        .bar {
             height: 3rem;
             background-color: #07518f;
             border-bottom: none;
         }
-        h1.title{
+
+        h1.title {
             color: white;
             overflow: hidden;
             text-overflow: ellipsis;
             line-height: 3rem;
         }
+
         .icon-arrow-left {
             display: inline-block;
             width: 0.9rem;
@@ -37,40 +41,48 @@
             top: 0.75rem;
             z-index: 30;
         }
-        .bar~.content{
+
+        .bar ~ .content {
             top: 3rem;
             height: calc(100% - 3rem);
             background-color: #fff;
             position: relative;
         }
-        .detail{
+
+        .detail {
             padding: .6rem .8rem;
             background-color: #F5F5F5;
             border-bottom: 1px solid #F9F9F9;
         }
-        .group-detail{
+
+        .group-detail {
             width: 100%;
             display: flex;
         }
-        .cover, .cover img{
+
+        .cover, .cover img {
             display: inline-block;
             height: 3rem;
             width: 3rem;
         }
-        .group-item-info{
+
+        .group-item-info {
             display: inline-block;
             flex: 1;
             margin-left: 1rem;
             position: relative;
         }
-        .group-title{
+
+        .group-title {
             line-height: 2rem;
         }
-        .members{
+
+        .members {
             line-height: 1rem;
             font-size: .7rem;
         }
-        .button-container{
+
+        .button-container {
             width: 100%;
             display: flex;
             justify-content: space-between;
@@ -78,33 +90,41 @@
             font-size: .7rem;
             text-align: center;
         }
-        .span-18{
+
+        .span-18 {
             flex: 5
         }
-        .span-13{
+
+        .span-13 {
             flex: 3
         }
-        .btn{
+
+        .btn {
             font-size: .6rem;
             margin: .2rem;
             padding: .2rem .3rem;
             border-radius: .3rem;
             color: #fff;
         }
-        .desc, .share{
+
+        .desc, .share {
             background-color: #0F528D;
         }
-        .join, .quit{
+
+        .join, .quit {
             background: #74B941;
             border: none;
         }
-        .quit{
+
+        .quit {
             background-color: #A33;
         }
-        .write{
+
+        .write {
             background-color: #F19725;
         }
-        .detailInfo{
+
+        .detailInfo {
             width: 100%;
             position: absolute;
             top: 40%;
@@ -112,7 +132,8 @@
             transform: translate(-50%, -50%);
             z-index: 11;
         }
-        .detailInfo .list-block{
+
+        .detailInfo .list-block {
             font-size: .7rem;
             width: 90%;
             margin: 0 auto;
@@ -120,29 +141,34 @@
             background-color: #FFF;
             border-radius: 1rem;
         }
-        .list-block .item-content{
+
+        .list-block .item-content {
             min-height: 1rem;
             padding-left: 0;
             width: 100%;
         }
-        .list-block .item-inner{
+
+        .list-block .item-inner {
             min-height: 1rem;
             padding: .2rem 0;
             width: 100%;
             margin: 0 auto;
             border-bottom: none;
         }
+
         .list-block .item-title {
             width: 40%;
             text-align: right;
             padding-right: 1rem;
             color: #8C8C8C;
         }
+
         .list-block .item-after {
             width: 60%;
             text-align: left;
         }
-        .mask{
+
+        .mask {
             position: absolute;
             top: 0;
             left: 0;
@@ -151,27 +177,35 @@
             background-color: rgba(0, 0, 0, .3);
             z-index: 10;
         }
-        .btn.disabled{
+
+        .btn.disabled {
             color: #8C8C8C;
             background-color: #F5F5F5;
             border: 1px solid #D5D5D5;
         }
-        .post-item{
+
+        .post-item {
+            display: block;
             padding: .3rem .5rem;
             border-bottom: 1px solid #DCDCDC;
+            color: #484747;
         }
-        .post-row{
+
+        .post-row {
             display: flex;
             align-items: center;
             font-size: .8rem;
         }
-        .post-row.info{
+
+        .post-row.info {
+            margin-top: 0.3rem;
             padding-left: 2rem;
-            font-size: .7rem;
+            font-size: 0.8rem;
             position: relative;
             color: #999;
         }
-        .post-comments{
+
+        .post-comments {
             width: 1.2rem;
             margin-left: .3rem;
             margin-right: .4rem;
@@ -182,7 +216,8 @@
             position: relative;
             color: #fff;
         }
-        .post-comments::before{
+
+        .post-comments::before {
             content: '';
             width: 0;
             height: 0;
@@ -193,10 +228,24 @@
             top: .7rem;
             transform: translateX(-3px) rotate(30deg);
         }
-        .post-title{
+
+        .post-avatar {
+            width: 1.6rem;
+            height: 1.6rem;
+            border-radius: 0.8rem;
+            border: 1px solid #eee;
+        }
+
+        .post-name {
+            margin-left: 0.5rem;
+            line-height: 1.6rem;
+        }
+
+        .post-title {
             flex: 1;
         }
-        .post-time{
+
+        .post-time {
             position: absolute;
             right: 0;
         }
@@ -212,7 +261,7 @@
         <div class="detail">
             <div v-if="groupInfo" class="group-detail">
                 <div class="cover">
-                    <img :src="groupInfo.cover" alt="">
+                    <img :src="'/static/img'+groupInfo.cover" alt="">
                 </div>
                 <div class="group-item-info">
                     <div class="group-title">{$ groupInfo.title $}</div>
@@ -227,10 +276,14 @@
                     <div class="btn share">分享</div>
                 </div>
                 <div class="span-18">
-                    <button :class="'btn join ' + (groupInfo.userInThisGroup ? 'disabled' : '')" :disabled="groupInfo.userInThisGroup ? true : false"  @click="joinGroup">加入小组</button>
+                    <button :class="'btn join ' + (groupInfo.userInThisGroup ? 'disabled' : '')"
+                            :disabled="groupInfo.userInThisGroup ? true : false" @click="joinGroup">加入小组
+                    </button>
                 </div>
                 <div class="span-18">
-                    <button :class="'btn quit ' + (groupInfo.userInThisGroup ? '' : 'disabled')" :disabled="groupInfo.userInThisGroup ? false : true" @click="quitGroup">退出小组</button>
+                    <button :class="'btn quit ' + (groupInfo.userInThisGroup ? '' : 'disabled')"
+                            :disabled="groupInfo.userInThisGroup ? false : true" @click="quitGroup">退出小组
+                    </button>
                 </div>
                 <div class="span-18">
                     <div class="btn write" @click="toPost">发帖</div>
@@ -238,17 +291,20 @@
             </div>
         </div>
         <div class="post-list">
-            <div class="post-item" v-for="post in posts">
-                <div class="post-row">
-                    <div class="post-comments">{$ post.comments $}</div>
-                    <div class="post-title">{$ post.title $}</div>
-                </div>
-                <div class="post-row info">
-                    <div class="post-avatar" v-if="post.authorAvatar">{$ post.authorAvatar $}</div>
-                    <div class="post-name">{$ post.authorName $}</div>
-                    <div class="post-time">{$ new Date(post.updateTime).Format('yyyy-MM-dd hh:mm') $}</div>
-                </div>
-            </div>
+            <template v-for="post in posts">
+                <a class="post-item external" :href="'/group/postdetail?id='+post.id">
+
+                    <div class="post-row">
+                        <div class="post-comments">{$ post.comments $}</div>
+                        <div class="post-title">{$ post.title $}</div>
+                    </div>
+                    <div class="post-row info">
+                        <img :src="'/static/img'+post.authorAvatar" alt="" class="post-avatar">
+                        <div class="post-name">{$ post.authorName $}</div>
+                        <div class="post-time">{$ new Date(post.updateTime).Format('yyyy-MM-dd hh:mm') $}</div>
+                    </div>
+                </a>
+            </template>
         </div>
         <div class="detailInfo" v-if="groupDetailShow">
             <div class="list-block">
@@ -274,51 +330,51 @@
     new Vue({
         delimiters: ['{$', '$}'],
         data () {
-        	return {
-        		groupInfo: {},
+            return {
+                groupInfo: {},
                 posts: undefined,
-		        groupDetailShow: false,
+                groupDetailShow: false,
                 joinDisabled: false,
                 quitDisabled: false,
                 detailList: [{
-        			item: '类型',
+                    item: '类型',
                     en: 'groupType'
                 }, {
-	                item: '创建人',
-	                en: 'creatorName'
+                    item: '创建人',
+                    en: 'creatorName'
                 }, {
-	                item: '创建时间',
-	                en: 'createTime'
+                    item: '创建时间',
+                    en: 'createTime'
                 }, {
-	                item: '简介',
-	                en: 'description'
+                    item: '简介',
+                    en: 'description'
                 }, {
-	                item: '成员数',
-	                en: 'members'
+                    item: '成员数',
+                    en: 'members'
                 }, {
-	                item: '活动时间',
-	                en: 'activityTime'
+                    item: '活动时间',
+                    en: 'activityTime'
                 }, {
-	                item: '活动地点',
-	                en: 'place'
+                    item: '活动地点',
+                    en: 'place'
                 }, {
-	                item: '乐园',
-	                en: 'park'
+                    item: '乐园',
+                    en: 'park'
                 }, {
-	                item: '设备',
-	                en: 'facility'
+                    item: '设备',
+                    en: 'facility'
                 }, {
-	                item: '备注',
-	                en: 'remark'
+                    item: '备注',
+                    en: 'remark'
                 }]
             }
         },
         created: function () {
-        	let self = this
+            let self = this
             $.ajax({
                 url: '/group/getgroupinfo',
                 data: {
-                	id: "{{ id }}"
+                    id: "{{ id }}"
                 },
                 success: function (ret) {
                     self.groupInfo = ret.data
@@ -328,65 +384,65 @@
             })
         },
         methods: {
-        	getPosts: function () {
+            getPosts: function () {
                 let self = this
                 $.ajax({
                     url: '/group/getposts',
                     data: {
-                    	id: "{{ id }}"
+                        id: "{{ id }}"
                     },
                     success: function (ret) {
                         self.posts = ret.data.data.sort((a, b) => {
-	                        return new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime()
+                            return new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime()
                         })
                     }
                 })
-	        },
-        	showDetail: function () {
+            },
+            showDetail: function () {
                 this.groupDetailShow = !this.groupDetailShow
-	        },
+            },
             hideDetail: function () {
-	            this.groupDetailShow = !this.groupDetailShow
+                this.groupDetailShow = !this.groupDetailShow
             },
             toPost: function () {
-        		if(/uid/.test(document.cookie)) {
-			        window.location.href="/group/" +this.groupInfo.id+ "/post"
+                if (/uid/.test(document.cookie)) {
+                    window.location.href = "/group/" + this.groupInfo.id + "/post"
                 } else {
-        			$.toast('您需要登录才能进行发帖')
+                    $.toast('您需要登录才能进行发帖')
                     setTimeout(function () {
                         window.location.href = '/user/login'
                     }, 1000)
                 }
             },
             joinGroup: function () {
-	            if(!/uid/.test(document.cookie)) {
-		            $.toast('您需要登录才能加入小组')
-		            setTimeout(function () {
-			            window.location.href = '/user/login'
-		            }, 1000)
+                if (!/uid/.test(document.cookie)) {
+                    $.toast('您需要登录才能加入小组')
+                    setTimeout(function () {
+                        window.location.href = '/user/login'
+                    }, 1000)
                     return
-	            }
+                }
                 let self = this
                 $.ajax({
                     url: '/group/joingroup',
-	                method: 'POST',
-	                data: {
-		                groupId: self.groupInfo.id
-	                },
+                    method: 'POST',
+                    data: {
+                        groupId: self.groupInfo.id
+                    },
                     success: function (ret) {
-                        if(ret.errno === 0) {
-	                        window.location.href = window.location.href
+                        if (ret.errno === 0) {
+                            window.location.href = window.location.href
                         }
                     }
                 })
             },
             quitGroup: function () {
-        		let self = this
+                let self = this
                 $.ajax({
                     url: '/group/quitgroup',
                     method: 'POST',
                     data: {
-                    	groupId: self.groupInfo.id
+                        groupId: self.groupInfo.id
                     },
                     success: function (ret) {
                         window.location.href = window.location.href
@@ -397,19 +453,19 @@
     }).$mount('#content')
 
     Date.prototype.Format = function (fmt) {
-	    var o = {
-		    "M+": this.getMonth() + 1, //月份
-		    "d+": this.getDate(), //日
-		    "h+": this.getHours(), //小时
-		    "m+": this.getMinutes(), //分
-		    "s+": this.getSeconds(), //秒
-		    "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-		    "S": this.getMilliseconds() //毫秒
-	    };
-	    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-	    for (var k in o)
-		    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-	    return fmt;
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
     }
 </script>
 </body>

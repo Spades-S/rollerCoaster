@@ -19,6 +19,12 @@ export default class extends think.model.base {
         return res
     }
 
+    async gerGroupsMore(theme, num, currentPage) {
+        let res = await this.field('id, title, theme, cover, members, groupType, activityType, updateTime').order('updateTime desc').where({theme: theme}).page(currentPage, num).countSelect();
+        return res;
+
+    }
+
     async getMyGroup(id, userGroups) {
         let whereQuery
         if (userGroups) {
@@ -36,26 +42,43 @@ export default class extends think.model.base {
         return res
     }
 
+    async getMyGroupMore(num, currentPage, userGroups, id) {
+        let whereQuery;
+        if (userGroups) {
+            whereQuery = {
+                creatorId: id,
+                id: ['IN', userGroups.split(',')],
+                _logic: 'OR'
+            }
+        } else {
+            whereQuery = {
+                creatorId: id
+            }
+        }
+        let res = await this.field('id, title, theme, cover, members, groupType, activityType, updateTime').where(whereQuery).order('updateTime desc').page(currentPage, num).countSelect()
+        return res
+    }
+
     async getActivity() {
         let res = await this.field('id, cover, title').where({groupType: 1}).order('updateTime desc').limit(0, 5).select()
         return res
     }
 
     async getGroupInfo(id) {
-        let res = this.field('id, title, theme, cover, description, members').where({id: id}).find()
+        let res = this.field('id, title, theme, cover, description, members, membersId,createTime').where({id: id}).find()
         return res
     }
-
 
 
     async updateCover(id, cover) {
         let lines = await this.where({id: id}).update({cover: cover});
         return lines;
     }
+
     async createGroup(data) {
         let reflect = ['nickname', 'avatar', 'id']
         let reflected = ['creatorName', 'creatorAvatar', 'creatorId']
-        for(let i in reflected) {
+        for (let i in reflected) {
             data[reflected[i]] = data[reflect[i]]
             delete data[reflect[i]]
         }

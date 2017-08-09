@@ -31,6 +31,25 @@ export default class extends base {
         return this.fail(false)
     }
 
+    async getmoregroupsAction() {
+        let groupType = Number(this.get('groupType'));
+        let num = Number(this.get('num'));
+        let currentPage = Number(this.get('currentPage'));
+        let groupModel = this.model('group');
+        if (groupType === 5) {
+            let userModel = this.model('user');
+            let userInfo = await userModel.getUserGroups(this.cookie('uid'));
+            if (userInfo.id) {
+                let res = await groupModel.getMyGroupMore(num, currentPage, userInfo.groups, userInfo.id)
+                return this.success(res)
+            }
+            return this.fail(false);
+        } else {
+            let res = await groupModel.gerGroupsMore(groupType, num, currentPage);
+            return this.success(res);
+        }
+    }
+
     async getactivityAction() {
         let res = await this.model('group').getActivity()
         if (think.isEmpty(res)) {
@@ -193,11 +212,11 @@ export default class extends base {
         return this.success(res)
     }
 
-    async getpostcontentAction(){
+    async getpostcontentAction() {
         let id = Number(this.get('id'));
         let articleModel = this.model('article');
         let data = await articleModel.getArticleItemByid(id);
-        if(think.isEmpty(data)){
+        if (think.isEmpty(data)) {
             return this.fail(1000, 'no message');
         }
         return this.success(data);

@@ -52,7 +52,7 @@ class Article extends think.model.base {
     }
 
     async getLikeArticles(ids, currentPage, num) {
-        let articles = await this.field('id, title, poster, authorAvatar, authorName, col, description, updateTime').page(currentPage, num).where({id: ['IN', ids]}).countSelect();
+        let articles = await this.field('id, title, poster, authorAvatar, authorName, col, description, updateTime,type').page(currentPage, num).where({id: ['IN', ids]}).countSelect();
         return articles;
     }
 

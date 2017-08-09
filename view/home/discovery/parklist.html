@@ -151,8 +151,6 @@
                             <div class="facility-title">
                                 {$ item.title $}
                             </div>
-                            <div class="facility-rating">
-                            </div>
                             <div class="facility-detail">
                                 <div class="facility-price">
                                     价格：{$ item.price || '0' $}
@@ -193,12 +191,11 @@
 
 <script type="text/javascript " src="/static/vue/vue.js "></script>
 <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
-<script src="/static/js/raty/jquery.raty.js"></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script>
     $.init();
 
-    $.fn.raty.defaults.path = '/static/js/raty/img'
+
     let loading = false
 
     let position = ''
@@ -225,13 +222,6 @@
         },
         created: function () {
             this.getFacility(this.perPageItems, this.page, position)
-        },
-        updated: function () {
-            $('.facility-rating').raty({
-                half: true,
-                number: 5,
-                score: 2.5
-            })
         },
         methods: {
             getFacility: function (perPageItems, page, position) {

@@ -168,6 +168,16 @@
             height: 5rem;
             border-radius: .5rem;
         }
+
+        .icon-tianjia {
+            font-size: 1rem;
+        }
+
+        .disabled span {
+            color: grey;
+            border-color: grey;
+            background: #eee;
+        }
     </style>
 </head>
 <body>
@@ -177,12 +187,13 @@
         <div class="searchbar" id="searchbar">
             <div class="search-input">
                 <label class="search-icon iconfont icon-sousuo active "></label>
-                <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show' @input="typeSearch" @keypress="doSearch"/>
+                <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show' @input="typeSearch"
+                       @keypress="doSearch"/>
             </div>
             <a class="searchbar-cancel">取消</a>
         </div>
         <a class="map-link external" href="/group/create">
-            <div class="map-icon iconfont icon-dingwei"></div>
+            <div class="map-icon iconfont icon-tianjia"></div>
         </a>
     </header>
     <div class="content" id="content">
@@ -201,28 +212,39 @@
                     <div class="group-item-info">
                         <div class="group-title">{$ group.title $}</div>
                         <div class="members">成员数：{$ group.members $}</div>
-                        <div class="group-type" v-if="group.activityType">{$ group.groupType === 1 ? '活动' : group.activityType $}</div>
+                        <div class="group-type" v-if="group.activityType">{$ group.groupType === 1 ? '活动' :
+                            group.activityType $}
+                        </div>
                     </div>
                 </div>
-                <div class="bottom" v-if="index === myGroup.length - 1"><span>更多小组</span></div>
+                <div class="bottom 5" data-grouptype="5" v-if="index === myGroup.length - 1" @click="getMoreGroups">
+                    <span>更多小组</span>
+                </div>
             </div>
         </div>
         <div class="group">
-            <div v-for="group, index in groups">
-                <div class="group-theme" v-if="index === 0 || group.theme !== groups[index-1].theme">{$
-                    themes[group.theme] $}
-                </div>
-                <div class="group-item" :data-id="group.id">
-                    <div class="cover">
-                        <img :src="'/static/img'+group.cover" alt="">
+            <div v-for="groups in groupsArray">
+                <div v-for="group, index in groups">
+                    <div class="group-theme" v-if="index === 0">{$
+                        themes[group.theme] $}
                     </div>
-                    <div class="group-item-info">
-                        <div class="group-title">{$ group.title $}</div>
-                        <div class="members">成员数：{$ group.members $}</div>
-                        <div class="group-type" v-if="group.activityType">{$ group.groupType === 1 ? '活动' : group.activityType $}</div>
+                    <div class="group-item" :data-id="group.id">
+                        <div class="cover">
+                            <img :src="'/static/img'+group.cover" alt="">
+                        </div>
+                        <div class="group-item-info">
+                            <div class="group-title">{$ group.title $}</div>
+                            <div class="members">成员数：{$ group.members $}</div>
+                            <div class="group-type" v-if="group.activityType">{$ group.groupType === 1 ? '活动' :
+                                group.activityType $}
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="bottom" v-if="index === groups.length - 1 || group.theme !== groups[index+1].theme"><span>更多小组</span>
+                    <div class="bottom " :data-grouptype="group.theme" :class="group.theme"
+                         v-if="index === groups.length - 1 || group.theme !== groups[index+1].theme"
+                         @click="getMoreGroups">
+                        <span>更多小组</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -255,17 +277,20 @@
 
     let cookies = {}
     document.cookie.split(';').forEach((el) => {
-        cookies[el.split('=')[0]] = el.split('=')[1]
+        cookies[el.split('=')[0].trim()] = el.split('=')[1]
     })
-
     new Vue({
         delimiters: ['{$', '$}'],
         data () {
             return {
-                groups: [],
+                groupsArray: [[], [], [], [], []],
                 myGroup: undefined,
                 activity: undefined,
-                themes: ['过山车联盟', '黑暗乘骑基地', '演出爱好者', '同城活动', '其它']
+                themes: ['过山车联盟', '黑暗乘骑基地', '演出爱好者', '同城活动', '其它'],
+                currentPage: [1, 1, 1, 1, 1, 1],//对应group：过、黑、演、同、其、我
+                FirstClickflag: [0, 0, 0, 0, 0, 0],
+                disableFlag: [0, 0, 0, 0, 0, 0],
+
             }
         },
         created: function () {
@@ -274,7 +299,10 @@
                 url: '/group/getgroups',
                 success: function (ret) {
                     if (ret.errno === 0) {
-                        self.groups = ret.data
+                        ret.data.forEach(function (item) {
+                            let theme = Number(item.theme);
+                            self.groupsArray[theme].push(item);
+                        })
                     }
                 }
             })
@@ -283,10 +311,18 @@
                 this.getMyGroup(cookies.uid)
             }
         },
+        updated: function () {
+            this.disableFlag.forEach(function (item, index) {
+                if (item === 1) {
+                    $('.bottom' + '.' + index).addClass('disabled');
+                }
+            })
+        },
+
         methods: {
 
-        	getMyGroup: function () {
-        		let self = this
+            getMyGroup: function () {
+                let self = this
                 $.ajax({
                     url: '/group/getmygroup',
                     success: function (ret) {
@@ -306,27 +342,72 @@
                         }
                     }
                 })
+            },
+            getMoreGroups: function (e) {
+                let self = this;
+                let grouptype = e.currentTarget.dataset.grouptype;
+                $.ajax({
+                    url: "/group/getmoregroups",
+                    data: {
+                        currentPage: self.currentPage[grouptype],
+                        num: 5,
+                        groupType: grouptype,
+                    },
+                    mothod: "GET",
+                    success: function (res) {
+                        if (res.errno === 0) {
+
+                            if (self.FirstClickflag[grouptype] === 0) {
+                                if (grouptype == 5) {
+                                    self.myGroup = res.data.data;
+                                } else {
+                                    self.groupsArray.splice(grouptype, 1, res.data.data);
+//                                    self.groupsArray[grouptype] = res.data.data;
+                                }
+                                self.FirstClickflag[grouptype] = 1;
+                            } else {
+                                if (grouptype == 5) {
+                                    self.myGroup = self.myGroup.concat(res.data.data);
+
+                                } else {
+                                    let tempArray = self.groupsArray[grouptype];
+                                    tempArray = tempArray.concat(res.data.data)
+                                    self.groupsArray.splice(grouptype, 1, tempArray);
+                                }
+                            }
+                            if (res.data.currentPage === res.data.totalPages) {
+                                self.disableFlag[grouptype] = 1;
+                            }
+                            self.currentPage[grouptype]++;
+
+
+                        }
+
+                    }
+                })
+
+
             }
         }
     }).$mount('#content')
 
     new Vue({
-	    data () {
-		    return {
-			    keyword: ''
-		    }
-	    },
-	    methods: {
-		    typeSearch: function (e) {
-			    this.keyword = e.target.value
-			    console.log(this.keyword)
-		    },
-		    doSearch: function (e) {
-			    if(this.keyword && e.keyCode === 13){
-				    window.location.href = '/search?t=' + 3 + '&q=' + this.keyword
-			    }
-		    }
-	    }
+        data () {
+            return {
+                keyword: ''
+            }
+        },
+        methods: {
+            typeSearch: function (e) {
+                this.keyword = e.target.value
+                console.log(this.keyword)
+            },
+            doSearch: function (e) {
+                if (this.keyword && e.keyCode === 13) {
+                    window.location.href = '/search?t=' + 3 + '&q=' + this.keyword
+                }
+            }
+        }
     }).$mount('#searchbar')
 
     $(document).on('click', '.group-item, .activity-cover', function (e) {
