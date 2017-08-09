@@ -267,10 +267,13 @@ export default class extends base {
     }
     
     async getmyactivityAction() {
-        let res = await this.model('user').field('id, cover, title, members, activityTime').where({
-            groupType: 1
-            // other query paremeters
-        })
-        
+        let userGroups = await this.model('user').getUserGroups(this.cookie('uid'))
+        let userGroup = JSON.parse(userGroups.groups)
+        let res = await this.model('group').field('id, cover, title, joinNumber, activityTime').where({
+            groupType: 1,
+            id: ['IN', userGroup],
+            _logic: 'AND'
+        }).select()
+        return this.success(res)
     }
 }
