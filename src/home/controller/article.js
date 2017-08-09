@@ -31,7 +31,18 @@ export default class extends base {
             let authorName = authorInfo[0].nickname;
             let authorId = authorInfo[0].id;
             let commentModel = this.model('comment');
-            let data = await commentModel.addComment(parseInt(authorId), parseInt(articleid), authorAvatar, authorName, content);
+            let commentData = {
+                postId: Number(articleid),
+                authorId: Number(authorId),
+                authorAvatar: authorAvatar,
+                authorName: authorName,
+                content: content,
+            }
+            if(this.post('replyId')){
+                commentData.replyToId = Number(this.post('replyId'));
+                commentData.replyToName = this.post('replyName')
+            }
+            let data = await commentModel.addComment(commentData);
             return this.success(data);
         }
     }
@@ -155,11 +166,15 @@ export default class extends base {
 
     async getcommentbyarticleidAction() {
         let articleid = this.get('articleid');
+        let slice = this.get('slice');
         let commentModel = this.model('comment');
+        console.log('test' + articleid);
         let comment = await commentModel.getCommentByPostId(parseInt(articleid));
         let commentLength = comment.length;
-        if (commentLength >= 2) {
-            comment = comment.splice(0, 2)
+        if (slice == 1) {
+            if (commentLength >= 2) {
+                comment = comment.splice(0, 2)
+            }
         }
         return this.success({commentLength: commentLength, commentContent: comment});
     }

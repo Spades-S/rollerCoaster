@@ -39,6 +39,8 @@
 
         .bar-nav ~ .content {
             top: 3rem;
+            bottom: 2.3rem;
+            overflow-x: hidden;
             background: #FFFFFF;
         }
 
@@ -148,6 +150,7 @@
         }
 
         .comment-item {
+            position: relative;
             padding: 0.7rem 0.5rem;
             border-bottom: 1px solid #d4d4d4;
         }
@@ -170,6 +173,30 @@
 
         .comment-content {
             margin-top: 0.5rem;
+            padding-left: 2.3rem;
+        }
+
+        .reply {
+            position: absolute;
+            top: 0rem;
+            right: 0;
+            width: 0;
+            height: 100%;
+            background: #f3e4c7;
+            border-bottom: 1px solid #d4d4d4;
+            writing-mode: vertical-lr;
+            font-size: 1rem;
+            letter-spacing: 0.3rem;
+            color: #969191;
+            transition: all 0.5s ease;
+        }
+
+        .reply-active {
+            width: 3rem;
+            padding-left: 0.91rem;
+            padding-top: 1.4rem;
+            z-index: 30;
+
         }
 
         .relativepost-item {
@@ -198,6 +225,35 @@
             font-size: 0.7rem;
             color: #999;
         }
+
+        .add-comment {
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            padding: .5rem;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            background-color: #eee;
+            font-size: .7rem;
+            color: #898989;
+        }
+
+        .comment-input {
+            width: 80%;
+            line-height: 1.5rem;
+            overflow: hidden;
+            border: none;
+            border-bottom: 1px solid #b7b0b0;
+            background: transparent;
+        }
+
+        .icon-feiji {
+            color: #868686;
+        }
+        .replyToName{
+            color: #72bb38;
+        }
     </style>
 
 </head>
@@ -212,7 +268,9 @@
         </header>
         <div class="content">
             <div class="post-part padding-5">
-                <div class="post-title">{$postContent.title$}</div>
+                <template>
+                    <div class="post-title">{$postContent.title$}</div>
+                </template>
                 <div class="author-share">
                     <div class="author">
                         <template>
@@ -231,7 +289,9 @@
                     </div>
                 </div>
                 <div class="post-content">
-                    <div class="content-text">{$postContent.content$}</div>
+                    <template>
+                        <div class="content-text">{$postContent.content$}</div>
+                    </template>
                     <div class="content-image" v-if="poster.length>0">
                         <template v-for="item in poster">
                             <img :src="'/static/img'+item">
@@ -252,31 +312,26 @@
 
             </div>
             <div class="comment">
-                <div class="comment-name">评论</div>
-                <div class="comment-item">
-                    <div class="comment-authorinfo">
-                        <img class="comment-authoravatar" src="/static/img/systemAvatar.jpeg" alt="">
-                        <div>
-                            <div class="comment-authorname">H黑暗骑士的小黄车</div>
-                            <div class="comment-updatetime">2017.6.23 12:33:12</div>
+                <template>
+                    <div class="comment-name" v-if="commentLength>0">评论 {$commentLength$}</div>
+                    <div class="comment-item" v-for="comment in comments">
+                        <div @click="replyToogle">
+                            <div class="comment-authorinfo">
+                                <img class="comment-authoravatar" :src="'/static/img'+comment.authorAvatar" alt="">
+                                <div>
+                                    <div class="comment-authorname">{$comment.authorName$}</div>
+                                    <div class="comment-updatetime">{$getTime(comment.updateTime)$}</div>
+                                </div>
+                            </div>
+                            <div class="comment-content"><span class="replyToName" v-if="comment.replyToName">@{$comment.replyToName$} </span>{$comment.content$}</div>
                         </div>
-                    </div>
-                    <div class="comment-content">这个帖子真的有点水啊，你们说是不是</div>
-
-
-                </div>
-                <div class="comment-item">
-                    <div class="comment-authorinfo">
-                        <img class="comment-authoravatar" src="/static/img/systemAvatar.jpeg" alt="">
-                        <div>
-                            <div class="comment-authorname">H黑暗骑士的小黄车</div>
-                            <div class="comment-updatetime">2017.6.23 12:33:12</div>
+                        <div class="reply" @click="replyTo($event,comment.authorId,comment.authorName)">
+                            回复
                         </div>
+
+
                     </div>
-                    <div class="comment-content">这个帖子真的有点水啊，你们说是不是</div>
-
-
-                </div>
+                </template>
 
             </div>
             <div class="relative-post" v-if="relativePosts.length>0">
@@ -286,11 +341,17 @@
                         <template v-if="post.poster">
                             <img class="relativepost-poster" :src="'/static/img'+post.poster" alt="">
                         </template>
-                        <div class="relativepost-title">{$post.title$}</div>
-                        <div class="relativepost-authorname">发帖：{$post.authorName$}</div>
+                        <template>
+                            <div class="relativepost-title">{$post.title$}</div>
+                            <div class="relativepost-authorname">发帖：{$post.authorName$}</div>
+                        </template>
                     </a>
                 </div>
             </div>
+        </div>
+        <div class="add-comment">
+            <textarea class="comment-input" placeholder="撰写评测" id="comment-input" rows="1"></textarea>
+            <span class="iconfont icon-feiji" @click="addComment()"></span>
         </div>
     </div>
 </div>
@@ -308,11 +369,14 @@
             poster: [],
             likeActive: false,
             relativePosts: [],
-
+            comments: [],
+            commentLength: 0,
+            reply: undefined,
         },
         created: function () {
             this.getPostContent();
             this.getLikeStatus();
+            this.getComment();
             this.getRelativePosts();
         },
         methods: {
@@ -389,12 +453,87 @@
 
                 })
 
+            },
+            addComment: function () {
+                let formData = new FormData();
+                if(vm.reply){
+                    formData.append('replyId', vm.reply.id)
+                    formData.append('replyName', vm.reply.name);
+                }
+                formData.append('articleid', "{{id}}");
+                formData.append('content', $('#comment-input').val());
+                $.ajax({
+                    url: "/article/addcomment ",
+                    data: formData,
+                    method: "POST",
+                    contentType: false,
+                    processData: false,
+                    success: (data) => {
+                        vm.reply = undefined;
+                        if (data.errno == 0) {
+                            $.toast("评论发表成功!");
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 1000)
+                        } else if (data.errno === 1000) {
+                            $.toast("请先登录!");
+                        }
+                        else {
+                            $.toast("评论发表失败!");
+                        }
+
+                    }
+                })
+
+
+            },
+            getComment: function () {
+                $.ajax({
+                    url: '/article/getcommentbyarticleid',
+                    data: {
+                        articleid: "{{id}}",
+                        slice: 0,
+                    },
+                    method: 'GET',
+                    success: function (res) {
+                        if (res.errno === 0) {
+                            vm.comments = res.data.commentContent;
+                            vm.commentLength = res.data.commentLength;
+                        }
+
+                    }
+                })
+
+            },
+            getTime: function (time) {
+                return new Date(time).Format("yyyy-MM-dd hh:mm:ss");
+
+            },
+            replyToogle: function (e) {
+                if (!$(e.currentTarget.parentNode).find('.reply').hasClass('reply-active')) {
+                    $(e.currentTarget.parentNode).find('.reply').addClass('reply-active');
+                } else {
+                    $(e.currentTarget.parentNode).find('.reply').removeClass('reply-active');
+                }
+
+
+            },
+            replyTo: function (e, id, name) {
+                vm.reply = {};
+                vm.reply.id = id;
+                vm.reply.name = name;
+                $(e.currentTarget).removeClass('reply-active');
+                $('#comment-input').focus();
             }
         }
 
     })
     $('.icon-weixin').on('click', function () {
         $.toast('请使用浏览器分享功能分享到微信');
+    })
+    $('#comment-input').keyup(function () {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + "px"
     })
 
     Date.prototype.Format = function (fmt) {

@@ -5,15 +5,9 @@ class Comment extends think.model.base {
         this.tableName = 'comment';
     }
 
-    async addComment(userid, articleid, authorAvatar, authorName, content) {
+    async addComment(data) {
         try {
-            let insertId = await this.add({
-                "authorId": userid,
-                "authorAvatar": authorAvatar,
-                "authorName": authorName,
-                "postId": articleid,
-                "content": content
-            });
+            let insertId = await this.add(data);
             return insertId;
         } catch (e) {
             think.log(`add user cause wrong ${e}`);
@@ -23,7 +17,7 @@ class Comment extends think.model.base {
 
 
     async getCommentByPostId(postid) {
-        let data = await this.field('authorAvatar, authorName, content, updateTime').where({postid: postid}).select();
+        let data = await this.order('updateTime ASC').field('authorId, authorAvatar, authorName, content, updateTime, replyToName').where({postid: postid}).select();
         return data;
     }
 

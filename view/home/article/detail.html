@@ -194,7 +194,8 @@
     $.ajax({
         url: '/article/getcommentbyarticleid',
         data: {
-            articleid: "{{articleid}}"
+            articleid: "{{articleid}}",
+            slice: 1,
         },
         method: 'GET',
         success: data => {

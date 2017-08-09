@@ -35,7 +35,7 @@ class Article extends think.model.base {
         return authorid;
     }
 
-    async getRelativeArticlesByCol(col, articleid,type) {
+    async getRelativeArticlesByCol(col, articleid, type) {
         let relativeArticles = await this.field('id, title, description, poster, authorName').order('updateTime DESC').where({
             col: col,
             id: ['!=', articleid],
