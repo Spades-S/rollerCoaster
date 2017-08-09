@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>欢乐冶</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <style>
+        *{
+            -webkit-font-smoothing: antialiased;
+        }
+        .bar{
+            border-bottom: none;
+            padding-right: 0.5rem;
+        }
+        .bar.bar-nav{
+            height: 3rem;
+            background-color: #07518f;
+            display: flex;
+            align-items: center;
+        }
+        .icon-arrow-left, .icon-dingwei{
+            flex: 1;
+        }
+        .icon-dingwei::before{
+            float: right;
+            color: #FFFFFF;
+        }
+        .bar .searchbar{
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: transparent;
+            flex: 10;
+            box-sizing: border-box;
+        }
+        .search-input{
+            width: 100%;
+            border-radius: .3rem;
+            box-sizing: border-box;
+            font-size: .6rem;
+        }
+        .searchbar .searchbar-cancel{
+            margin-left: .3rem;
+        }
+        .bar .searchbar .searchbar-cancel{
+            font-size: .7rem;
+            color: #fff;
+        }
+        .searchbar .search-input input {
+            height: 1.8rem;
+            margin: 0;
+        }
+        .search-input label+input {
+            padding-left: .7rem;
+        }
+        .icon-sousuo{
+            position: absolute;
+            line-height: 1.8rem;
+            right: .5rem;
+            color: #6EB732;
+        }
+        .bar ~ .content{
+            background-color: #FFF;
+            top: 3rem;
+        }
+
+        .search-content {
+            height: calc(100% - 3rem);
+        }
+
+        .buttons-tab {
+            background-color: #eeeeee;
+            border: none;
+            overflow: scroll;
+        }
+
+        .buttons-tab .button {
+            height: 2rem;
+            bottom: 0;
+        }
+
+        .buttons-tab .button.active {
+            color: #07518f;
+            border-bottom: none;
+            border-top: 2px solid #72bb38;
+            border-right-color: #d4cbcb;
+            border-top-width: 3px;
+            background: #fff;
+        }
+
+        .content-tab {
+            background-color: #fff;
+            width: 100%;
+            height: calc(100% - 2.6rem);
+        }
+
+        .tab-link.button {
+            margin-left: 0;
+            margin-right: 0;
+            padding-left: 1.3rem;
+            padding-right: 1.3rem;
+            border-right: 1px solid #d4cbcb;
+
+        }
+
+        .tabs,
+        .tab {
+            height: 100%;
+        }
+
+        .sr-container {
+
+            display: block;
+            padding: 0.8rem;
+            height: 4.6rem;
+        }
+
+        .sr-img {
+            height: 3rem;
+            width: 3rem;
+            float: left;
+            overflow: hidden;
+        }
+
+        .sr-img img{
+            height: 3rem;
+            width: auto;
+        }
+
+        .sr-info {
+            width: 100%;
+            height: 100%;
+            padding-left: 4.3rem;
+
+        }
+
+        .sr-title {
+            overflow: hidden;
+            height: 1.25rem;
+            margin-top: .2rem;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 16px;
+            color: #565252;
+        }
+
+        .sr-star, .sr-members, .sr-date{
+            margin-top: .4rem;
+            width: 100% !important;
+        }
+
+        .sr-star span, .sr-members span, .sr-date span{
+            color: grey;
+            font-size: 11px;
+            margin-right: 0.2rem;
+        }
+
+        .sr-star img {
+            width: 10px;
+
+        }
+
+        .hr {
+            height: 1px;
+            border-top: 1px solid #d4d4d4;
+        }
+    </style>
+</head>
+<body>
+<div class="page" id="page">
+    <header class="bar bar-nav">
+        <a href="" class="iconfont icon-arrow-left back"></a>
+        <div class="searchbar">
+            <div class="search-input">
+                <label class="search-icon iconfont icon-sousuo active "></label>
+                <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show' @input="typeSearch" @keypress="doSearch"/>
+            </div>
+            <a class="searchbar-cancel">取消</a>
+        </div>
+        <a href="" class="iconfont icon-dingwei"></a>
+    </header>
+    <div class="content">
+        <div class="search-content">
+            <div class="buttons-tab">
+                <a :href="'#tab' + (index + 1)" v-for="tab, index in type" :data-index="index" :class="'tab-link button ' + (index === tabIndex ? 'active' : '')" @click="switchIndex">{$ tab.item $}</a>
+            </div>
+            <div class="content-tab">
+                <div class="tabs">
+                    <div id="tab1" :class="'tab ' + (0===tabIndex?'active':'')">
+                        <div class="search-result" v-for="rc, index in rcList" :key="index">
+                            <a class="sr-container external" :href="'/discovery/facility?id=' + rc.id">
+                                <div class="sr-img">
+                                    <img :src="rc.poster.split(',')[0]" alt="">
+                                </div>
+                                <div class="sr-info">
+                                    <div class="sr-title">{$ rc.title $}</div>
+                                    <div class="sr-star" :data-score="rc.rating">
+                                        <span>综合评分: </span>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="hr"></div>
+                        </div>
+                    </div>
+                    <div id="tab2" :class="'tab ' + (1===tabIndex?'active':'')">
+                        <div class="search-result" v-for="dr, index in drList" :key="index">
+                            <a class="sr-container external">
+                                <div class="sr-img">
+                                    <img src="/static/img/article-img.jpg" alt="">
+                                </div>
+                                <div class="sr-info">
+                                    <div class="sr-title"></div>
+                                    <div class="sr-star">
+                                        <span>综合评分: </span>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="hr"></div>
+                        </div>
+                    </div>
+                    <div id="tab3" :class="'tab ' + (2===tabIndex?'active':'')">
+                        <div class="search-result" v-for="show, index in showList" :key="index">
+                            <a class="sr-container external">
+                                <div class="sr-img">
+                                    <img src="/static/img/article-img.jpg" alt="">
+                                </div>
+                                <div class="sr-info">
+                                    <div class="sr-title"></div>
+                                    <div class="sr-star">
+                                        <span>综合评分: </span>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="hr"></div>
+                        </div>
+                    </div>
+                    <div id="tab4" :class="'tab ' + (3===tabIndex?'active':'')">
+                        <div class="search-result" v-for="group, index in groupList" :key="index">
+                            <a class="sr-container external" :href="'/group/' + group.id">
+                                <div class="sr-img">
+                                    <img :src="group.cover" alt="">
+                                </div>
+
+                                <div class="sr-info">
+                                    <div class="sr-title">{$ group.title $}</div>
+                                    <div class="sr-members">
+                                        <span>成员数: {$ group.members $}</span>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="hr"></div>
+                        </div>
+                    </div>
+                    <div id="tab5" :class="'tab ' + (4===tabIndex?'active':'')">
+                        <div class="search-result" v-for="article, index in articleList" :key="index">
+                            <a class="sr-container external" :href="'/article/detail?articleid=' + article.id">
+                                <img :src="article.poster || '/static/img/article-img.jpg'" alt="" class="sr-img">
+                                <div class="sr-info">
+                                    <div class="sr-title">{$ article.title $}</div>
+                                    <div class="sr-date">
+                                        <span>{$ new Date(article.updateTime).Format("yyyy-MM-dd hh:mm") $}</span>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="hr"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript" src="/static/vue/vue.js"></script>
+<script src="/static/js/raty/jquery.raty.js"></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
+<script>
+    $.init();
+
+    var vm = new Vue({
+        delimiters: ['{$', '$}'],
+        data () {
+        	return {
+        		result: [],
+                keyword: '',
+                tabIndex: 0,
+                type: [{
+        			item: '过山车',
+                    en: 'rcList'
+                }, {
+        			item: '黑暗乘骑',
+                    en: 'drList'
+                }, {
+	                item: '演出',
+                    en: 'showList'
+                }, {
+        			item: '小组',
+                    en: 'groupList'
+                }, {
+        			item: '文章',
+                    en: 'articleList'
+                }],
+                keyword: '',
+                rcList: [],
+                drList: [],
+                showList: [],
+                groupList: [],
+                articleList: []
+            }
+        },
+        created: function () {
+            let search = window.location.search
+            if (/(\?|\&)t=/.test(search)) {
+            	this.tabIndex = parseInt(search.match(/(\?|\&)t=\d+/)[0].replace(/(\?|\&)t=/, ''))
+            }
+	        if (/(\?|\&)q=/.test(search)) {
+		        this.keyword = search.match(/(\?|\&)q=[^\s&]+/)[0].replace(/(\?|\&)q=/, '')
+	        }
+	        if(this.keyword){
+            	this.search()
+	        }
+        },
+        methods: {
+        	search: function () {
+        		if(this.keyword){
+        			return $.toast('请输入关键词')
+                }
+        		let self = this
+                $.ajax({
+                    url: '/search/searchbykeyword',
+                    data: {
+                    	type: (self.tabIndex + 1),
+                        keyword: self.keyword
+                    },
+                    success: function (ret) {
+                    	self[self.type[self.tabIndex].en] = ret.data.data
+                        if(ret.data.data.length === 0) {
+                    		$.toast('没有查询到结果')
+                        }
+                    },
+                    error: function (err) {
+	                    $.toast('查询失败，请刷新重试')
+	                    console.log(self.tabIndex, self.keyword)
+                        console.log(err)
+                    }
+                })
+	        },
+            typeSearch: function (e) {
+                this.keyword = e.target.value
+            },
+            doSearch: function (e) {
+	            if (e.keyCode === 13) {
+		            this.search()
+	            }
+            },
+            switchIndex: function (e) {
+                this.tabIndex = parseInt(e.target.dataset.index)
+            }
+        }
+    }).$mount('#page')
+
+    $('.sr-star').raty({
+        path: '/static/js/raty/img',
+	    number: 5,
+	    score: 2.8,
+    });
+
+    Date.prototype.Format = function (fmt) {
+	    var o = {
+		    "M+": this.getMonth() + 1, //月份
+		    "d+": this.getDate(), //日
+		    "h+": this.getHours(), //小时
+		    "m+": this.getMinutes(), //分
+		    "s+": this.getSeconds(), //秒
+		    "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+		    "S": this.getMilliseconds() //毫秒
+	    };
+	    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+	    for (var k in o)
+		    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+	    return fmt;
+    }
+</script>
+</body>
+</html>

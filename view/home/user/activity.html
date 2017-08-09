@@ -42,6 +42,43 @@
             top: 3rem;
             background-color: #fff;
         }
+        .theme{
+            font-size: .8rem;
+            padding: .5rem;
+            background-color: #F5F4F9;
+        }
+        .group-item{
+            height: 4rem;
+            padding: .8rem .5rem;
+            display: flex;
+            border-bottom: 1px solid #F9F9F9;
+        }
+        .group-item>div{
+            display: inline-block;
+        }
+        .cover, .cover img{
+            height: 2.4rem;
+            width: 2.4rem;
+        }
+        .group-item-info{
+            flex: 1;
+            margin-left: 1rem;
+            position: relative;
+        }
+        .group-title{
+            font-size: .8rem;
+            line-height: 1.5rem;
+        }
+        .members, .group-time{
+            line-height: 1rem;
+            font-size: .6rem;
+            color: #999
+        }
+        .group-time{
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
     </style>
 </head>
 <body>
@@ -50,7 +87,21 @@
         <h1 class="title">我的活动</h1>
         <a href="" class="iconfont icon-arrow-left back"></a>
     </header>
-    <div class="content"></div>
+    <div class="content" id="content">
+        <div class="theme">我的活动</div>
+        <div class="rows">
+            <div class="group-item" v-for="act in activity" :data-id="act.id" @click="toGroup">
+                <div class="cover">
+                    <img :src="act.cover" alt="">
+                </div>
+                <div class="group-item-info">
+                    <div class="group-title">{$ act.title $}</div>
+                    <div class="members">参加人数：{$ act.joinNumber $}</div>
+                    <div class="group-time">活动时间：{$ act.activityTime $}</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -59,5 +110,41 @@
 <script type="text/javascript " src="/static/vue/vue.js "></script>
 <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script>
+    $.init();
+
+    new Vue({
+        delimiters: ['{$', '$}'],
+        data () {
+        	return {
+                activity: []
+            }
+        },
+        created: function () {
+        	let self = this
+	        $.ajax({
+		        url: '/user/getmyactivity',
+		        success: function (ret) {
+		        	if(ret.errno === 0) {
+				        self.activity = ret.data
+		        		if (ret.data.length === 0) {
+		        			$.toast('您还未参加任何活动')
+                        }
+                    }
+		        },
+		        error: function (err) {
+			        console.log(err)
+                    $.toast('获取失败，请刷新重试')
+		        }
+	        })
+        },
+        methods: {
+        	toGroup: function (e) {
+                window.location.href = '/group/' + e.currentTarget.dataset.id
+	        }
+        }
+    }).$mount('#content')
+
+</script>
 </body>
 </html>

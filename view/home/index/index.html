@@ -16,7 +16,14 @@
     <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/css/index.css">
     <link rel="stylesheet" href="/static/iconfont/iconfont.css">
-
+    <style>
+        .icon-sousuo{
+            line-height: 2.8rem;
+            right: 1rem;
+            font-size: 1rem;
+            color: #efefef;
+        }
+    </style>
 </head>
 
 <body>
@@ -24,17 +31,18 @@
     <div class="page page-current" id="index-page">
         <div class="bar bar-header-secondary search-container">
             <div class="logo"><img src="/static/img/icon/logo.png"></div>
+            <!--  search bar
             <div class="searchbar">
                 <a class="searchbar-cancel">取消</a>
-                <div class="search-input">
+                <div class="search-input" onclick="window.location.href='/search'">
                     <form action="">
                         <label class="search-icon iconfont icon-sousuo active "></label>
                         <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show  小组'/>
-
                     </form>
 
                 </div>
-            </div>
+            </div>-->
+            <a class="search-icon iconfont icon-sousuo active " onclick="window.location.href='/search'"></a>
         </div>
 
 
@@ -45,7 +53,7 @@
                     <a href="/score" class="button score external">成就排名</a>
                 </div>
                 <div class="button-row marginbottom">
-                    <a href="#" class="button group">我的小组</a>
+                    <a href="/group" class="button group external">我的小组</a>
 
                     <a href="/user/feedback" class="button feed external">意见反馈</a>
                 </div>
@@ -53,7 +61,7 @@
             </div>
             <div class="article-list" id="article-list">
                 <template v-for="item, index in articles">
-                    <div :class="'article-item ' + item.readClass" :data-index="index" v-bind:data-articleid="item.id"> <!-- getClass(item.id, greyList) -->
+                    <div :class="'article-item ' + item.readClass" :data-index="index" :data-articleid="item.id"> <!-- getClass(item.id, greyList) -->
                         <div class="article-content padded">
                             <img :src="'/static/img'+item.poster " class="article-firstimg ">
                             <div class="article-title ">{$ escape(item.title) $}</div>
@@ -96,256 +104,7 @@
             <span class="icon iconfont icon-wode left-negtivedot2"></span>
             <span class="tab-label ">我的</span>
         </a>
-
     </nav>
-
-    <div class="page no-tabbar" id="search-page">
-
-        <div class="bar bar-header-secondary search-container">
-            <a class="iconfont icon-arrow-left" id="back-btn">
-            </a>
-            <div class="searchbar inner">
-                <a class="searchbar-cancel">取消</a>
-                <div class="search-input">
-                    <form action="">
-                        <label class="search-icon iconfont icon-sousuo active"></label>
-                        <input type="search" id='search-inner' class="search " placeholder='过山车  黑暗骑士  show  小组'/>
-                    </form>
-                    <label></label>
-                </div>
-            </div>
-            <a href="" class="location iconfont icon-dingwei"></a>
-        </div>
-        <div class="search-content">
-            <div class="buttons-tab">
-                <a href="#tab1" class="tab-link active button">过山车</a>
-                <a href="#tab2" class="tab-link button">小组</a>
-                <a href="#tab3" class="tab-link button">演出</a>
-                <a href="#tab4" class="tab-link button">黑暗乘骑</a>
-                <a href="#tab5" class="tab-link button">文章</a>
-            </div>
-            <div class="content-tab">
-                <div class="tabs">
-                    <div id="tab1" class="tab active">
-                        <div class="search-result">
-                            <a class="sr-container">
-                                <img src="/static/img/article-img.jpg" alt="" class="sr-img">
-                                <div class="sr-info">
-                                    <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                    <div class="sr-star">
-                                        <span>综合评分: </span>
-                                    </div>
-
-                                </div>
-                            </a>
-                            <div class="hr"></div>
-                        </div>
-                        <div class="search-result">
-                            <a class="sr-container">
-                                <img src="/static/img/article-img.jpg" alt="" class="sr-img">
-                                <div class="sr-info">
-                                    <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                    <div class="sr-star">
-                                        <span>综合评分: </span>
-                                    </div>
-
-                                </div>
-                            </a>
-                            <div class="hr"></div>
-                        </div>
-                        <div class="search-result">
-                            <a class="sr-container">
-                                <img src="/static/img/article-img.jpg" alt="" class="sr-img">
-                                <div class="sr-info">
-                                    <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                    <div class="sr-star">
-                                        <span>综合评分: </span>
-                                    </div>
-
-                                </div>
-                            </a>
-                            <div class="hr"></div>
-                        </div>
-                    </div>
-                    <div id="tab2" class="tab">
-                        <div class="search-result">
-                            <div class="search-result">
-                                <a class="sr-container">
-                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
-                                    <div class="sr-info">
-                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                        <div class="sr-star">
-                                            <span>综合评分: </span>
-                                        </div>
-
-                                    </div>
-                                </a>
-                                <div class="hr"></div>
-                            </div>
-                            <div class="search-result">
-                                <a class="sr-container">
-                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
-                                    <div class="sr-info">
-                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                        <div class="sr-star">
-                                            <span>综合评分: </span>
-                                        </div>
-
-                                    </div>
-                                </a>
-                                <div class="hr"></div>
-                            </div>
-                            <div class="search-result">
-                                <a class="sr-container">
-                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
-                                    <div class="sr-info">
-                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                        <div class="sr-star">
-                                            <span>综合评分: </span>
-                                        </div>
-
-                                    </div>
-                                </a>
-                                <div class="hr"></div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div id="tab3" class="tab">
-                        <div class="search-result">
-                            <div class="search-result">
-                                <a class="sr-container">
-                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
-                                    <div class="sr-info">
-                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                        <div class="sr-star">
-                                            <span>综合评分: </span>
-                                        </div>
-
-                                    </div>
-                                </a>
-                                <div class="hr"></div>
-                            </div>
-                            <div class="search-result">
-                                <a class="sr-container">
-                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
-                                    <div class="sr-info">
-                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                        <div class="sr-star">
-                                            <span>综合评分: </span>
-                                        </div>
-
-                                    </div>
-                                </a>
-                                <div class="hr"></div>
-                            </div>
-                            <div class="search-result">
-                                <a class="sr-container">
-                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
-                                    <div class="sr-info">
-                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                        <div class="sr-star">
-                                            <span>综合评分: </span>
-                                        </div>
-
-                                    </div>
-                                </a>
-                                <div class="hr"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="tab4" class="tab">
-                        <div class="search-result">
-                            <div class="search-result">
-                                <a class="sr-container">
-                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
-                                    <div class="sr-info">
-                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                        <div class="sr-star">
-                                            <span>综合评分: </span>
-                                        </div>
-
-                                    </div>
-                                </a>
-                                <div class="hr"></div>
-                            </div>
-                            <div class="search-result">
-                                <a class="sr-container">
-                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
-                                    <div class="sr-info">
-                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                        <div class="sr-star">
-                                            <span>综合评分: </span>
-                                        </div>
-
-                                    </div>
-                                </a>
-                                <div class="hr"></div>
-                            </div>
-                            <div class="search-result">
-                                <a class="sr-container">
-                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
-                                    <div class="sr-info">
-                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                        <div class="sr-star">
-                                            <span>综合评分: </span>
-                                        </div>
-
-                                    </div>
-                                </a>
-                                <div class="hr"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="tab5" class="tab">
-                        <div class="search-result">
-                            <div class="search-result">
-                                <a class="sr-container">
-                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
-                                    <div class="sr-info">
-                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                        <div class="sr-star">
-                                            <span>综合评分: </span>
-                                        </div>
-
-                                    </div>
-                                </a>
-                                <div class="hr"></div>
-                            </div>
-                            <div class="search-result">
-                                <a class="sr-container">
-                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
-                                    <div class="sr-info">
-                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                        <div class="sr-star">
-                                            <span>综合评分: </span>
-                                        </div>
-
-                                    </div>
-                                </a>
-                                <div class="hr"></div>
-                            </div>
-                            <div class="search-result">
-                                <a class="sr-container">
-                                    <img src="/static/img/article-img.jpg" alt="" class="sr-img">
-                                    <div class="sr-info">
-                                        <div class="sr-title">上海迪士尼极速光轮过山车上海迪士尼极速光轮过山车</div>
-                                        <div class="sr-star">
-                                            <span>综合评分: </span>
-                                        </div>
-
-                                    </div>
-                                </a>
-                                <div class="hr"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-    </div>
 </div>
 <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
 <script type="text/javascript" src="/static/vue/vue.js"></script>
