@@ -174,10 +174,10 @@
 
 <div class="page">
     <header class="bar bar-nav">
-        <div class="searchbar">
+        <div class="searchbar" id="searchbar">
             <div class="search-input">
                 <label class="search-icon iconfont icon-sousuo active "></label>
-                <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show'/>
+                <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show' @input="typeSearch" @keypress="doSearch"/>
             </div>
             <a class="searchbar-cancel">取消</a>
         </div>
@@ -309,6 +309,25 @@
             }
         }
     }).$mount('#content')
+
+    new Vue({
+	    data () {
+		    return {
+			    keyword: ''
+		    }
+	    },
+	    methods: {
+		    typeSearch: function (e) {
+			    this.keyword = e.target.value
+			    console.log(this.keyword)
+		    },
+		    doSearch: function (e) {
+			    if(this.keyword && e.keyCode === 13){
+				    window.location.href = '/search?t=' + 3 + '&q=' + this.keyword
+			    }
+		    }
+	    }
+    }).$mount('#searchbar')
 
     $(document).on('click', '.group-item, .activity-cover', function (e) {
         if (e.currentTarget.dataset.id) {

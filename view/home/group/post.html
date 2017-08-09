@@ -165,6 +165,12 @@
                         if (ret.errno === 0) {
                             window.location.href = '/group/' + "{{ groupId }}"
                         }
+                        if (ret.errmsg==='not login') {
+                        	$.toast('登录失效，请重新登录')
+                            setTimeout(function () {
+                                window.location.href = '/user/login'
+                            }, 1000)
+                        }
                     }
                 })
             }
