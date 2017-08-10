@@ -179,7 +179,7 @@
         }
 
         .content-list-item {
-            height: 5rem;
+            height: 6rem;
             padding: .8rem 1rem;
             display: flex;
             background-color: #fff;
@@ -187,8 +187,8 @@
         }
 
         .facility-poster {
-            height: 3.4rem;
-            width: 3.4rem;
+            height: 4rem;
+            width: 4rem;
         }
 
         .facility-poster-img {
@@ -233,7 +233,7 @@
             color: #999;
         }
 
-        .toogle-display{
+        .toogle-display {
             display: none;
         }
 
@@ -261,16 +261,21 @@
         .show {
             display: block;
         }
+
+        .star-intro {
+            font-size: 0.7rem;
+        }
     </style>
 </head>
 <body>
-<div class="page" >
+<div class="page">
     <header class="bar bar-nav">
-        <div class="default-header" >
-            <div class="searchbar">
+        <div class="default-header">
+            <div class="searchbar" id="searchbar">
                 <div class="search-input">
-                        <label class="search-icon iconfont icon-sousuo active "></label>
-                        <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show' @input="typeSearch"  @keypress="doSearch"/>
+                    <label class="search-icon iconfont icon-sousuo active "></label>
+                    <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show' @input="typeSearch"
+                           @keypress="doSearch"/>
                 </div>
                 <a class="searchbar-cancel">取消</a>
 
@@ -279,7 +284,7 @@
                 <div class="map-icon iconfont icon-dingwei"></div>
             </a>
         </div>
-        <div class="toogle-display" >
+        <div class="toogle-display">
 
             <a class=" iconfont icon-arrow-left external" href="/discovery"></a>
             <h1 class="title">附近</h1>
@@ -335,7 +340,10 @@
                             <div class="facility-title">
                                 {$ item.title $}
                             </div>
-                            <div class="facility-rating">
+                            <div>
+                                <span class="star-intro">评分：</span>
+                                <span class="star" :data-score="item.rating" v-if="item.rating!=0"></span>
+                                <span v-else>--</span>
                             </div>
                             <div class="facility-detail">
                                 <div class="facility-price">
@@ -377,13 +385,21 @@
 
 <script type="text/javascript " src="/static/vue/vue.js "></script>
 <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
-<script src="/static/js/raty/jquery.raty.js"></script>
+<!--<script src="/static/js/raty/jquery.raty.js"></script>-->
+<script type="text/javascript" src="/static/star/starlib.js"></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
-<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 <script>
     $.init();
-
-    $.fn.raty.defaults.path = '/static/js/raty/img'
+    let starConfig = {
+        num: 5,
+        readOnly: true,
+        imgPath: {
+            neg: '/static/star/images/starNeg.png',
+            act: '/static/star/images/starAct.png',
+        },
+        size: 0.6 //单位rem
+    }
+    let star = new raty('.star', starConfig);
     let loading = false
 
     let position = ''
@@ -424,14 +440,11 @@
             }
         },
         created: function () {
+            star.init();
             this.getFacility(this.perPageItems, this.page, position)
         },
         updated: function () {
-            $('.facility-rating').raty({
-                half: true,
-                number: 5,
-                score: 2.5
-            })
+            star.set();
         },
         watch: {
             activeIndex: function (newVal) {
@@ -456,26 +469,26 @@
                         radius: self.radius
                     },
                     success: function (ret) {
-                    	if(ret.errno === 0){
-                    		let list = ret.data.data
-		                    for (let i in list) {
-			                    list[i].distance = self.convertToKilometers(list[i].geolocation)
-		                    }
-		                    list.sort((a, b) => {
-			                    return a.distance - b.distance
-		                    })
+                        if (ret.errno === 0) {
+                            let list = ret.data.data
+                            for (let i in list) {
+                                list[i].distance = self.convertToKilometers(list[i].geolocation)
+                            }
+                            list.sort((a, b) => {
+                                return a.distance - b.distance
+                            })
 
-		                    self.facilityList = self.facilityList.concat(list)
-		                    self.page ++
-                            if(ret.data.totalPages === 1){
-                                self.radius ++
+                            self.facilityList = self.facilityList.concat(list)
+                            self.page++
+                            if (ret.data.totalPages === 1) {
+                                self.radius++
                                 self.getFacility(self.perPageItems, self.page, position, self.radius)
                             }
                             return
                         }
-                        if(ret.errmsg === 'no more'){
+                        if (ret.errmsg === 'no more') {
                             if (self.activeIndex === 0) {
-                                self.radius ++
+                                self.radius++
                                 self.getFacility(self.perPageItems, self.page, position, self.radius)
                                 return
                             }
@@ -531,7 +544,7 @@
                 this.disappear = true;
                 $('.content-tab').addClass('disappear');
                 $('.default-header').addClass('disappear');
-                $('h1.title').html('附近'+this.cats[this.activeIndex].short);
+                $('h1.title').html('附近' + this.cats[this.activeIndex].short);
                 $('.toogle-display').addClass('show');
             }
         }
@@ -540,20 +553,20 @@
 
     new Vue({
         data () {
-        	return {
-        		keyword: ''
+            return {
+                keyword: ''
             }
         },
         methods: {
-	        typeSearch: function (e) {
-		        this.keyword = e.target.value
-		        console.log(this.keyword)
-	        },
-	        doSearch: function (e) {
-	        	if(this.keyword && e.keyCode === 13){
-			        window.location.href = '/search?t=' + vm.activeIndex + '?q=' + this.keyword
-		        }
-	        }
+            typeSearch: function (e) {
+                this.keyword = e.target.value
+                console.log(this.keyword)
+            },
+            doSearch: function (e) {
+                if (this.keyword && e.keyCode === 13) {
+                    window.location.href = '/search?t=' + vm.activeIndex + '?q=' + this.keyword
+                }
+            }
         }
     }).$mount('#searchbar')
 

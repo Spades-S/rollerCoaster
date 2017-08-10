@@ -168,7 +168,7 @@
             text-align: left;
         }
 
-        .mask {
+        .mask, .share-mask {
             position: absolute;
             top: 0;
             left: 0;
@@ -249,6 +249,30 @@
             position: absolute;
             right: 0;
         }
+
+        .share-content {
+            display: flex;
+            padding: 0 20%;
+            flex-direction: row;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 2.3rem;
+            line-height: 2.3rem;
+            z-index: 13;
+            background: #fff;
+            color: #60B300;
+            justify-content: space-around;
+        }
+
+        .share-content .iconfont {
+            font-size: 1.2rem;
+        }
+
+        .share-content a {
+            color: #60B300;
+        }
+
     </style>
 </head>
 <body>
@@ -273,7 +297,7 @@
                     <div class="btn desc" @click="showDetail">小组简介</div>
                 </div>
                 <div class="span-13">
-                    <div class="btn share">分享</div>
+                    <div class="btn share" @click="shareDisplay">分享</div>
                 </div>
                 <div class="span-18">
                     <button :class="'btn join ' + (groupInfo.userInThisGroup ? 'disabled' : '')"
@@ -316,7 +340,16 @@
                 </div>
             </div>
         </div>
+        <div class="share-content" v-if="shareShow">
+            <span class="iconfont icon-weixin" @click="wechat"></span>
+            <a class="iconfont icon-qq external"
+               href="http://connect.qq.com/widget/shareqq/index.html?url=http%3A%2F%2Flocalhost%3A8080%2Farticle%2Fdetail%3Farticleid%3D36&title=%E6%AC%A2%E4%B9%90%E5%86%B6&source=%E6%AC%A2%E4%B9%90%E5%86%B6&desc=&pics=http%3A%2F%2Flocalhost%3A8080%2Fstatic%2Fimgundefined"></a>
+            <a class="iconfont icon-f external"
+               href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fovertrue.me%2Fshare.js%2F"></a>
+            <a class="iconfont icon-tuite external" href="https://twitter.com/intent/tweet?text=玩在欢乐冶"></a>
+        </div>
         <div class="mask" v-if="groupDetailShow" @click="hideDetail"></div>
+        <div class="share-mask" v-if="shareShow" @click="shareDisappear"></div>
     </div>
 </div>
 
@@ -334,6 +367,7 @@
                 groupInfo: {},
                 posts: undefined,
                 groupDetailShow: false,
+                shareShow: false,
                 joinDisabled: false,
                 quitDisabled: false,
                 detailList: [{
@@ -399,10 +433,20 @@
                 })
             },
             showDetail: function () {
-                this.groupDetailShow = !this.groupDetailShow
+                console.log('show');
+                this.groupDetailShow = true;
             },
             hideDetail: function () {
-                this.groupDetailShow = !this.groupDetailShow
+                this.groupDetailShow = false;
+            },
+            shareDisplay: function () {
+                this.shareShow = true;
+            },
+            shareDisappear: function () {
+                this.shareShow = false;
+            },
+            wechat:function(){
+              $.toast('请使用浏览器分享功能分享到微信');
             },
             toPost: function () {
                 if (/uid/.test(document.cookie)) {
