@@ -42,6 +42,8 @@ export default class extends base {
                 commentData.replyToId = Number(this.post('replyId'));
                 commentData.replyToName = this.post('replyName')
             }
+            let articleModel = this.model('article');
+            let line = await articleModel.updateCommentNum(Number(articleid));
             let data = await commentModel.addComment(commentData);
             return this.success(data);
         }
