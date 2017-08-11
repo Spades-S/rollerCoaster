@@ -38,7 +38,7 @@ export default class extends base {
                 authorName: authorName,
                 content: content,
             }
-            if(this.post('replyId')){
+            if (this.post('replyId')) {
                 commentData.replyToId = Number(this.post('replyId'));
                 commentData.replyToName = this.post('replyName')
             }
@@ -129,15 +129,16 @@ export default class extends base {
         if (uid) {
             let userModel = this.model('user');
             let rowdata = await userModel.getLikes(uid);
-            likes = JSON.parse(rowdata[0].likes);
+            if (JSON.parse(rowdata[0].likes)) {
+                likes = JSON.parse(rowdata[0].likes);
+            }
         } else {
             if (this.cookie('likecookie')) {
                 likes = JSON.parse(this.cookie('likecookie'));
             }
         }
-
         let data = false;
-        if (likes!=null && likes.indexOf(articleid) >= 0) {
+        if (likes.indexOf(articleid) >= 0) {
             data = true;
 // =======
 //         let articleid = this.post('articleid');
