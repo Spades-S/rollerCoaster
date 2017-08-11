@@ -377,6 +377,8 @@
                             }
                             if (res.data.currentPage === res.data.totalPages) {
                                 self.disableFlag[grouptype] = 1;
+                                $.toast('没有更多小组了!')
+
                             }
                             self.currentPage[grouptype]++;
 
