@@ -137,7 +137,7 @@ export default class extends base {
         }
 
         let data = false;
-        if (likes.indexOf(articleid) >= 0) {
+        if (likes!=null && likes.indexOf(articleid) >= 0) {
             data = true;
 // =======
 //         let articleid = this.post('articleid');
