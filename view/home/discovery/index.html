@@ -265,6 +265,10 @@
         .star-intro {
             font-size: 0.7rem;
         }
+
+        .raty-container {
+            margin-right: 0.3rem !important;
+        }
     </style>
 </head>
 <body>
@@ -560,7 +564,6 @@
         methods: {
             typeSearch: function (e) {
                 this.keyword = e.target.value
-                console.log(this.keyword)
             },
             doSearch: function (e) {
                 if (this.keyword && e.keyCode === 13) {
