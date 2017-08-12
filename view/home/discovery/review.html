@@ -10,6 +10,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
     <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
     <style>
         * {
             box-sizing: border-box;
@@ -135,14 +136,13 @@
         <div class="button button-big disabled" disabled="true">提交评测</div>
     </div>
 </div>
-
-
 <script type="text/javascript " src="/static/vue/vue.js "></script>
 <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 <script type="text/javascript" src="/static/star/starlib.js"></script>
 <script>
-    $.init;
+    $.init();
     let starConfig = {
         num: 5,
         readOnly: false,
@@ -152,7 +152,7 @@
         },
         size: 1.3 //单位rem
     }
-    let star = new raty('.star', starConfig);
+    var star = new raty('.star', starConfig);
 
     star.init();
 
