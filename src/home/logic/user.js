@@ -45,7 +45,6 @@ export default class extends think.logic.base {
 
     async passwordAction() {
         let code = await this.session('code')
-        console.log(code)
         if (!code) {
             return this.redirect('/user/index')
         }
