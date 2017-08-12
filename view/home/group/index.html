@@ -20,6 +20,11 @@
             padding-right: 0.2rem;
         }
 
+        .bar.bar-tab {
+            display: flex;
+            flex-direction: row;
+        }
+
         .bar.bar-nav {
             height: 3rem;
             background-color: #07518f;
@@ -377,6 +382,8 @@
                             }
                             if (res.data.currentPage === res.data.totalPages) {
                                 self.disableFlag[grouptype] = 1;
+                                $.toast('没有更多小组了!')
+
                             }
                             self.currentPage[grouptype]++;
 
