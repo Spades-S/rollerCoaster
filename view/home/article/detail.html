@@ -167,7 +167,7 @@
                 let content = escape2Html(data.data[0].content)
                 $vm.article.content = content.replace(/(<a [^>]+>)|(<img[^>]+>)/g, function (el) {
                     if (/<img/.test(el)) {
-                        return el.replace(/style="[^"]+"/, ' ').replace(/ src=[^\s]+/, ' ').replace('data-src=”', 'src=”/static/img')
+                        return el.replace(/style="[^"]+"/, ' ').replace(/ src=[^\s]+/, ' ').replace('data-src="', 'src="/static/img')
                     } else {
                         return el.replace('>', ' class="external">').replace(/target[^\s]+/, '')
                     }
