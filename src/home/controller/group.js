@@ -167,6 +167,7 @@ export default class extends base {
 
     async getgroupinfoAction() {
         let id = this.get('id')
+
         let res = await this.model('group').getGroupInfo(id)
         let userModel = this.model('user')
         if (think.isEmpty(res)) {
@@ -183,8 +184,9 @@ export default class extends base {
 
     async getpostsAction() {
         let id = this.get('id')
-        console.log(id)
-        let res = await this.model('article').where({type: 1, col: id}).page(0, 10).countSelect()
+        let num = Number(this.get('num'))
+        let currentPage = Number(this.get('currentPage'))
+        let res = await this.model('article').where({type: 1, col: id}).page(currentPage, num).countSelect()
         if (think.isEmpty(res)) {
             return this.fail('no posts')
         }

@@ -157,7 +157,6 @@ export default class extends think.model.base {
         } else {
             groups = [groupId]
         }
-        console.log('groups', groups)
         let updateRes = await this.where({id: id}).update({groups: JSON.stringify(groups)})
         return updateRes
     }

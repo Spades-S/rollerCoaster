@@ -196,7 +196,7 @@
         <div class="searchbar">
             <div class="search-input">
                 <label class="search-icon iconfont icon-sousuo active "></label>
-                <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show'/>
+                <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show' @keypress="doSearch"/>
             </div>
             <a class="searchbar-cancel">取消</a>
         </div>
@@ -404,11 +404,9 @@
                 self.getPerPageItems(self.currentPage, perPageNum)
 
             },
-            typeSearch: function (e) {
-                this.keyword = e.target.value
-            },
             doSearch: function (e) {
                 if (e.keyCode === 13) {
+                    this.keyword = $('#search').val();
                     this.search()
                 }
             },
@@ -441,9 +439,9 @@
         score: 2.8,
     });
 
-    $('#search').on('input', function (e) {
-        vm.typeSearch(e)
-    });
+    //    $('#search').on('input', function (e) {
+    //        vm.typeSearch(e)
+    //    });
     $('#search').keypress(function (e) {
         vm.doSearch(e)
     });
