@@ -62,10 +62,7 @@ function raty(className, config) {
         let ratyArray = $(className);
         for (let i = 0; i < ratyArray.length; i++) {
             let item = ratyArray[i];
-            console.log($(item));
-            console.log($(item).attr('data-score'))
             let num = Number($(item).attr('data-score'));
-            console.log(num);
             let index = parseInt(num);
             let percnet = (num - parseInt(num)) * 100;
             let ratyContents = $(item).find('.raty-content');

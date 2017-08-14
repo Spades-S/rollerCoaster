@@ -182,13 +182,12 @@ export default class extends base {
             city: this.post('city')
         }
         if (avatarCropped) {
-            console.log('inner');
             let avatarBase64 = avatarCropped.split(',')[1];
             let avatarBinary = new Buffer(avatarBase64, 'base64').toString('binary');
             let userRowData = await userModel.getUserInfo(uid);
             let basePath = this.config('avatarBasePath');
             let detailPath = '/avatar/' + userRowData.id + '.png';
-            fs.writeFileSync(basePath + detailPath, avatarBinary, 'binary', function (err) {
+            fs.writeFile(basePath + detailPath, avatarBinary, 'binary', function (err) {
                 console.log(err);
             });
             userDetail.avatar = detailPath;
@@ -196,7 +195,7 @@ export default class extends base {
 
 
         console.log(userDetail)
-
+        
 
         let updateRes = await userModel.updateUserDetail(userDetail, uid)
         if (!think.isEmpty(updateRes)) {

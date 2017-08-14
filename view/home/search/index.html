@@ -8,34 +8,40 @@
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
-    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="mobile-web-app-status-bar-style" content="black">
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
     <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/iconfont/iconfont.css">
     <style>
-        *{
+        * {
             -webkit-font-smoothing: antialiased;
         }
-        .bar{
+
+        .bar {
             border-bottom: none;
             padding-right: 0.5rem;
         }
-        .bar.bar-nav{
+
+        .bar.bar-nav {
             height: 3rem;
             background-color: #07518f;
             display: flex;
             align-items: center;
         }
-        .icon-arrow-left, .icon-dingwei{
+
+        .icon-arrow-left, .icon-dingwei {
             flex: 1;
+            z-index: 30;
         }
-        .icon-dingwei::before{
+
+        .icon-dingwei::before {
             float: right;
             color: #FFFFFF;
         }
-        .bar .searchbar{
+
+        .bar .searchbar {
             position: relative;
             display: flex;
             align-items: center;
@@ -43,45 +49,52 @@
             flex: 10;
             box-sizing: border-box;
         }
-        .search-input{
+
+        .search-input {
             width: 100%;
             border-radius: .3rem;
             box-sizing: border-box;
             font-size: .6rem;
         }
-        .searchbar .searchbar-cancel{
+
+        .searchbar .searchbar-cancel {
             margin-left: .3rem;
         }
-        .bar .searchbar .searchbar-cancel{
+
+        .bar .searchbar .searchbar-cancel {
             font-size: .7rem;
             color: #fff;
         }
+
         .searchbar .search-input input {
             height: 1.8rem;
             margin: 0;
         }
-        .search-input label+input {
+
+        .search-input label + input {
             padding-left: .7rem;
         }
-        .icon-sousuo{
+
+        .icon-sousuo {
             position: absolute;
             line-height: 1.8rem;
             right: .5rem;
             color: #6EB732;
         }
-        .bar ~ .content{
+
+        .bar ~ .content {
             background-color: #FFF;
             top: 3rem;
+            bottom: 0rem;
         }
 
         .search-content {
-            height: calc(100% - 3rem);
         }
 
         .buttons-tab {
             background-color: #eeeeee;
             border: none;
-            overflow: scroll;
+            overflow-x: auto;
         }
 
         .buttons-tab .button {
@@ -132,7 +145,7 @@
             overflow: hidden;
         }
 
-        .sr-img img{
+        .sr-img img {
             height: 3rem;
             width: auto;
         }
@@ -154,12 +167,12 @@
             color: #565252;
         }
 
-        .sr-star, .sr-members, .sr-date{
+        .sr-star, .sr-members, .sr-date {
             margin-top: .4rem;
             width: 100% !important;
         }
 
-        .sr-star span, .sr-members span, .sr-date span{
+        .sr-star span, .sr-members span, .sr-date span {
             color: grey;
             font-size: 11px;
             margin-right: 0.2rem;
@@ -183,16 +196,19 @@
         <div class="searchbar">
             <div class="search-input">
                 <label class="search-icon iconfont icon-sousuo active "></label>
-                <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show' @input="typeSearch" @keypress="doSearch"/>
+                <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show' @keypress="doSearch"/>
             </div>
             <a class="searchbar-cancel">取消</a>
         </div>
-        <a href="" class="iconfont icon-dingwei"></a>
+        <a href="/discovery/map" class="iconfont icon-dingwei external"></a>
     </header>
-    <div class="content">
-        <div class="search-content">
+    <div class="content infinite-scroll infinite-scroll-bottom" data-distance="10">
+
+        <div class="search-content" id="search-content">
             <div class="buttons-tab">
-                <a :href="'#tab' + (index + 1)" v-for="tab, index in type" :data-index="index" :class="'tab-link button ' + (index === tabIndex ? 'active' : '')" @click="switchIndex">{$ tab.item $}</a>
+                <a :href="'#tab' + (index + 1)" v-for="tab, index in type" :data-index="index"
+                   :class="'tab-link button ' + (index === tabIndex ? 'active' : '')" @click="switchIndex">{$ tab.item
+                    $}</a>
             </div>
             <div class="content-tab">
                 <div class="tabs">
@@ -248,7 +264,7 @@
                         <div class="search-result" v-for="group, index in groupList" :key="index">
                             <a class="sr-container external" :href="'/group/' + group.id">
                                 <div class="sr-img">
-                                    <img :src="group.cover" alt="">
+                                    <img :src="'/static/img'+group.cover" alt="">
                                 </div>
 
                                 <div class="sr-info">
@@ -278,6 +294,9 @@
                 </div>
             </div>
         </div>
+        <div class="infinite-scroll-preloader">
+            <div class="preloader"></div>
+        </div>
     </div>
 </div>
 
@@ -288,28 +307,30 @@
 <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 <script>
     $.init();
+    let perPageNum = 10;
+    let loading = false;
 
     var vm = new Vue({
         delimiters: ['{$', '$}'],
         data () {
-        	return {
-        		result: [],
+            return {
+                result: [],
                 keyword: '',
                 tabIndex: 0,
                 type: [{
-        			item: '过山车',
+                    item: '过山车',
                     en: 'rcList'
                 }, {
-        			item: '黑暗乘骑',
+                    item: '黑暗乘骑',
                     en: 'drList'
                 }, {
-	                item: '演出',
+                    item: '演出',
                     en: 'showList'
                 }, {
-        			item: '小组',
+                    item: '小组',
                     en: 'groupList'
                 }, {
-        			item: '文章',
+                    item: '文章',
                     en: 'articleList'
                 }],
                 keyword: '',
@@ -317,80 +338,128 @@
                 drList: [],
                 showList: [],
                 groupList: [],
-                articleList: []
+                articleList: [],
+                currentPage: 1,
             }
         },
         created: function () {
+            $('#search').val();
+            $('.infinite-scroll-preloader').hide();
             let search = window.location.search
             if (/(\?|\&)t=/.test(search)) {
-            	this.tabIndex = parseInt(search.match(/(\?|\&)t=\d+/)[0].replace(/(\?|\&)t=/, ''))
+                this.tabIndex = parseInt(search.match(/(\?|\&)t=\d+/)[0].replace(/(\?|\&)t=/, ''))
             }
-	        if (/(\?|\&)q=/.test(search)) {
-		        this.keyword = search.match(/(\?|\&)q=[^\s&]+/)[0].replace(/(\?|\&)q=/, '')
-	        }
-	        if(this.keyword){
-            	this.search()
-	        }
+            if (/(\?|\&)q=/.test(search)) {
+                this.keyword = search.match(/(\?|\&)q=[^\s&]+/)[0].replace(/(\?|\&)q=/, '')
+            }
+            if (this.keyword) {
+                this.search()
+            }
         },
         methods: {
-        	search: function () {
-        		if(this.keyword){
-        			return $.toast('请输入关键词')
-                }
-        		let self = this
+            getPerPageItems: function (currentPage, num) {
+                let self = this
                 $.ajax({
                     url: '/search/searchbykeyword',
                     data: {
-                    	type: (self.tabIndex + 1),
-                        keyword: self.keyword
+                        type: (self.tabIndex + 1),
+                        keyword: self.keyword,
+                        currentPage: currentPage,
+                        num: num,
                     },
                     success: function (ret) {
-                    	self[self.type[self.tabIndex].en] = ret.data.data
-                        if(ret.data.data.length === 0) {
-                    		$.toast('没有查询到结果')
+                        if (ret.errno === 0) {
+                            if (self.currentPage === 1) {
+                                self[self.type[self.tabIndex].en] = ret.data.data;
+                            } else {
+                                self[self.type[self.tabIndex].en] = self[self.type[self.tabIndex].en].concat(ret.data.data)
+                            }
+                            if (ret.data.data.length === 0) {
+                                $.toast('没有查询到结果')
+                            }
+                            loading = false;
+                            if (ret.data.currentPage === ret.data.totalPages || ret.data.totalPages === 0) {
+                                $.detachInfiniteScroll($('.infinite-scroll'));
+                                $('.infinite-scroll-preloader').remove();
+                                return;
+                            }
+                            self.currentPage++;
                         }
+
                     },
                     error: function (err) {
-	                    $.toast('查询失败，请刷新重试')
-	                    console.log(self.tabIndex, self.keyword)
+                        $.toast('查询失败，请刷新重试')
+                        console.log(self.tabIndex, self.keyword)
                         console.log(err)
                     }
                 })
-	        },
-            typeSearch: function (e) {
-                this.keyword = e.target.value
+
+            },
+            search: function () {
+                if (!this.keyword) {
+                    return $.toast('请输入关键词')
+                }
+                $('.infinite-scroll-preloader').show();
+                let self = this;
+                self.getPerPageItems(self.currentPage, perPageNum)
+
             },
             doSearch: function (e) {
-	            if (e.keyCode === 13) {
-		            this.search()
-	            }
+                if (e.keyCode === 13) {
+                    this.keyword = $('#search').val();
+                    this.search()
+                }
             },
             switchIndex: function (e) {
-                this.tabIndex = parseInt(e.target.dataset.index)
+                $.attachInfiniteScroll($('.infinite-scroll'));
+                $('.content').append('    <div class="infinite-scroll-preloader">\
+                    <div class="preloader"></div>\
+                    </div>');
+                $('.infinite-scroll-preloader').hide();
+                this.tabIndex = parseInt(e.target.dataset.index);
+                this.currentPage = 1;
+                if ($('#search').val()) {
+                    this.search();
+                }
             }
         }
-    }).$mount('#page')
+    }).$mount('#search-content')
+
+
+    $(document).on('infinite', '.content', function () {
+        if (loading) return;
+        loading = true;
+        vm.getPerPageItems(vm.currentPage, perPageNum);
+    });
+
 
     $('.sr-star').raty({
         path: '/static/js/raty/img',
-	    number: 5,
-	    score: 2.8,
+        number: 5,
+        score: 2.8,
+    });
+
+    //    $('#search').on('input', function (e) {
+    //        vm.typeSearch(e)
+    //    });
+    $('#search').keypress(function (e) {
+        vm.doSearch(e)
     });
 
     Date.prototype.Format = function (fmt) {
-	    var o = {
-		    "M+": this.getMonth() + 1, //月份
-		    "d+": this.getDate(), //日
-		    "h+": this.getHours(), //小时
-		    "m+": this.getMinutes(), //分
-		    "s+": this.getSeconds(), //秒
-		    "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-		    "S": this.getMilliseconds() //毫秒
-	    };
-	    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-	    for (var k in o)
-		    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-	    return fmt;
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
     }
 </script>
 </body>

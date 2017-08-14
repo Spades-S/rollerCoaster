@@ -35,10 +35,10 @@
         }
 
         .bar .searchbar {
-            width: 87%;
             position: relative;
             display: flex;
-            padding-right: 0;
+            flex: 10;
+            padding-right: 1rem;
             align-items: center;
             background: transparent;
         }
@@ -151,9 +151,9 @@
         }
 
         /*hr {*/
-            /*margin: 0;*/
-            /*border: none;*/
-            /*border-bottom: 1px solid #ccc;*/
+        /*margin: 0;*/
+        /*border: none;*/
+        /*border-bottom: 1px solid #ccc;*/
         /*}*/
 
         .item-detail {
@@ -217,8 +217,13 @@
             line-height: 1rem;
             overflow: hidden;
         }
-        .detail-hr{
-            border-top:1px solid #ccc;
+
+        .detail-hr {
+            border-top: 1px solid #ccc;
+        }
+
+        .icon-arrow-left {
+            width: 1.5rem;
         }
     </style>
 </head>
@@ -226,16 +231,15 @@
 
 <div class="page">
     <header class="bar bar-nav">
+        <a href="/discovery" class=" iconfont icon-arrow-left  external "></a>
         <div class="searchbar">
-            <div class="search-input">
-                <form action="">
-                    <label class="search-icon iconfont icon-sousuo active "></label>
-                    <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show'/>
-                </form>
+            <div class="search-input" id="searchbar">
+                <label class="search-icon iconfont icon-sousuo active "></label>
+                <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show' @input="typeSearch"
+                       @keypress="doSearch"/>
             </div>
             <a class="searchbar-cancel">取消</a>
         </div>
-        <div class="map-icon iconfont icon-dingwei"></div>
     </header>
     <div class="content">
         <div id="container"></div>
@@ -284,6 +288,25 @@
 <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
 <script>
     $.init();
+    new Vue({
+        data () {
+            return {
+                keyword: ''
+            }
+        },
+        methods: {
+            typeSearch: function (e) {
+                this.keyword = e.target.value
+                console.log(this.keyword)
+            },
+            doSearch: function (e) {
+
+                if (this.keyword && e.keyCode === 13) {
+                    window.location.href = '/search?t=' + 0 + '?q=' + this.keyword
+                }
+            }
+        }
+    }).$mount('#searchbar')
     let $vm = new Vue({
         delimiters: ['{$', '$}'],
         el: '#nearby-car',

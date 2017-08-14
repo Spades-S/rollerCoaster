@@ -137,6 +137,7 @@
 
         .average-review .star {
             justify-content: center;
+            margin-bottom: 0.5rem;
         }
 
         .review-item {
@@ -210,6 +211,10 @@
             text-align: center;
             margin-top: 2rem;
         }
+
+        .small-star {
+            margin-top: 0.3rem;
+        }
     </style>
 </head>
 <body>
@@ -262,13 +267,15 @@
         </div>
         <div class="review" v-if="buttonsTabIndex == 1">
             <div class="average-review">
-                <div class="star" id="star-average" :data-score="facilityInfo.averageRating || '4.3'"></div>
-                <div class="average-score">综合评分: {$ facilityInfo.averageRating || 4.3 $}</div>
+                <div class="star" id="star-average" :data-score="facilityInfo.rating"
+                     v-if="facilityInfo.rating!=0"></div>
+                <div class="average-score" v-if="facilityInfo.rating!=0">综合评分: {$ facilityInfo.rating$}</div>
+                <div class="average-score" v-else>综合评分: --</div>
             </div>
             <div class="review-list">
                 <div class="review-item content-padded" v-for="review in reviewInfo">
                     <div class="review-left">
-                        <img :src="review.authorAvatar || '/static/img/systemAvatar.jpeg'" alt="">
+                        <img :src="'/static/img'+review.authorAvatar || '/static/img/systemAvatar.jpeg'" alt="">
                     </div>
                     <div class="review-right">
                         <div class="name">{$ review.authorName $}</div>
@@ -299,8 +306,8 @@
         num: 5,
         readOnly: true,
         imgPath: {
-            neg: '/static/star/images/starNeg.png',
-            act: '/static/star/images/starAct.png',
+            neg: '/static/star/images/star-off-big.png',
+            act: '/static/star/images/star-on-big.png',
         },
         size: 1.2 //单位rem
     }
@@ -308,8 +315,8 @@
         num: 5,
         readOnly: true,
         imgPath: {
-            neg: '/static/star/images/starNeg.png',
-            act: '/static/star/images/starAct.png',
+            neg: '/static/star/images/star-off-big.png',
+            act: '/static/star/images/star-on-big.png',
         },
         size: 0.8 //单位rem
     }
@@ -413,19 +420,12 @@
             let self = this
             star.init();
             smallStar.init();
-            $.ajax({
-                url: '/discovery/getfacilityinfo',
-                data: {
-                    id: "{{ id }}"
-                },
-                success: function (ret) {
-                    self.facilityInfo = ret.data[0]
-                    self.facilityInfo.poster = self.facilityInfo.poster.split(',')
-                    self.createSwiper(self.facilityInfo.poster)
-                }
-            })
+            self.getFacilityInfo();
+
+
         },
         updated: function () {
+            let self = this;
             star.set();
             smallStar.set();
         },
@@ -434,6 +434,7 @@
                 this.buttonsTabIndex = e.target.dataset.tabIndex
                 if (e.target.dataset.tabIndex === '1') {
                     if (!this.reviewInfo) {
+                        this.getFacilityInfo();
                         return this.getReview(this.page, this.perpageReview)
                     }
                 } else {
@@ -502,6 +503,20 @@
             },
             format: function (time) {
                 return new Date(time).Format("yyyy-MM-dd hh:mm")
+            },
+            getFacilityInfo: function () {
+                let self = this;
+                $.ajax({
+                    url: '/discovery/getfacilityinfo',
+                    data: {
+                        id: "{{ id }}"
+                    },
+                    success: function (ret) {
+                        self.facilityInfo = ret.data[0]
+                        self.facilityInfo.poster = self.facilityInfo.poster.split(',')
+                        self.createSwiper(self.facilityInfo.poster)
+                    }
+                })
             }
         }
     }).$mount('#page')

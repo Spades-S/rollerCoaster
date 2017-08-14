@@ -10,25 +10,30 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
     <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <link rel="stylesheet" href="/static/cropper/cropper.css">
     <style>
         * {
             box-sizing: border-box;
             -webkit-font-smoothing: antialiased;
         }
-        .page{
+
+        .page {
             background-color: #fff;
         }
-        .bar{
+
+        .bar {
             height: 3rem;
             background-color: #07518f;
             border-bottom: none;
         }
-        h1.title{
+
+        h1.title {
             color: white;
             overflow: hidden;
             text-overflow: ellipsis;
             line-height: 3rem;
         }
+
         .icon-arrow-left {
             display: inline-block;
             width: 0.9rem;
@@ -37,45 +42,71 @@
             top: 0.75rem;
             z-index: 30;
         }
-        .bar~.content{
+
+        .bar ~ .content {
             top: 3rem;
             background-color: #fff;
         }
-        .list-block{
+
+        .list-block {
             margin: 0;
             font-size: .7rem;
         }
-        .list-block .item-content.ta{
+
+        .list-block .item-content.ta {
             padding: .5rem 0 .5rem .75rem;
         }
-        .list-block .item-inner{
+
+        .list-block .item-inner {
             border-bottom: none;
         }
-        .list-block .item-title.label{
+
+        .list-block .item-title.label {
             text-align: right;
             padding-right: 1.5rem;
         }
-        .list-block .item-title.label.ta{
+
+        .list-block .item-title.label.ta {
             align-self: flex-start;
         }
-        .cover, .cover img{
+
+        img {
+            max-width: 100%;
+        }
+
+        .cover, .cover img {
             width: 2.5rem;
             height: 2.5rem;
         }
-        .list-block input[type=text]{
+
+        .cover-input {
+            position: absolute;
+            top: 0;
+            width: 2.5rem;
+            height: 2.5rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            opacity: 0;
+        }
+
+        .list-block input[type=text] {
             height: 1.4rem;
         }
-        .list-block textarea, .list-block input[type=text], .list-block select{
+
+        .list-block textarea, .list-block input[type=text], .list-block select {
             padding-left: .5rem;
             font-size: .6rem;
             border: 1px solid #DCDCDC;
             border-radius: .3rem;
         }
-        .list-block select{
+
+        .list-block select {
             height: 1.4rem;
             font-size: .6rem;
         }
-        .button.button-big{
+
+        .button.button-big {
             margin: 2rem .75rem;
             background-color: #74B941;
             color: #fff;
@@ -84,6 +115,36 @@
             line-height: 2rem;
             font-size: .8rem;
         }
+
+        .cropperContainer {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: rgba(52, 52, 52, 0.8);
+            filter: alpha(opacity=50);
+            overflow: hidden;
+            display: none;
+            z-index: 1000000;
+        }
+
+        #crop-box {
+            position: absolute;
+            max-width: 100%;
+            max-height: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .cover-confirm {
+            line-height: 3rem;
+            position: absolute;
+            right: 1rem;
+            color: #fff;
+        }
+
+
     </style>
 </head>
 <body>
@@ -95,7 +156,8 @@
     </header>
     <div class="content content-padded" id="content">
         <div class="list-block">
-            <div :class="'item-content ' + (item.box === 'textarea' ? 'ta' : '')" v-for="item in list" v-if="item.belong!=='activity' || groupType">
+            <div :class="'item-content ' + (item.box === 'textarea' ? 'ta' : '')" v-for="item in list"
+                 v-if="item.belong!=='activity' || groupType">
                 <div class="item-inner">
                     <div :class="'item-title label ' + (item.box === 'textarea' ? 'ta' : '')">{$ item.item $}</div>
                     <div class="item-input">
@@ -106,6 +168,7 @@
                         </select>
                         <div class="cover" v-if="item.box==='cover'">
                             <img src="/static/img/camera.png" alt="">
+                            <input name="cover" type="file" alt="上传封面" id="cover-input" class="cover-input">
                         </div>
                     </div>
                 </div>
@@ -113,105 +176,119 @@
         </div>
         <div class="button button-big" @click="createGroup">创建小组</div>
     </div>
+    <div class="cropperContainer">
+        <header class="bar bar-nav">
+            <a class="iconfont icon-arrow-left closeCrop"></a>
+            <div class="cover-confirm">确定</div>
+        </header>
+        <div id="crop-box">
+            <img id="crop-image" src="">
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript " src="/static/vue/vue.js "></script>
 <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="/static/cropper/cropper.min.js"></script>
+
 <script>
     $.init();
-
+    $.fn.cropper;
     var vm = new Vue({
         delimiters: ['{$', '$}'],
         data () {
-        	return {
-        		groupInfo: {},
+            return {
+                groupInfo: {},
                 groupType: 0,
                 list: [{
-        			item: '封面上传',
+                    item: '封面上传',
                     en: 'cover',
                     box: 'cover'
                 }, {
-	                item: '小组名称',
-	                en: 'title'
+                    item: '小组名称',
+                    en: 'title'
                 }, {
-	                item: '主题',
-	                en: 'theme',
+                    item: '主题',
+                    en: 'theme',
                     box: 'select',
                     options: ['过山车联盟', '黑暗乘骑基地', '演出爱好者', '同城活动', '其它']
                 }, {
-	                item: '描述',
-	                en: 'description',
+                    item: '描述',
+                    en: 'description',
                     box: 'textarea'
                 }, {
-	                item: '类型',
-	                en: 'type',
+                    item: '类型',
+                    en: 'type',
                     box: 'select',
-	                options: ['普通小组', '活动小组']
+                    options: ['普通小组', '活动小组']
                 }, {
-	                item: '活动类型',
+                    item: '活动类型',
                     belong: 'activity',
-	                en: 'activityType'
+                    en: 'activityType'
                 }, {
-	                item: '时间',
-	                belong: 'activity',
-	                en: 'activityTime'
+                    item: '时间',
+                    belong: 'activity',
+                    en: 'activityTime'
                 }, {
-	                item: '地点',
-	                belong: 'activity',
-	                en: 'place'
+                    item: '地点',
+                    belong: 'activity',
+                    en: 'place'
                 }, {
-	                item: '乐园',
-	                belong: 'activity',
-	                en: 'park'
+                    item: '乐园',
+                    belong: 'activity',
+                    en: 'park'
                 }, {
-	                item: '设施名称',
-	                belong: 'activity',
-	                en: 'facility'
+                    item: '设施名称',
+                    belong: 'activity',
+                    en: 'facility'
                 }, {
-	                item: '拟参加人数',
-	                belong: 'activity',
-	                en: 'joinNumber'
+                    item: '拟参加人数',
+                    belong: 'activity',
+                    en: 'joinNumber'
                 }, {
-	                item: '备注',
-	                belong: 'activity',
-	                en: 'remark',
+                    item: '备注',
+                    belong: 'activity',
+                    en: 'remark',
                     box: 'textarea'
-                }, ]
+                },]
             }
         },
         methods: {
-        	typeInfo: function (e) {
+            typeInfo: function (e) {
                 this[e.currentTarget.dataset.name] = e.currentTarget.value
-	        },
+            },
             switchType: function (e) {
-        		if (e.target.dataset.name === 'type') {
-			        this.groupType = parseInt(e.target.value)
+                if (e.target.dataset.name === 'type') {
+                    this.groupType = parseInt(e.target.value)
                 } else {
-        			this.theme = parseInt(e.target.value)
+                    this.theme = parseInt(e.target.value)
                 }
             },
             createGroup: function () {
+                if(!this.cover){
+                    return $.toast('请上传群组封面');
+                }
                 if (!this.title) {
-                	return $.toast('请填写小组名称')
+                    return $.toast('请填写小组名称')
                 }
                 if (this.groupType === 1) {
-                	if (!this.activityTime) {
-                		return $.toast('请填写活动时间')
+                    if (!this.activityTime) {
+                        return $.toast('请填写活动时间')
                     }
                     if (!this.place) {
-                		return $.toast('请填写活动地点')
+                        return $.toast('请填写活动地点')
                     }
                 }
-	            let data = {
-		            cover: $('.cover img')[0].src,
+                let data = {
+                    cover: $('.cover img')[0].src,
                     title: this.title,
                     theme: this.theme || 0,
                     description: this.description,
                     groupType: this.groupType
-	            }
+                }
                 if (this.groupType === 1) {
-                	data.activityType = this.activityType
+                    data.activityType = this.activityType
                     data.activityTime = this.activityTime
                     data.place = this.place
                     data.park = this.park
@@ -224,16 +301,73 @@
                     data: data,
                     method: 'POST',
                     success: function (ret) {
-                        console.log(ret)
-                        window.location.href = '/group'
+                        if (ret.errno === 0) {
+                            window.location.href = '/group'
+                        } else if (ret.errno === 1020) {
+                            $.toast('群组名已存在');
+                        }
+
                     }
                 })
             }
         }
     }).$mount('#content')
-    
-    
-    
+    $('.closeCrop').on('click', function () {
+        $('.cropperContainer').css({
+            display: 'none',
+        })
+        $('.cover-input').val(null);
+        console.log('close crop');
+    })
+
+    $('.cover-input').on('change', function () {
+        if (!(window.File && window.FileReader && window.FileList && window.Blob )) {
+            $.toast('当前浏览器不支持图片上传');
+        }
+        let file = this.files[0];
+        let allowTypeList = ['jpg', 'jpeg', 'png'];
+        let lowerFileType = file.name.split('.').pop().toLowerCase();
+        if (allowTypeList.indexOf(lowerFileType) < 0) {
+            return $.toast('图片格式不正确!');
+        }
+        $('#crop-box').height(window.innerWidth + 'px');
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function (event) {
+            let options = {
+                aspectRatio: 1 / 1,
+                dragMode: 'move',
+                movable: true,
+            }
+            let dataUrl = event.target.result;
+            $('#crop-image').attr('src', dataUrl);
+            $('.cropperContainer').css({
+                display: 'block',
+            })
+            $('#crop-image').cropper(options).cropper('replace', dataUrl);
+            $('#crop-image').on('ready', function () {
+                $('.cover-confirm').off().on('click', function () {
+                    console.log($('#crop-image').cropper('getCroppedCanvas'));
+                    let coverCropped = $('#crop-image').cropper('getCroppedCanvas').toDataURL();
+                    console.log(typeof coverCropped);
+
+                    vm.cover = coverCropped;
+                    $('.cover img').attr('src', coverCropped);
+                    $('.cropperContainer').css({
+                        display: 'none',
+                    })
+                    $('#crop-image').cropper('destroy');
+                    $('#cover-input').val('');
+
+                })
+
+            })
+
+        }
+
+    })
+
+
 </script>
 </body>
 </html>

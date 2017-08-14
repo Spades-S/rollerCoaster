@@ -24,9 +24,19 @@
             padding-right: 0.2rem;
         }
 
+        .bar.bar-tab {
+            display: flex;
+            flex-direction: row;
+        }
+
         .bar.bar-nav {
             height: 3rem;
             background-color: #07518f;
+
+        }
+
+        .default-header {
+            height: 3rem;
             display: flex;
             align-items: center;
             justify-content: space-around;
@@ -174,7 +184,7 @@
         }
 
         .content-list-item {
-            height: 5rem;
+            height: 6rem;
             padding: .8rem 1rem;
             display: flex;
             background-color: #fff;
@@ -182,8 +192,8 @@
         }
 
         .facility-poster {
-            height: 3.4rem;
-            width: 3.4rem;
+            height: 4rem;
+            width: 4rem;
         }
 
         .facility-poster-img {
@@ -227,43 +237,89 @@
             font-size: .7rem;
             color: #999;
         }
+
+        .toogle-display {
+            display: none;
+        }
+
+        .icon-arrow-left {
+            position: absolute;
+            z-index: 30;
+            display: inline-block;
+            width: 2rem;
+            height: 100%;
+            padding-top: 0.75rem;
+        }
+
+        h1.title {
+            color: white;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 3rem;
+            letter-spacing: 0.1rem;
+        }
+
+        .disappear {
+            display: none;
+        }
+
+        .show {
+            display: block;
+        }
+
+        .star-intro {
+            font-size: 0.7rem;
+        }
+
+        .raty-container {
+            margin-right: 0.3rem !important;
+        }
     </style>
 </head>
 <body>
 <div class="page">
     <header class="bar bar-nav">
-        <div class="searchbar" id="searchbar">
-            <div class="search-input">
-                <label class="search-icon iconfont icon-sousuo active "></label>
-                <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show' @input="typeSearch"  @keypress="doSearch"/>
+        <div class="default-header">
+            <div class="searchbar" id="searchbar">
+                <div class="search-input">
+                    <label class="search-icon iconfont icon-sousuo active "></label>
+                    <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show' @input="typeSearch"
+                           @keypress="doSearch"/>
+                </div>
+                <a class="searchbar-cancel">取消</a>
+
             </div>
-            <a class="searchbar-cancel">取消</a>
+            <a class="map-link external" href="/discovery/map">
+                <div class="map-icon iconfont icon-dingwei"></div>
+            </a>
         </div>
-        <a class="map-link external" href="/discovery/map">
-            <div class="map-icon iconfont icon-dingwei"></div>
-        </a>
+        <div class="toogle-display">
+
+            <a class=" iconfont icon-arrow-left external" href="/discovery"></a>
+            <h1 class="title">附近</h1>
+        </div>
     </header>
-    <div class="content infinite-scroll" data-distance="50">
-        <div class="content-tab">
+
+    <div class="content infinite-scroll" data-distance="5">
+        <div class="content-tab" :class="{disappear:disappear}">
             <div class="content-tab-item active" data-index="0">过山车</div>
             <div class="content-tab-item" data-index="1">黑暗乘骑</div>
             <div class="content-tab-item" data-index="2">演出</div>
         </div>
         <div id="content-list">
             <div class="content-item">
-                <div class="content-nav">
+                <div class="content-nav" :class="{disappear:disappear}">
+                    <a class="content-nav-item" href="#" @click="toogleDisplay">
 
-
-                    <a class="content-nav-item external" href="/discovery/nearby">
                         <div class="content-icon rollercoaster-icon">
-                            <img class="content-icon-img" src="static/img/icon/rollercoaster2.svg">
+                            <img class="content-icon-img" src="/static/img/icon/rollercoaster2.svg">
                         </div>
                         <div class="content-nav-item-text">附近{$ cats[activeIndex].short $}</div>
                     </a>
                     <a class="content-nav-item external" href="/discovery/parklist">
 
                         <div class="content-icon park-icon">
-                            <img class="content-icon-img" src="static/img/icon/park.svg">
+                            <img class="content-icon-img" src="/static/img/icon/park.svg">
                         </div>
                         <div class="content-nav-item-text">乐园</div>
 
@@ -271,7 +327,7 @@
                     <a class="content-nav-item external" href="/discovery/factory">
 
                         <div class="content-icon factory-icon">
-                            <img class="content-icon-img" src="static/img/icon/factory.svg">
+                            <img class="content-icon-img" src="/static/img/icon/factory.svg">
                         </div>
                         <div class="content-nav-item-text">厂商</div>
 
@@ -279,7 +335,7 @@
                     <a class="content-nav-item external" :href="'/discovery/knowledge?type='+activeIndex">
 
                         <div class="content-icon knowledge-icon">
-                            <img class="content-icon-img" src="static/img/icon/knowledge.svg">
+                            <img class="content-icon-img" src="/static/img/icon/knowledge.svg">
                         </div>
                         <div class="content-nav-item-text">{$ cats[activeIndex].name $}知识</div>
                     </a>
@@ -293,7 +349,10 @@
                             <div class="facility-title">
                                 {$ item.title $}
                             </div>
-                            <div class="facility-rating">
+                            <div>
+                                <span class="star-intro">评分：</span>
+                                <span class="star" :data-score="item.rating" v-if="item.rating!=0"></span>
+                                <span v-else>--</span>
                             </div>
                             <div class="facility-detail">
                                 <div class="facility-price">
@@ -308,7 +367,7 @@
                 </div>
             </div>
         </div>
-        <div class="infinite-scroll-preloader">
+        <div class="infinite-scroll-preloader" data-distance="5">
             <div class="preloader"></div>
         </div>
     </div>
@@ -335,13 +394,21 @@
 
 <script type="text/javascript " src="/static/vue/vue.js "></script>
 <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
-<script src="/static/js/raty/jquery.raty.js"></script>
+<!--<script src="/static/js/raty/jquery.raty.js"></script>-->
+<script type="text/javascript" src="/static/star/starlib.js"></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
-<script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 <script>
     $.init();
-
-    $.fn.raty.defaults.path = '/static/js/raty/img'
+    let starConfig = {
+        num: 5,
+        readOnly: true,
+        imgPath: {
+            neg: '/static/star/images/star-off-big.png',
+            act: '/static/star/images/star-on-big.png',
+        },
+        size: 0.6 //单位rem
+    }
+    let star = new raty('.star', starConfig);
     let loading = false
 
     let position = ''
@@ -375,19 +442,18 @@
                 activeIndex: 0,
                 perPageItems: 10,
                 page: 1,
+                disappear: false,
                 radius: 1,
                 keyword: ''
+
             }
         },
         created: function () {
+            star.init();
             this.getFacility(this.perPageItems, this.page, position)
         },
         updated: function () {
-            $('.facility-rating').raty({
-                half: true,
-                number: 5,
-                score: 2.5
-            })
+            star.set();
         },
         watch: {
             activeIndex: function (newVal) {
@@ -395,7 +461,7 @@
                 this.facilityList = []
 
                 this.getFacility(this.perPageItems, this.page, position)
-	        }
+            }
         },
         methods: {
             getFacility: function (perPageItems, page, position) {
@@ -412,40 +478,43 @@
                         radius: self.radius
                     },
                     success: function (ret) {
+                        if (ret.errno === 0) {
+                            let list = ret.data.data
+                            for (let i in list) {
+                                list[i].distance = self.convertToKilometers(list[i].geolocation)
+                            }
+                            list.sort((a, b) => {
+                                return a.distance - b.distance
+                            })
 
-                    	if(ret.errno === 0){
-                    		let list = ret.data.data
-		                    for (let i in list) {
-			                    list[i].distance = self.convertToKilometers(list[i].geolocation)
-		                    }
-		                    list.sort((a, b) => {
-			                    return a.distance - b.distance
-		                    })
-
-		                    self.facilityList = self.facilityList.concat(list)
-		                    self.page ++
+                            self.facilityList = self.facilityList.concat(list)
+                            self.page++
+                            if (ret.data.totalPages === 1) {
+                                self.radius++
+                                self.getFacility(self.perPageItems, self.page, position, self.radius)
+                            }
                             return
                         }
-                        if(ret.errmsg === 'no more'){
-                    		if (self.activeIndex === 0) {
-                    			self.radius ++
+                        if (ret.errmsg === 'no more') {
+                            if (self.activeIndex === 0) {
+                                self.radius++
                                 self.getFacility(self.perPageItems, self.page, position, self.radius)
                                 return
                             }
-	                        $.toast('没有更多了，向我们反馈吧')
+                            $.toast('没有更多了，向我们反馈吧')
                             $.detachInfiniteScroll($('.infinite-scroll'))
-	                        return
+                            return
                         }
                         $.toast('出了点小问题，请重试')
-	                    return
+                        return
                     },
-	                error: function (err) {
-		                return $.toast('获取失败，请刷新重试')
+                    error: function (err) {
+                        return $.toast('获取失败，请刷新重试')
 
-	                },
+                    },
                     complete: function (ret) {
                         loading = false
-	                    $('.infinite-scroll-preloader').hide();
+                        $('.infinite-scroll-preloader').hide();
                     }
                 })
             },
@@ -479,26 +548,33 @@
                 s = Math.round(s * 10000) / 10000.0
 
                 return s
+            },
+            toogleDisplay: function () {
+                this.disappear = true;
+                $('.content-tab').addClass('disappear');
+                $('.default-header').addClass('disappear');
+                $('h1.title').html('附近' + this.cats[this.activeIndex].short);
+                $('.toogle-display').addClass('show');
             }
         }
     })
 
+
     new Vue({
         data () {
-        	return {
-        		keyword: ''
+            return {
+                keyword: ''
             }
         },
         methods: {
-	        typeSearch: function (e) {
-		        this.keyword = e.target.value
-		        console.log(this.keyword)
-	        },
-	        doSearch: function (e) {
-	        	if(this.keyword && e.keyCode === 13){
-			        window.location.href = '/search?t=' + vm.activeIndex + '?q=' + this.keyword
-		        }
-	        }
+            typeSearch: function (e) {
+                this.keyword = e.target.value
+            },
+            doSearch: function (e) {
+                if (this.keyword && e.keyCode === 13) {
+                    window.location.href = '/search?t=' + vm.activeIndex + '&q=' + this.keyword
+                }
+            }
         }
     }).$mount('#searchbar')
 

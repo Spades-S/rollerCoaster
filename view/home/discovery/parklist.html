@@ -21,6 +21,11 @@
             padding-right: 0.2rem;
         }
 
+        .bar.bar-tab {
+            display: flex;
+            flex-direction: row;
+        }
+
         .bar.bar-nav {
             height: 3rem;
             background-color: #07518f;
@@ -61,7 +66,7 @@
 
         .bar-nav ~ .content {
             top: 3rem;
-            padding-bottom: 2.5rem;
+            /*padding-bottom: 2.5rem;*/
             background-color: #fff;
         }
 
@@ -151,8 +156,6 @@
                             <div class="facility-title">
                                 {$ item.title $}
                             </div>
-                            <div class="facility-rating">
-                            </div>
                             <div class="facility-detail">
                                 <div class="facility-price">
                                     价格：{$ item.price || '0' $}
@@ -170,7 +173,7 @@
             <div class="preloader"></div>
         </div>
     </div>
-    <nav class="bar bar-tab ">
+    <!--<nav class="bar bar-tab ">
         <a class="tab-item external" href="/index">
             <span class="icon iconfont icon-shouye"></span>
             <span class="tab-label ">首页</span>
@@ -187,18 +190,17 @@
             <span class="icon iconfont icon-wode"></span>
             <span class="tab-label ">我的</span>
         </a>
-    </nav>
+    </nav>-->
 </div>
 
 
 <script type="text/javascript " src="/static/vue/vue.js "></script>
 <script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
-<script src="/static/js/raty/jquery.raty.js"></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script>
     $.init();
 
-    $.fn.raty.defaults.path = '/static/js/raty/img'
+
     let loading = false
 
     let position = ''
@@ -225,13 +227,6 @@
         },
         created: function () {
             this.getFacility(this.perPageItems, this.page, position)
-        },
-        updated: function () {
-            $('.facility-rating').raty({
-                half: true,
-                number: 5,
-                score: 2.5
-            })
         },
         methods: {
             getFacility: function (perPageItems, page, position) {

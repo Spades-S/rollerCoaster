@@ -2,6 +2,7 @@
 import base from './base.js';
 export default class extends base {
     async detailAction() {
+        this.expires(86400)
         let articleId = this.get('articleid');
 
         if (checkLogin(this)) {
@@ -22,15 +23,29 @@ export default class extends base {
 
     async addcommentAction() {
         if (this.isPost()) {
-            let userid = this.post("userid");
+            let uid = this.cookie('uid');
             let articleid = this.post('articleid');
             let content = this.post('content');
             let userModel = this.model('user');
-            let authorInfo = await userModel.getAvatarInfoByUserId(parseInt(userid));
+            let authorInfo = await userModel.getAuthorInfoByUserUid(uid);
             let authorAvatar = authorInfo[0].avatar;
             let authorName = authorInfo[0].nickname;
+            let authorId = authorInfo[0].id;
             let commentModel = this.model('comment');
-            let data = await commentModel.addComment(parseInt(userid), parseInt(articleid), authorAvatar, authorName, content);
+            let commentData = {
+                postId: Number(articleid),
+                authorId: Number(authorId),
+                authorAvatar: authorAvatar,
+                authorName: authorName,
+                content: content,
+            }
+            if (this.post('replyId')) {
+                commentData.replyToId = Number(this.post('replyId'));
+                commentData.replyToName = this.post('replyName')
+            }
+            let articleModel = this.model('article');
+            let line = await articleModel.updateCommentNum(Number(articleid));
+            let data = await commentModel.addComment(commentData);
             return this.success(data);
         }
     }
@@ -69,10 +84,11 @@ export default class extends base {
 
     async getrelativearticleAction() {
         let articleid = this.get('articleid');
+        let type = this.get('type');
         let articleModel = this.model('article');
         let authoridRowData = await articleModel.getColByArticleId(articleid);
         let col = authoridRowData[0].col;
-        let relativeArticles = await articleModel.getRelativeArticlesByCol(col, articleid);
+        let relativeArticles = await articleModel.getRelativeArticlesByCol(col, articleid, type);
         if (relativeArticles.length >= 2) {
             relativeArticles = relativeArticles.slice(0, 2);
         }
@@ -82,9 +98,9 @@ export default class extends base {
 
     async refreshlikesAction() {
         let likes = this.post('likes');
-// <<<<<<< HEAD
         let uid = this.cookie('uid');
         let articleid = parseInt(this.post('articleid'));
+        console.log(articleid);
         let articleModel = this.model('article');
         let art_lines = await articleModel.updateLikesByArticleId(articleid, likes);
         if (uid) {
@@ -116,7 +132,9 @@ export default class extends base {
         if (uid) {
             let userModel = this.model('user');
             let rowdata = await userModel.getLikes(uid);
-            likes = JSON.parse(rowdata[0].likes);
+            if (JSON.parse(rowdata[0].likes)) {
+                likes = JSON.parse(rowdata[0].likes);
+            }
         } else {
             if (this.cookie('likecookie')) {
                 likes = JSON.parse(this.cookie('likecookie'));
@@ -153,11 +171,15 @@ export default class extends base {
 
     async getcommentbyarticleidAction() {
         let articleid = this.get('articleid');
+        let slice = this.get('slice');
         let commentModel = this.model('comment');
+        console.log('test' + articleid);
         let comment = await commentModel.getCommentByPostId(parseInt(articleid));
         let commentLength = comment.length;
-        if (commentLength >= 2) {
-            comment = comment.splice(0, 2)
+        if (slice == 1) {
+            if (commentLength >= 2) {
+                comment = comment.splice(0, 2)
+            }
         }
         return this.success({commentLength: commentLength, commentContent: comment});
     }

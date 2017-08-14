@@ -56,10 +56,10 @@
 
         .like-item {
             overflow: hidden;
-            height: 8.5rem;
+            /*height: 8.5rem;*/
             transition: all 1s ease;
             margin: 1rem 0.7rem;
-            padding: 0.3rem 0.5rem;
+            padding: 0.5rem;
             background: #FFF;
             -webkit-border-radius: 0.5rem;
             -moz-border-radius: 0.5rem;
@@ -114,11 +114,20 @@
             color: #000;
         }
 
+        .article-content.post {
+            height: 3rem;
+        }
+
         .article-img {
             float: right;
             width: 5rem;
             height: 5rem;
 
+        }
+
+        .article-img.post {
+            height: 3rem;
+            width: 3rem;
         }
 
         .article-content-text {
@@ -164,11 +173,21 @@
 
                     </div>
                     <hr>
-                    <a class="article-content external" :href="'/article/detail?articleid='+item.id">
+                    <a class="article-content external" :href="'/article/detail?articleid='+item.id"
+                       v-if="item.type==0">
                         <img class="article-img" :src="'/static/img'+item.poster" alt="">
                         <div class="article-content-text">
                             <div class="article-title">{$ item.title $}</div>
-                            <div class="article-intro">{$ item.description $}<</div>
+                            <div class="article-intro">{$ item.description $}</div>
+
+                        </div>
+                    </a>
+                    <a class="article-content post external" :href="'/group/postdetail?id='+item.id" v-else>
+                        <img class="article-img post" :src="getPoster(item.poster)" v-if="getPoster(item.poster)"
+                             alt="">
+                        <div class="article-content-text">
+                            <div class="article-title">{$ item.title $}</div>
+                            <div class="article-intro">{$ item.description $}</div>
 
                         </div>
                     </a>
@@ -233,6 +252,13 @@
 
                     }
                 })
+
+            },
+            getPoster: function (poster) {
+                if (JSON.parse(poster).length > 0) {
+                    return '/static/img' + JSON.parse(poster)[0];
+                }
+                return undefined;
 
             }
         }

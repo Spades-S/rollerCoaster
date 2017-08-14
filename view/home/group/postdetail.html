@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>欢乐冶</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/share/css/share.min.css">
+    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+    <style>
+        .bar {
+            height: 3rem;
+            background-color: #07518f;
+            border-bottom: none;
+        }
+
+        .icon-arrow-left {
+            display: inline-block;
+            width: 0.9rem;
+            height: 1.4rem;
+            position: absolute;
+            top: 0.75rem;
+            z-index: 30;
+        }
+
+        h1.title {
+            color: white;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 3rem;
+            letter-spacing: 0.2rem;
+            font-weight: 400;
+        }
+
+        .bar-nav ~ .content {
+            top: 3rem;
+            bottom: 2.3rem;
+            overflow-x: hidden;
+            background: #FFFFFF;
+        }
+
+        .padding-5 {
+            padding: 0 0.5rem;
+
+        }
+
+        .post-title {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+
+        .author {
+            font-size: 0.7rem;
+            color: #b5b5b5;
+        }
+
+        .author-name {
+            display: inline-block;
+            max-width: 35%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .post-time {
+            display: inline-block;
+            margin-left: 1rem;
+            max-width: 60%;
+            overflow: hidden;
+        }
+
+        .share {
+            height: 2rem;
+            line-height: 2rem;
+            font-size: 0;
+        }
+
+        .share-text {
+            margin-right: 1rem;
+            font-size: 0.75rem;
+            color: #9e9d9d;
+        }
+
+        .iconfont {
+            display: inline-block;
+            padding: 0 0.5rem;
+            color: #72bb38;
+            font-size: 1rem;
+        }
+
+        .post-content {
+            margin-top: 0.5rem;
+        }
+
+        .content-image {
+            margin: auto;
+            text-align: center;
+        }
+
+        .content-image img {
+            margin-top: 0.5rem;
+            width: 100%;
+            border-radius: 0.4rem;
+        }
+
+        .likes.outer {
+            margin: 0.5rem auto;
+            padding-top: 0.5rem;
+            width: 5rem;
+            height: 5rem;
+            border-radius: 2.5rem;
+            background: #eeefee;
+        }
+
+        .likes.outer.active {
+            background: #e3f1d7;
+        }
+
+        .likes.inner {
+            margin: auto;
+            padding-top: 0.5rem;
+            width: 4rem;
+            height: 4rem;
+            border-radius: 2rem;
+            background: #bdbdbd;
+            text-align: center;
+
+        }
+
+        .active .likes.inner {
+            background: #72bb38;
+        }
+
+        .icon-praise, .like-num {
+            color: #fff;
+        }
+
+        .comment-name, .relativepost-name {
+            padding-left: 0.5rem;
+            height: 2rem;
+            line-height: 2rem;
+            letter-spacing: 0.1rem;
+            background: #eeeeee;
+            color: #959a95;
+        }
+
+        .comment-item {
+            position: relative;
+            padding: 0.7rem 0.5rem;
+            border-bottom: 1px solid #d4d4d4;
+        }
+
+        .comment-authoravatar {
+            float: left;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 1rem;
+        }
+
+        .comment-authorname, .comment-updatetime {
+            height: 2rem;
+            line-height: 2rem;
+            font-weight: 400;
+            color: #999;
+        }
+
+        .comment-authorname {
+            display: inline-block;
+            margin-left: 0.5rem;
+            width: 5rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .comment-updatetime {
+            float: right;
+            font-size: 0.8rem;
+        }
+
+        .comment-content {
+            padding-left: 2.3rem;
+        }
+
+        .reply {
+            position: absolute;
+            top: 0rem;
+            right: 0;
+            width: 0;
+            height: 100%;
+            background: #f3e4c7;
+            border-bottom: 1px solid #d4d4d4;
+            writing-mode: vertical-lr;
+            font-size: 1rem;
+            letter-spacing: 0.3rem;
+            color: #969191;
+            transition: all 0.5s ease;
+        }
+
+        .reply-active {
+            width: 3rem;
+            padding-left: 0.91rem;
+            padding-top: 1.4rem;
+            z-index: 30;
+
+        }
+
+        .relativepost-item {
+            display: block;
+            padding: 0.5rem;
+            height: 4rem;
+            border-bottom: 1px solid #d4d4d4;
+        }
+
+        .relativepost-poster {
+            float: right;
+            width: 3rem;
+            height: 3rem;
+        }
+
+        .relativepost-title {
+            height: 1.8rem;
+            line-height: 1.8rem;
+            font-size: 0.9rem;
+            color: #000;
+        }
+
+        .relativepost-authorname {
+            height: 1.2rem;
+            line-height: 1.2rem;
+            font-size: 0.7rem;
+            color: #999;
+        }
+
+        .add-comment {
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            padding: .5rem;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            background-color: #eee;
+            font-size: .7rem;
+            color: #898989;
+        }
+
+        .comment-input {
+            width: 80%;
+            line-height: 1.5rem;
+            overflow: hidden;
+            border: none;
+            border-bottom: 1px solid #b7b0b0;
+            background: transparent;
+        }
+
+        .icon-feiji {
+            color: #868686;
+        }
+
+        .replyToName {
+            color: #72bb38;
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="page-group">
+    <div class="page page-current" id="page">
+        <header class="bar bar-nav">
+            <a class=" iconfont icon-arrow-left back" href="javascript:window.history.go(-1)">
+            </a>
+            <h1 class='title'>帖子详情</h1>
+        </header>
+        <div class="content">
+            <div class="post-part padding-5">
+                <template>
+                    <div class="post-title">{$postContent.title$}</div>
+                </template>
+                <div class="author-share">
+                    <div class="author">
+                        <template>
+                            <span class="author-name">作者: {$postContent.authorName$}</span>
+                            <span class="post-time">时间：{$postContent.updateTime$}</span>
+                        </template>
+                    </div>
+                    <div class="share">
+                        <span class="share-text">分享:</span>
+                        <span class="iconfont icon-weixin"></span>
+                        <a class="iconfont icon-qq external"
+                           href="http://connect.qq.com/widget/shareqq/index.html?url=http%3A%2F%2Flocalhost%3A8080%2Farticle%2Fdetail%3Farticleid%3D36&title=%E6%AC%A2%E4%B9%90%E5%86%B6&source=%E6%AC%A2%E4%B9%90%E5%86%B6&desc=&pics=http%3A%2F%2Flocalhost%3A8080%2Fstatic%2Fimgundefined"></a>
+                        <a class="iconfont icon-f external"
+                           href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fovertrue.me%2Fshare.js%2F"></a>
+                        <a class="iconfont icon-tuite external" href="https://twitter.com/intent/tweet?text=玩在欢乐冶"></a>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <template>
+                        <div class="content-text">{$postContent.content$}</div>
+                    </template>
+                    <div class="content-image" v-if="poster.length>0">
+                        <template v-for="item in poster">
+                            <img :src="'/static/img'+item">
+                        </template>
+
+
+                    </div>
+                </div>
+                <div class="likes outer" :class="{active:likeActive}" @click="clickLikes">
+                    <div class="likes inner">
+                        <span class="iconfont icon-praise"></span><br>
+                        <template>
+                            <span class="like-num" v-if="postContent.likes==null">0</span>
+                            <span class="like-num" v-else>{$postContent.likes$}</span>
+                        </template>
+                    </div>
+                </div>
+
+            </div>
+            <div class="comment">
+                <template>
+                    <div class="comment-name" v-if="commentLength>0">评论 {$commentLength$}</div>
+                    <div class="comment-item" v-for="comment in comments">
+                        <div @click="replyToogle">
+                            <div class="comment-authorinfo">
+                                <img class="comment-authoravatar" :src="'/static/img'+comment.authorAvatar" alt="">
+                                <div>
+                                    <span class="comment-authorname">{$comment.authorName$}</span>
+                                    <span class="comment-updatetime">{$getTime(comment.updateTime)$}</span>
+                                </div>
+                            </div>
+                            <div class="comment-content"><span class="replyToName" v-if="comment.replyToName">@{$comment.replyToName$} </span>{$comment.content$}
+                            </div>
+                        </div>
+                        <div class="reply" @click="replyTo($event,comment.authorId,comment.authorName)">
+                            回复
+                        </div>
+
+
+                    </div>
+                </template>
+
+            </div>
+            <div class="relative-post" v-if="relativePosts.length>0">
+                <div class="relativepost-name">相关帖子</div>
+                <div v-for="post in relativePosts">
+                    <a class="relativepost-item external" :href="'/group/postdetail?id='+post.id">
+                        <template v-if="post.poster">
+                            <img class="relativepost-poster" :src="'/static/img'+post.poster" alt="">
+                        </template>
+                        <template>
+                            <div class="relativepost-title">{$post.title$}</div>
+                            <div class="relativepost-authorname">发帖：{$post.authorName$}</div>
+                        </template>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="add-comment">
+            <textarea class="comment-input" placeholder="撰写评论" id="comment-input" rows="1"></textarea>
+            <span class="iconfont icon-feiji" @click="addComment()"></span>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript " src="/static/vue/vue.js "></script>
+<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
+<script>
+    $.init();
+    let vm = new Vue({
+        delimiters: ['{$', '$}'],
+        el: '#page',
+        data: {
+            postContent: {},
+            poster: [],
+            likeActive: false,
+            relativePosts: [],
+            comments: [],
+            commentLength: 0,
+            reply: undefined,
+        },
+        created: function () {
+            this.getPostContent();
+            this.getLikeStatus();
+            this.getComment();
+            this.getRelativePosts();
+        },
+        methods: {
+            getPostContent: function () {
+                let _this = this;
+                $.ajax({
+                    url: "/group/getpostcontent",
+                    data: {
+                        id: "{{id}}",
+                    },
+                    method: "GET",
+                    success: function (res) {
+                        if (res.errno === 0) {
+                            _this.poster = JSON.parse(res.data[0].poster);
+                            res.data[0].updateTime = new Date(res.data[0].updateTime).Format("yyyy-MM-dd hh:mm");
+                            _this.postContent = res.data[0];
+                        }
+
+                    }
+                })
+            },
+            getLikeStatus: function () {
+                $.ajax({
+                    url: '/article/getlikestatus',
+                    method: 'GET',
+                    data: {
+                        articleid: "{{id}}",
+                    },
+                    success: function (data) {
+                        vm.likeActive = data.data;
+                    }
+                })
+
+            },
+            getRelativePosts: function () {
+                $.ajax({
+                    url: "/article/getrelativearticle",
+                    data: {
+                        articleid: "{{id}}",
+                        type: 1,
+                    },
+                    mothod: "GET",
+                    success: function (data) {
+                        if (data.errno === 0) {
+                            for (let item of data.data) {
+                                if (JSON.parse(item.poster).length > 0) {
+                                    item.poster = JSON.parse(item.poster)[0];
+                                } else {
+                                    item.poster = undefined;
+                                }
+                            }
+                            vm.relativePosts = data.data;
+                        }
+
+                    }
+                })
+            },
+            clickLikes: function () {
+                this.likeActive = !this.likeActive;
+                if (this.likeActive) {
+                    this.postContent.likes++;
+                } else {
+                    this.postContent.likes--;
+                }
+                $.ajax({
+                    data: {
+                        likes: vm.postContent.likes,
+                        articleid: "{{id}}",
+                    },
+                    url: '/article/refreshlikes',
+                    method: 'POST',
+                    success: function (data) {
+                    }
+
+                })
+
+            },
+            addComment: function () {
+                let formData = new FormData();
+                if (vm.reply) {
+                    formData.append('replyId', vm.reply.id)
+                    formData.append('replyName', vm.reply.name);
+                }
+                formData.append('articleid', "{{id}}");
+                formData.append('content', $('#comment-input').val());
+                $.ajax({
+                    url: "/article/addcomment ",
+                    data: formData,
+                    method: "POST",
+                    contentType: false,
+                    processData: false,
+                    success: (data) => {
+                        vm.reply = undefined;
+                        if (data.errno == 0) {
+                            $.toast("评论发表成功!");
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 1000)
+                        } else if (data.errno === 1000) {
+                            $.toast("请先登录!");
+                        }
+                        else {
+                            $.toast("评论发表失败!");
+                        }
+
+                    }
+                })
+
+
+            },
+            getComment: function () {
+                $.ajax({
+                    url: '/article/getcommentbyarticleid',
+                    data: {
+                        articleid: "{{id}}",
+                        slice: 0,
+                    },
+                    method: 'GET',
+                    success: function (res) {
+                        if (res.errno === 0) {
+                            vm.comments = res.data.commentContent;
+                            vm.commentLength = res.data.commentLength;
+                        }
+
+                    }
+                })
+
+            },
+            getTime: function (time) {
+                return new Date(time).Format("yyyy-MM-dd hh:mm");
+
+            },
+            replyToogle: function (e) {
+                if (!$(e.currentTarget.parentNode).find('.reply').hasClass('reply-active')) {
+                    $(e.currentTarget.parentNode).find('.reply').addClass('reply-active');
+                } else {
+                    $(e.currentTarget.parentNode).find('.reply').removeClass('reply-active');
+                }
+
+
+            },
+            replyTo: function (e, id, name) {
+                vm.reply = {};
+                vm.reply.id = id;
+                vm.reply.name = name;
+                $(e.currentTarget).removeClass('reply-active');
+                $('#comment-input').focus();
+            }
+        }
+
+    })
+    $('.icon-weixin').on('click', function () {
+        $.toast('请使用浏览器分享功能分享到微信');
+    })
+    $('#comment-input').keyup(function () {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + "px"
+    })
+
+    Date.prototype.Format = function (fmt) {
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+</script>
+</body>
+
+</html>

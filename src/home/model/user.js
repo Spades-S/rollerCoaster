@@ -37,8 +37,8 @@ export default class extends think.model.base {
         return data;
     }
 
-    async getAvatarInfoByUserId(id) {
-        let data = await this.field('avatar, nickname').where({id: id}).select();
+    async getAuthorInfoByUserUid(uid) {
+        let data = await this.field('id, avatar, nickname').where({uid: uid}).select();
         return data;
     }
 
@@ -157,7 +157,6 @@ export default class extends think.model.base {
         } else {
             groups = [groupId]
         }
-        console.log('groups', groups)
         let updateRes = await this.where({id: id}).update({groups: JSON.stringify(groups)})
         return updateRes
     }

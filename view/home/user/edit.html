@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
     <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/iconfont/iconfont.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/2.3.4/cropper.css"/>
+    <link rel="stylesheet" href="/static/cropper/cropper.css"/>
     <style>
         * {
             box-sizing: border-box;
@@ -288,7 +288,6 @@
             </div>
         </div>
     </div>
-    <!--cropper test-->
     <div class="cropContainer">
         <header class="bar bar-nav">
             <a class="iconfont icon-arrow-left closeCrop"></a>
@@ -364,7 +363,7 @@
     })
 
     $('.img-input').on('change', function () {
-        if (!(window.File || window.FileReader || window.FileList || window.Blob)) {
+        if (!(window.File &&  window.FileReader && window.FileList && window.Blob)) {
             return $.toast('当前浏览器不支持上传头像')
         }
         let file = this.files[0];
@@ -391,11 +390,11 @@
             $('#crop-image').attr('src', dataUrl);
             $('.cropContainer').css('display', 'block');
 
-            $('#crop-image').cropper(options).cropper('replace', dataUrl);;
+            $('#crop-image').cropper(options).cropper('replace', dataUrl);
 
 
             $('#crop-image').on('ready', function () {
-                $('.avatar-confirm').on('click', function () {
+                $('.avatar-confirm').off().on('click', function () {
                     let avatarCropped = $('#crop-image').cropper('getCroppedCanvas').toDataURL();
                     vm.userDetail.avatarCropped = avatarCropped;
                     $('.edit-avatar img').attr('src', avatarCropped);
