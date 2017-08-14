@@ -2,7 +2,7 @@
   "apps": [{
     "name": "rollerCoaster",
     "script": "www/production.js",
-    "cwd": "/Users/spades/Documents/PROJECT/roller coaster/rollerCoaster",
+    "cwd": "/opt/rollerCoaster",
     "exec_mode": "cluster",
     "instances": 0,
     "max_memory_restart": "1G",
