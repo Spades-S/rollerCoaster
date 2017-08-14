@@ -187,6 +187,7 @@ export default class extends base {
         let num = Number(this.get('num'))
         let currentPage = Number(this.get('currentPage'))
         let res = await this.model('article').where({type: 1, col: id}).page(currentPage, num).countSelect()
+        console.log('posts', res)
         if (think.isEmpty(res)) {
             return this.fail('no posts')
         }

@@ -2,7 +2,7 @@
 class Article extends think.model.base {
     init(...args) {
         super.init(...args);
-        this.tableName = 'article';
+        this.tableName = 'articles';
     }
 
     async getPerPageItems(number, currentPage, invisibleList) {
@@ -21,7 +21,7 @@ class Article extends think.model.base {
     }
 
     async getArticleItemByid(id) {
-        let data = await this.alias('article')
+        let data = await this.alias('articles')
             .field('title, authorAvatar, authorName, content, updateTime, likes, col, poster')
             .where({id: id}).select();
 
