@@ -86,20 +86,22 @@ header h1.title {
 .author {
     font-size: 18px;
     padding-left: 0.3rem;
-    padding-right: 0.3rem;
     overflow: hidden;
     display: inline-block;
-    height: 1.2rem;
+    height: 1.5rem;
+    width: 5.5rem;
     text-overflow: ellipsis;
     white-space: nowrap;
-    position: relative;
+    line-height: 1.5rem;
 }
 
 .article .time {
     font-size: 16px;
     color: #9e9d9d;
-    position: absolute;
-    right: .5rem;
+    display: inline-block;
+    line-height: 1.5rem;
+    height: 1.5rem;
+    float: right;
 }
 
 .article-content {
@@ -148,7 +150,7 @@ header h1.title {
     color: gray;
 }
 
-.relative-article{
+.relative-article {
     height: 4rem;
 }
 
@@ -187,7 +189,7 @@ header h1.title {
 }
 
 .comment-info {
-    height: 3rem;
+    height: 2rem;
 }
 
 .comment-content {

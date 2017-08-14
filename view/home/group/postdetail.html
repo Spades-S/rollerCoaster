@@ -163,16 +163,28 @@
         }
 
         .comment-authorname, .comment-updatetime {
-            padding-left: 2.4rem;
-            height: 1rem;
-            line-height: 1rem;
+            height: 2rem;
+            line-height: 2rem;
             font-weight: 400;
-            font-size: .7rem;
             color: #999;
         }
 
+        .comment-authorname {
+            display: inline-block;
+            margin-left: 0.5rem;
+            width: 5rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .comment-updatetime {
+            float: right;
+            font-size: 0.8rem;
+        }
+
         .comment-content {
-            margin-top: 0.5rem;
             padding-left: 2.3rem;
         }
 
@@ -251,7 +263,8 @@
         .icon-feiji {
             color: #868686;
         }
-        .replyToName{
+
+        .replyToName {
             color: #72bb38;
         }
     </style>
@@ -319,11 +332,12 @@
                             <div class="comment-authorinfo">
                                 <img class="comment-authoravatar" :src="'/static/img'+comment.authorAvatar" alt="">
                                 <div>
-                                    <div class="comment-authorname">{$comment.authorName$}</div>
-                                    <div class="comment-updatetime">{$getTime(comment.updateTime)$}</div>
+                                    <span class="comment-authorname">{$comment.authorName$}</span>
+                                    <span class="comment-updatetime">{$getTime(comment.updateTime)$}</span>
                                 </div>
                             </div>
-                            <div class="comment-content"><span class="replyToName" v-if="comment.replyToName">@{$comment.replyToName$} </span>{$comment.content$}</div>
+                            <div class="comment-content"><span class="replyToName" v-if="comment.replyToName">@{$comment.replyToName$} </span>{$comment.content$}
+                            </div>
                         </div>
                         <div class="reply" @click="replyTo($event,comment.authorId,comment.authorName)">
                             回复
@@ -391,7 +405,7 @@
                     success: function (res) {
                         if (res.errno === 0) {
                             _this.poster = JSON.parse(res.data[0].poster);
-                            res.data[0].updateTime = new Date(res.data[0].updateTime).Format("yyyy-MM-dd hh:mm:ss");
+                            res.data[0].updateTime = new Date(res.data[0].updateTime).Format("yyyy-MM-dd hh:mm");
                             _this.postContent = res.data[0];
                         }
 
@@ -456,7 +470,7 @@
             },
             addComment: function () {
                 let formData = new FormData();
-                if(vm.reply){
+                if (vm.reply) {
                     formData.append('replyId', vm.reply.id)
                     formData.append('replyName', vm.reply.name);
                 }
@@ -506,7 +520,7 @@
 
             },
             getTime: function (time) {
-                return new Date(time).Format("yyyy-MM-dd hh:mm:ss");
+                return new Date(time).Format("yyyy-MM-dd hh:mm");
 
             },
             replyToogle: function (e) {

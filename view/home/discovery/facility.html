@@ -137,6 +137,7 @@
 
         .average-review .star {
             justify-content: center;
+            margin-bottom: 0.5rem;
         }
 
         .review-item {
@@ -209,6 +210,10 @@
             font-size: .7rem;
             text-align: center;
             margin-top: 2rem;
+        }
+
+        .small-star {
+            margin-top: 0.3rem;
         }
     </style>
 </head>
@@ -301,8 +306,8 @@
         num: 5,
         readOnly: true,
         imgPath: {
-            neg: '/static/star/images/starNeg.png',
-            act: '/static/star/images/starAct.png',
+            neg: '/static/star/images/star-off-big.png',
+            act: '/static/star/images/star-on-big.png',
         },
         size: 1.2 //单位rem
     }
@@ -310,8 +315,8 @@
         num: 5,
         readOnly: true,
         imgPath: {
-            neg: '/static/star/images/starNeg.png',
-            act: '/static/star/images/starAct.png',
+            neg: '/static/star/images/star-off-big.png',
+            act: '/static/star/images/star-on-big.png',
         },
         size: 0.8 //单位rem
     }

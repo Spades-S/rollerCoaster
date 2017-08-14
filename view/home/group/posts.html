@@ -9,7 +9,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+    <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+
     <style>
         * {
             box-sizing: border-box;
@@ -279,77 +281,82 @@
 <div class="page">
     <header class="bar bar-nav">
         <h1 class="title">小组</h1>
-        <a href="" class="iconfont icon-arrow-left back"></a>
+        <a href="/group" class="iconfont icon-arrow-left external"></a>
     </header>
-    <div class="content" id="content">
-        <div class="detail">
-            <div v-if="groupInfo" class="group-detail">
-                <div class="cover">
-                    <img :src="'/static/img'+groupInfo.cover" alt="">
+    <div class="content infinite-scroll infinite-scroll-bottom" data-distance="10">
+        <div id="posts-content">
+            <div class="detail">
+                <div v-if="groupInfo" class="group-detail">
+                    <div class="cover">
+                        <img :src="'/static/img'+groupInfo.cover" alt="">
+                    </div>
+                    <div class="group-item-info">
+                        <div class="group-title">{$ groupInfo.title $}</div>
+                        <div class="members">成员数：{$ groupInfo.members $}</div>
+                    </div>
                 </div>
-                <div class="group-item-info">
-                    <div class="group-title">{$ groupInfo.title $}</div>
-                    <div class="members">成员数：{$ groupInfo.members $}</div>
+                <div class="button-container">
+                    <div class="span-18">
+                        <div class="btn desc" @click="showDetail">小组简介</div>
+                    </div>
+                    <div class="span-13">
+                        <div class="btn share" @click="shareDisplay">分享</div>
+                    </div>
+                    <div class="span-18">
+                        <button :class="'btn join ' + (groupInfo.userInThisGroup ? 'disabled' : '')"
+                                :disabled="groupInfo.userInThisGroup ? true : false" @click="joinGroup">加入小组
+                        </button>
+                    </div>
+                    <div class="span-18">
+                        <button :class="'btn quit ' + (groupInfo.userInThisGroup ? '' : 'disabled')"
+                                :disabled="groupInfo.userInThisGroup ? false : true" @click="quitGroup">退出小组
+                        </button>
+                    </div>
+                    <div class="span-18">
+                        <div class="btn write" @click="toPost">发帖</div>
+                    </div>
                 </div>
             </div>
-            <div class="button-container">
-                <div class="span-18">
-                    <div class="btn desc" @click="showDetail">小组简介</div>
-                </div>
-                <div class="span-13">
-                    <div class="btn share" @click="shareDisplay">分享</div>
-                </div>
-                <div class="span-18">
-                    <button :class="'btn join ' + (groupInfo.userInThisGroup ? 'disabled' : '')"
-                            :disabled="groupInfo.userInThisGroup ? true : false" @click="joinGroup">加入小组
-                    </button>
-                </div>
-                <div class="span-18">
-                    <button :class="'btn quit ' + (groupInfo.userInThisGroup ? '' : 'disabled')"
-                            :disabled="groupInfo.userInThisGroup ? false : true" @click="quitGroup">退出小组
-                    </button>
-                </div>
-                <div class="span-18">
-                    <div class="btn write" @click="toPost">发帖</div>
-                </div>
-            </div>
-        </div>
-        <div class="post-list">
-            <template v-for="post in posts">
-                <a class="post-item external" :href="'/group/postdetail?id='+post.id">
+            <div class="post-list">
+                <template v-for="post in posts">
+                    <a class="post-item external" :href="'/group/postdetail?id='+post.id">
 
-                    <div class="post-row">
-                        <div class="post-comments">{$ post.comments $}</div>
-                        <div class="post-title">{$ post.title $}</div>
-                    </div>
-                    <div class="post-row info">
-                        <img :src="'/static/img'+post.authorAvatar" alt="" class="post-avatar">
-                        <div class="post-name">{$ post.authorName $}</div>
-                        <div class="post-time">{$ new Date(post.updateTime).Format('yyyy-MM-dd hh:mm') $}</div>
-                    </div>
-                </a>
-            </template>
-        </div>
-        <div class="detailInfo" v-if="groupDetailShow">
-            <div class="list-block">
-                <div class="item-content" v-for="item in detailList" v-if="groupInfo[item.en]">
-                    <div class="item-inner">
-                        <div class="item-title">{$ item.item $}</div>
-                        <div class="item-after">{$ groupInfo[item.en] $}</div>
+                        <div class="post-row">
+                            <div class="post-comments">{$ post.comments $}</div>
+                            <div class="post-title">{$ post.title $}</div>
+                        </div>
+                        <div class="post-row info">
+                            <img :src="'/static/img'+post.authorAvatar" alt="" class="post-avatar">
+                            <div class="post-name">{$ post.authorName $}</div>
+                            <div class="post-time">{$ new Date(post.updateTime).Format('yyyy-MM-dd hh:mm') $}</div>
+                        </div>
+                    </a>
+                </template>
+            </div>
+            <div class="infinite-scroll-preloader">
+                <div class="preloader"></div>
+            </div>
+            <div class="detailInfo" v-if="groupDetailShow">
+                <div class="list-block">
+                    <div class="item-content" v-for="item in detailList" v-if="groupInfo[item.en]">
+                        <div class="item-inner">
+                            <div class="item-title">{$ item.item $}</div>
+                            <div class="item-after">{$ groupInfo[item.en] $}</div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="share-content" v-if="shareShow">
+                <span class="iconfont icon-weixin" @click="wechat"></span>
+                <a class="iconfont icon-qq external"
+                   href="http://connect.qq.com/widget/shareqq/index.html?url=http%3A%2F%2Flocalhost%3A8080%2Farticle%2Fdetail%3Farticleid%3D36&title=%E6%AC%A2%E4%B9%90%E5%86%B6&source=%E6%AC%A2%E4%B9%90%E5%86%B6&desc=&pics=http%3A%2F%2Flocalhost%3A8080%2Fstatic%2Fimgundefined"></a>
+                <a class="iconfont icon-f external"
+                   href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fovertrue.me%2Fshare.js%2F"></a>
+                <a class="iconfont icon-tuite external" href="https://twitter.com/intent/tweet?text=玩在欢乐冶"></a>
+            </div>
+            <div class="mask" v-if="groupDetailShow" @click="hideDetail"></div>
+            <div class="share-mask" v-if="shareShow" @click="shareDisappear"></div>
         </div>
-        <div class="share-content" v-if="shareShow">
-            <span class="iconfont icon-weixin" @click="wechat"></span>
-            <a class="iconfont icon-qq external"
-               href="http://connect.qq.com/widget/shareqq/index.html?url=http%3A%2F%2Flocalhost%3A8080%2Farticle%2Fdetail%3Farticleid%3D36&title=%E6%AC%A2%E4%B9%90%E5%86%B6&source=%E6%AC%A2%E4%B9%90%E5%86%B6&desc=&pics=http%3A%2F%2Flocalhost%3A8080%2Fstatic%2Fimgundefined"></a>
-            <a class="iconfont icon-f external"
-               href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fovertrue.me%2Fshare.js%2F"></a>
-            <a class="iconfont icon-tuite external" href="https://twitter.com/intent/tweet?text=玩在欢乐冶"></a>
-        </div>
-        <div class="mask" v-if="groupDetailShow" @click="hideDetail"></div>
-        <div class="share-mask" v-if="shareShow" @click="shareDisappear"></div>
     </div>
 </div>
 
@@ -359,13 +366,16 @@
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script>
     $.init()
+    let loading = false;
+    let num = 10;
 
-    new Vue({
+    let vm = new Vue({
         delimiters: ['{$', '$}'],
         data () {
             return {
+                currentPage: 1,
                 groupInfo: {},
-                posts: undefined,
+                posts: [],
                 groupDetailShow: false,
                 shareShow: false,
                 joinDisabled: false,
@@ -420,15 +430,31 @@
         methods: {
             getPosts: function () {
                 let self = this
+                self.getPerpageItems(this.currentPage, num)
+
+            },
+            getPerpageItems: function (currentPage, num) {
+                let self = this
                 $.ajax({
                     url: '/group/getposts',
                     data: {
-                        id: "{{ id }}"
+                        id: "{{ id }}",
+                        currentPage: self.currentPage,
+                        num: num,
                     },
                     success: function (ret) {
-                        self.posts = ret.data.data.sort((a, b) => {
-                            return new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime()
-                        })
+                        loading = false;
+                        if (ret.errno === 0) {
+                            self.posts = self.posts.concat(ret.data.data.sort((a, b) => {
+                                return new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime()
+                            }))
+                            self.currentPage++;
+                            if (ret.data.currentPage === ret.data.totalPages || ret.data.currentPage === 0) {
+                                $.detachInfiniteScroll($('.infinite-scroll'))
+                                $('.infinite-scroll-preloader').hide();
+                            }
+                        }
+
                     }
                 })
             },
@@ -445,8 +471,8 @@
             shareDisappear: function () {
                 this.shareShow = false;
             },
-            wechat:function(){
-              $.toast('请使用浏览器分享功能分享到微信');
+            wechat: function () {
+                $.toast('请使用浏览器分享功能分享到微信');
             },
             toPost: function () {
                 if (/uid/.test(document.cookie)) {
@@ -494,7 +520,15 @@
                 })
             }
         }
-    }).$mount('#content')
+    }).$mount('#posts-content')
+    $(document).on('infinite', '.infinite-scroll', function () {
+        if (loading) {
+            return
+        }
+        loading = true;
+        vm.getPerpageItems(vm.currentPage, num);
+
+    })
 
     Date.prototype.Format = function (fmt) {
         var o = {
