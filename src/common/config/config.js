@@ -9,5 +9,5 @@ export default {
     dGeo:{
         lng: 1,
         lat: 1,
-    }
+    },
 };

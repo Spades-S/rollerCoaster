@@ -9,7 +9,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
-
     <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
     <link rel="stylesheet" href="/static/iconfont/iconfont.css">
 
@@ -110,6 +109,10 @@
             color: #fff;
         }
 
+        .btn.write{
+            width: 100%;
+        }
+
         .desc, .share {
             background-color: #0F528D;
         }
@@ -125,6 +128,7 @@
 
         .write {
             background-color: #F19725;
+            border: none;
         }
 
         .detailInfo {
@@ -314,7 +318,7 @@
                         </button>
                     </div>
                     <div class="span-18">
-                        <div class="btn write" @click="toPost">发帖</div>
+                        <button :class="'btn write ' + (groupInfo.userInThisGroup ? '' : 'disabled')" :disabled="groupInfo.userInThisGroup ? false : true" @click="toPost">发帖</button>
                     </div>
                 </div>
             </div>
@@ -450,12 +454,15 @@
                                 return new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime()
                             }))
                             self.currentPage++;
-                            if (ret.data.currentPage === ret.data.totalPages || ret.data.currentPage === 0) {
+                            if (ret.data.currentPage >= ret.data.totalPages || ret.data.totalPages === 0) {
                                 $.detachInfiniteScroll($('.infinite-scroll'))
                                 $('.infinite-scroll-preloader').hide();
                             }
                         }
-
+                    },
+                    error: function (err) {
+                        console.log(err)
+                        $.toast('出了点小错误，刷新重试')
                     }
                 })
             },

@@ -367,7 +367,7 @@
                 </div>
             </div>
         </div>
-        <div class="infinite-scroll-preloader">
+        <div class="infinite-scroll-preloader" data-distance="5">
             <div class="preloader"></div>
         </div>
     </div>
@@ -572,7 +572,7 @@
             },
             doSearch: function (e) {
                 if (this.keyword && e.keyCode === 13) {
-                    window.location.href = '/search?t=' + vm.activeIndex + '?q=' + this.keyword
+                    window.location.href = '/search?t=' + vm.activeIndex + '&q=' + this.keyword
                 }
             }
         }

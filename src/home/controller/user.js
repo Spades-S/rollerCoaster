@@ -195,7 +195,7 @@ export default class extends base {
 
 
         console.log(userDetail)
-
+        
 
         let updateRes = await userModel.updateUserDetail(userDetail, uid)
         if (!think.isEmpty(updateRes)) {

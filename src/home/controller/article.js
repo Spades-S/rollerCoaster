@@ -2,6 +2,7 @@
 import base from './base.js';
 export default class extends base {
     async detailAction() {
+        this.expires(86400)
         let articleId = this.get('articleid');
 
         if (checkLogin(this)) {
