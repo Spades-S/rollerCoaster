@@ -53,20 +53,20 @@ export default class extends base {
 
             let account = this.post('account')
             let code = generateVerificationCode();
-            // let userModel = this.model('user')
-            // let send_res = await userModel.sendMessage(phone, code)
+            let userModel = this.model('user')
+            let send_res = await userModel.sendMessage(account, code)
 
             await this.session('account', account);
             await this.session('code', Number(code));
 
 
-            let sessionCode = await this.session('code')
-            console.log(sessionCode)
+            // let sessionCode = await this.session('code')
+            // console.log(sessionCode)
 
             return this.success(true)
             // this.success(send_res)
 
-        } catch (err) {
+        }catch (err) {
             return this.fail(err, this.errors())
         }
     }
