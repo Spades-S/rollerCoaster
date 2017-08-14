@@ -1,196 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>欢乐冶</title>
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-    <link rel="shortcut icon" href="/favicon.ico">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>欢乐冶</title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
-    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
-    <style>
-        * {
-            -webkit-font-smoothing: antialiased;
-        }
+  <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+  <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+  <style>
+    * {
+      -webkit-font-smoothing: antialiased;
+    }
 
-        .bar {
-            border-bottom: none;
-            padding-right: 0.2rem;
-        }
+    .bar {
+      border-bottom: none;
+      padding-right: 0.2rem;
+    }
 
-        .bar.bar-tab {
-            display: flex;
-            flex-direction: row;
-        }
+    .bar.bar-tab {
+      display: flex;
+      flex-direction: row;
+    }
 
-        .bar.bar-nav {
-            height: 3rem;
-            background-color: #07518f;
-        }
+    .bar.bar-nav {
+      height: 3rem;
+      background-color: #07518f;
+    }
 
-        .icon-arrow-left {
-            display: inline-block;
-            width: 0.9rem;
-            height: 1.4rem;
-            position: absolute;
-            top: 0.75rem;
-            z-index: 30;
-        }
+    .icon-arrow-left {
+      display: inline-block;
+      width: 0.9rem;
+      height: 1.4rem;
+      position: absolute;
+      top: 0.75rem;
+      z-index: 30;
+    }
 
-        h1.title {
-            color: white;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            line-height: 3rem;
-        }
+    h1.title {
+      color: white;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 3rem;
+    }
 
-        .searchbar .search-input input {
-            height: 1.8rem;
-            margin: 0;
-        }
+    .searchbar .search-input input {
+      height: 1.8rem;
+      margin: 0;
+    }
 
-        .search-input label + input {
-            padding-left: .7rem;
-        }
+    .search-input label + input {
+      padding-left: .7rem;
+    }
 
-        .tab-item {
-            text-align: center;
-        }
+    .tab-item {
+      text-align: center;
+    }
 
-        .tab-item.active {
-            color: #72bb38 !important;
-        }
+    .tab-item.active {
+      color: #72bb38 !important;
+    }
 
-        .bar-nav ~ .content {
-            top: 3rem;
-            padding-bottom: 2.5rem;
-            background-color: #fff;
-        }
+    .bar-nav ~ .content {
+      top: 3rem;
+      padding-bottom: 2.5rem;
+      background-color: #fff;
+    }
 
-        .content-tab .active {
-            color: #07518f;
-            background-color: #fff;
-            border-top: 2px solid #6EB732;
-        }
+    .content-tab .active {
+      color: #07518f;
+      background-color: #fff;
+      border-top: 2px solid #6EB732;
+    }
 
-        .content-list {
-            padding-top: .3rem;
-        }
+    .content-list {
+      padding-top: .3rem;
+    }
 
-        .content-list-item {
-            height: 5rem;
-            padding: .8rem 1rem;
-            display: flex;
-            background-color: #fff;
-            border-bottom: 1px solid #EEEEEE;
-        }
+    .content-list-item {
+      height: 4.6rem;
+      padding: .8rem 1rem;
+      display: flex;
+      background-color: #fff;
+      border-bottom: 1px solid #EEEEEE;
+    }
 
-        .facility-poster {
-            height: 3.4rem;
-            width: 3.4rem;
-        }
+    .facility-poster {
+      position: relative;
+      height: 3rem;
+      width: 3rem;
+      overflow: hidden;
+    }
 
-        .facility-poster-img {
-            height: 100%;
-            width: 100%;
-        }
+    .facility-poster-img {
+      position: absolute;
+      height: 100%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
 
-        .content-list-item-right {
-            width: calc(100% - 3.4rem);
-            padding-left: 1rem;
-        }
+    .content-list-item-right {
+      width: calc(100% - 3rem);
+      height: 3rem;
+      padding-left: 1rem;
+    }
 
-        .facility-title {
-            height: 1.4rem;
-            line-height: 1.3rem;
-            margin: 0;
-        }
+    .facility-title {
+      margin: 0;
+      height: 1.4rem;
+      line-height: 1.4rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
 
-        .facility-rating {
-            width: 100% !important;
-            height: .6rem;
-            padding: .05rem;
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
+    .facility-rating {
+      width: 100% !important;
+      height: .6rem;
+      padding: .05rem;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
 
-        .facility-rating img {
-            width: .6rem;
-        }
+    .facility-rating img {
+      width: .6rem;
+    }
 
-        .facility-detail {
-            display: flex;
-            justify-content: space-between;
-            margin-top: .3rem;
-            height: 1.3rem;
-            line-height: 1.3rem;
-        }
+    .facility-detail {
+      display: flex;
+      justify-content: space-between;
+      margin-top: .68rem;
+      height: 1rem;
+      line-height: 1rem;
+    }
 
-        .facility-price, .facility-distance {
-            font-size: .7rem;
-            color: #999;
-        }
-    </style>
+    .facility-price, .facility-distance {
+      font-size: .7rem;
+      color: #999;
+    }
+  </style>
 </head>
 <body>
 <div class="page">
-    <header class="bar bar-nav">
-        <a href="javascript:window.history.go(-1)" class=" iconfont icon-arrow-left back"></a>
-        <h1 class="title">乐园</h1>
-    </header>
-    <div class="content infinite-scroll" data-distance="50">
-        <div id="content-list">
-            <div class="content-item">
-                <div class="content-list">
-                    <div class="content-list-item" v-for="item in parkList" :data-id="item.id" @click="toFacility">
-                        <div class="facility-poster">
-                            <img v-if="item.poster==''" src="/static/img/systemAvatar.jpeg" alt=""
-                                 class="facility-poster-img">
-                            <img v-else :src="item.poster.split(',')[0]" class="facility-poster-img">
-                        </div>
-                        <div class="content-list-item-right">
-                            <div class="facility-title">
-                                {$ item.title $}
-                            </div>
-                            <div class="facility-detail">
-                                <div class="facility-price">
-                                    价格：{$ item.price || '0' $}
-                                </div>
-                                <div class="facility-distance" :data-position="item.geolocation">
-                                    距离：{$ convertToKilometers(item.geolocation) $} km
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <header class="bar bar-nav">
+    <a href="javascript:window.history.go(-1)" class=" iconfont icon-arrow-left back"></a>
+    <h1 class="title">乐园</h1>
+  </header>
+  <div class="content infinite-scroll" data-distance="50">
+    <div id="content-list">
+      <div class="content-item">
+        <div class="content-list">
+          <div class="content-list-item" v-for="item in parkList" :data-id="item.id" @click="toFacility">
+            <div class="facility-poster">
+              <img v-if="item.poster==''" src="/static/img/systemAvatar.jpeg" alt=""
+                   class="facility-poster-img">
+              <img v-else :src="item.poster.split(',')[0]" class="facility-poster-img">
             </div>
+            <div class="content-list-item-right">
+              <div class="facility-title">
+                {$ item.title $}
+              </div>
+              <div class="facility-detail">
+                <div class="facility-price">
+                  价格：{$ item.price || '0' $}
+                </div>
+                <div class="facility-distance" :data-position="item.geolocation">
+                  距离：{$ convertToKilometers(item.geolocation) $} km
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="infinite-scroll-preloader">
-            <div class="preloader"></div>
-        </div>
+      </div>
     </div>
-    <nav class="bar bar-tab ">
-        <a class="tab-item external" href="/index">
-            <span class="icon iconfont icon-shouye"></span>
-            <span class="tab-label ">首页</span>
-        </a>
-        <a class="tab-item active external">
-            <span class="icon iconfont icon-yikeapp15"></span>
-            <span class="tab-label ">发现</span>
-        </a>
-        <a class="tab-item external" href="/group">
-            <span class="icon iconfont icon-xiaozufill"></span>
-            <span class="tab-label ">小组</span>
-        </a>
-        <a class="tab-item external" href="/user">
-            <span class="icon iconfont icon-wode"></span>
-            <span class="tab-label ">我的</span>
-        </a>
-    </nav>
+    <div class="infinite-scroll-preloader">
+      <div class="preloader"></div>
+    </div>
+  </div>
+  <nav class="bar bar-tab ">
+    <a class="tab-item external" href="/index">
+      <span class="icon iconfont icon-shouye"></span>
+      <span class="tab-label ">首页</span>
+    </a>
+    <a class="tab-item active external">
+      <span class="icon iconfont icon-yikeapp15"></span>
+      <span class="tab-label ">发现</span>
+    </a>
+    <a class="tab-item external" href="/group">
+      <span class="icon iconfont icon-xiaozufill"></span>
+      <span class="tab-label ">小组</span>
+    </a>
+    <a class="tab-item external" href="/user">
+      <span class="icon iconfont icon-wode"></span>
+      <span class="tab-label ">我的</span>
+    </a>
+  </nav>
 </div>
 
 
