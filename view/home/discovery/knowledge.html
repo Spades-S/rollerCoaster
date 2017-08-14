@@ -153,13 +153,13 @@
                 <div class="content-list">
                     <div class="content-list-item" v-for="article in articles">
                         <div class="item-content" :data-id="article.id" @click="toArticle">
-                            <img :src="article.poster||'/static/img/systemAvatar.jpeg'" alt="" class="poster">
+                            <img :src="'/static/img'+article.poster||'/static/img/systemAvatar.jpeg'" alt="" class="poster">
                             <div class="title-intro">
                                 <div class="article-title">{$ article.title $}</div>
                                 <div class="article-intro">{$ article.description $}</div>
                             </div>
                             <div class="author-uptadetime">
-                                <img :src="article.authorAvatar||'/static/img/systemAvatar.jpeg'" alt="" class="avatar">
+                                <img :src="'/static/img'+article.authorAvatar||'/static/img/systemAvatar.jpeg'" alt="" class="avatar">
                                 <span v-if="article.authorName==''" class="nickname">{$ article.col $}</span>
                                 <span v-else class="nickname">{$ article.authorName $}</span>
                                 <span class="updatetime">{$ getDateDiff(article.updateTime) $}</span>

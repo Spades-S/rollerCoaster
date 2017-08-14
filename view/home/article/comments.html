@@ -2,50 +2,50 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>欢乐冶</title>
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-    <link rel="shortcut icon" href="/favicon.ico">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
-    <link rel="stylesheet" href="/static/css/comments.css">
-    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>欢乐冶</title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+  <link rel="stylesheet" href="/static/css/comments.css">
+  <link rel="stylesheet" href="/static/iconfont/iconfont.css">
 </head>
 
 <body>
 <div class="page-group">
-    <div class="page page-current">
-        <header class="bar bar-nav">
-            <a class=" iconfont icon-arrow-left back " >
-            </a>
-            <h1 class='title'>所有评论</h1>
-        </header>
-        <div class="comments  content infinite-scroll infinite-scroll-bottom" data-distance="3">
-            <div class="comment-list" id="comments-list">
-                <template>
-                    <div class="comment-item content-padded" v-for="item in comments">
-                        <div class="comment-info">
-                            <img :src=item.authorAvatar class="comment avatar">
-                            <span class="author">{$item.authorName$}</span>
-                            <span class="time">{$getTime(item.updateTime)$}</span>
-                        </div>
-                        <div class="comment-content">
-                            {$item.content$}
-                            <hr>
-                        </div>
-
-                    </div>
-                </template>
+  <div class="page page-current">
+    <header class="bar bar-nav">
+      <a class=" iconfont icon-arrow-left back ">
+      </a>
+      <h1 class='title'>所有评论</h1>
+    </header>
+    <div class="comments  content infinite-scroll infinite-scroll-bottom" data-distance="3">
+      <div class="comment-list" id="comments-list">
+        <template>
+          <div class="comment-item content-padded" v-for="item in comments">
+            <div class="comment-info">
+              <img :src="'/static/img'+item.authorAvatar" class="comment avatar">
+              <span class="author">{$item.authorName$}</span>
+              <span class="time">{$getTime(item.updateTime)$}</span>
             </div>
-            <div class="infinite-scroll-preloader">
-                <div class="preloader"></div>
+            <div class="comment-content">
+              {$item.content$}
+              <hr>
             </div>
-        </div>
 
-
+          </div>
+        </template>
+      </div>
+      <div class="infinite-scroll-preloader">
+        <div class="preloader"></div>
+      </div>
     </div>
+
+
+  </div>
 </div>
 
 
@@ -125,7 +125,7 @@
 
         if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
         for (var k in o)
-        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
     }
 </script>
