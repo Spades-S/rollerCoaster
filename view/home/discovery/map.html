@@ -1,282 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>欢乐冶</title>
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-    <link rel="shortcut icon" href="/favicon.ico">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>欢乐冶</title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    <link rel="stylesheet" href="/static/light7/css/light7.min.css">
-    <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
-    <link rel="stylesheet" href="/static/iconfont/iconfont.css">
+  <link rel="stylesheet" href="/static/light7/css/light7.min.css">
+  <link rel="stylesheet" href="/static/light7/css/light7-swiper.min.css">
+  <link rel="stylesheet" href="/static/iconfont/iconfont.css">
 
-    <style>
-        * {
-            -webkit-font-smoothing: antialiased;
-        }
+  <style>
+    * {
+      -webkit-font-smoothing: antialiased;
+    }
 
-        .bar {
-            border-bottom: none;
-        }
+    .bar {
+      border-bottom: none;
+    }
 
-        .bar.bar-nav {
-            height: 3rem;
-            background-color: #07518f;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-        }
+    .bar.bar-nav {
+      height: 3rem;
+      background-color: #07518f;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+    }
 
-        .map-icon::before {
-            color: #fff;
-        }
+    .map-icon::before {
+      color: #fff;
+    }
 
-        .bar .searchbar {
-            position: relative;
-            display: flex;
-            flex: 10;
-            padding-right: 1rem;
-            align-items: center;
-            background: transparent;
-        }
+    .bar .searchbar {
+      position: relative;
+      display: flex;
+      flex: 10;
+      padding-right: 1rem;
+      align-items: center;
+      background: transparent;
+    }
 
-        .search-input {
-            width: 100%;
-            border-radius: .3rem;
-            box-sizing: content-box;
-            font-size: .6rem;
-        }
+    .search-input {
+      width: 100%;
+      border-radius: .3rem;
+      box-sizing: content-box;
+      font-size: .6rem;
+    }
 
-        .searchbar .searchbar-cancel {
-            margin-left: .3rem;
-        }
+    .searchbar .searchbar-cancel {
+      margin-left: .3rem;
+    }
 
-        .bar .searchbar .searchbar-cancel {
-            font-size: .7rem;
-            color: #fff;
-        }
+    .bar .searchbar .searchbar-cancel {
+      font-size: .7rem;
+      color: #fff;
+    }
 
-        .searchbar .search-input input {
-            height: 1.8rem;
-            margin: 0;
-        }
+    .searchbar .search-input input {
+      height: 1.8rem;
+      margin: 0;
+    }
 
-        .search-input label + input {
-            padding-left: .7rem;
-        }
+    .search-input label + input {
+      padding-left: .7rem;
+    }
 
-        .icon-sousuo {
-            position: absolute;
-            line-height: 1.8rem;
-            right: .5rem;
-            color: #6EB732;
-        }
+    .icon-sousuo {
+      position: absolute;
+      line-height: 1.8rem;
+      right: .5rem;
+      color: #6EB732;
+    }
 
-        .bar ~ .content {
-            top: 3rem;
-        }
+    .bar ~ .content {
+      top: 3rem;
+    }
 
-        #container {
-            width: 100%;
-            height: calc(100% - 2.2rem);
-        }
+    #container {
+      width: 100%;
+      height: calc(100% - 2.2rem);
+    }
 
-        .nearby-car {
-            position: absolute;
-            z-index: 10000;
-            bottom: 0;
-            width: 100%;
-            height: 2.2rem;
+    .nearby-car {
+      position: absolute;
+      z-index: 10000;
+      bottom: 0;
+      width: 100%;
+      height: 2.2rem;
 
-            transition: all 0.5s;
+      transition: all 0.5s;
 
-        }
+    }
 
-        .display {
-            /*height: calc(100% - 10rem);*/
-            transition: all 0.5s;
+    .display {
+      /*height: calc(100% - 10rem);*/
+      transition: all 0.5s;
 
-            background: #eee;
-        }
+      background: #eee;
+    }
 
-        .display .icon-arrow-top:before {
-            content: "\e823";
-        }
+    .display .icon-arrow-top:before {
+      content: "\e823";
+    }
 
-        .icon-arrow-top, .name {
-            height: 1.1rem;
-            text-align: center;
-            font-size: 14px;
-        }
+    .icon-arrow-top, .name {
+      height: 1.1rem;
+      text-align: center;
+      font-size: 14px;
+    }
 
-        .item-list {
-            overflow-y: auto;
-        }
+    .item-list {
+      overflow-y: auto;
+    }
 
-        .item-content {
-            padding: 0.7rem 1rem 0.7rem 0.7rem;
-            height: 4.4rem;
-            background: #FFF;
-        }
+    .item-content {
+      padding: 0.7rem 1rem 0.7rem 0.7rem;
+      height: 4.4rem;
+      background: #FFF;
+    }
 
-        .poster {
-            float: left;
-            width: 3rem;
-            height: 3rem;
-        }
+    .poster {
+      float: left;
+      width: 3rem;
+      height: 3rem;
+    }
 
-        .text-content {
-            padding-left: 3.6rem;
-            margin-top: 0.12rem;
-        }
+    .text-content {
+      padding-left: 3.6rem;
+      margin-top: 0.12rem;
+    }
 
-        .car-title {
-            overflow: hidden;
-            font-size: 16px;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
+    .car-title {
+      overflow: hidden;
+      font-size: 16px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
-        .price-distance {
-            margin-top: 0.7rem;
-            color: #8a8282;
-            font-size: 13px;
-        }
+    .price-distance {
+      margin-top: 0.7rem;
+      color: #8a8282;
+      font-size: 13px;
+    }
 
-        .distance {
-            float: right;
-        }
+    .distance {
+      float: right;
+    }
 
-        /*hr {*/
-        /*margin: 0;*/
-        /*border: none;*/
-        /*border-bottom: 1px solid #ccc;*/
-        /*}*/
+    /*hr {*/
+    /*margin: 0;*/
+    /*border: none;*/
+    /*border-bottom: 1px solid #ccc;*/
+    /*}*/
 
-        .item-detail {
-            padding-left: 0.5rem;
-            padding-right: 0.8rem;
-            height: 0;
-            overflow: hidden;
-            background: #FFFFFF;
-            transition: all 0.5s ease;
-            font-size: 0;
-        }
+    .item-detail {
+      padding-left: 0.5rem;
+      padding-right: 0.8rem;
+      height: 0;
+      overflow: hidden;
+      background: #FFFFFF;
+      transition: all 0.5s ease;
+      font-size: 0;
+    }
 
-        .detail-border {
-            margin-top: 0.5rem;
-            border-top: 1px solid #dcdbdb;
-            border-right: 1px solid #dcdbdb;
-        }
+    .detail-border {
+      margin-top: 0.5rem;
+      border-top: 1px solid #dcdbdb;
+      border-right: 1px solid #dcdbdb;
+    }
 
-        .detail-key, .detial-value {
-            border-left: 1px solid #dcdbdb;
-            border-bottom: 1px solid #dcdbdb;
-        }
+    .detail-key, .detial-value {
+      border-left: 1px solid #dcdbdb;
+      border-bottom: 1px solid #dcdbdb;
+    }
 
-        .detail-key {
-            display: inline-block;
-            padding-right: 0.5rem;
-            overflow: auto;
-            width: 4.5rem;
-            height: 1.6rem;
-            font-size: 14px;
-            line-height: 1.5rem;
-            text-align: right;
-            background: #EEEEEE;
-        }
+    .detail-key {
+      display: inline-block;
+      padding-right: 0.5rem;
+      overflow: auto;
+      width: 4.5rem;
+      height: 1.6rem;
+      font-size: 14px;
+      line-height: 1.5rem;
+      text-align: right;
+      background: #EEEEEE;
+    }
 
-        .detial-value {
-            display: inline-block;
-            height: 1.6rem;
-            padding-left: 0.5rem;
-            overflow: auto;
-            width: calc(100% - 4.5rem);
-            font-size: 14px;
-            line-height: 1.5rem;
-            white-space: nowrap;
-        }
+    .detial-value {
+      display: inline-block;
+      height: 1.6rem;
+      padding-left: 0.5rem;
+      overflow: auto;
+      width: calc(100% - 4.5rem);
+      font-size: 14px;
+      line-height: 1.5rem;
+      white-space: nowrap;
+    }
 
-        .map-info-title {
-            color: white;
-            font-size: 14px;
-            background-color: rgba(0, 155, 255, 0.8);
-            line-height: 26px;
-            padding: 0px 0 0 6px;
-            font-weight: 700;
-            letter-spacing: 1px
-        }
+    .map-info-title {
+      color: white;
+      font-size: 14px;
+      background-color: rgba(0, 155, 255, 0.8);
+      line-height: 26px;
+      padding: 0px 0 0 6px;
+      font-weight: 700;
+      letter-spacing: 1px
+    }
 
-        .map-info-location {
-            margin-left: 2.5rem;
-            width: calc(100% - 2.5rem);
-            font-size: 14px;
-            line-height: 1rem;
-            overflow: hidden;
-        }
+    .map-info-location {
+      margin-left: 2.5rem;
+      width: calc(100% - 2.5rem);
+      font-size: 14px;
+      line-height: 1rem;
+      overflow: hidden;
+    }
 
-        .detail-hr {
-            border-top: 1px solid #ccc;
-        }
+    .detail-hr {
+      border-top: 1px solid #ccc;
+    }
 
-        .icon-arrow-left {
-            width: 1.5rem;
-        }
-    </style>
+    .icon-arrow-left {
+      width: 1.5rem;
+    }
+
+    .amap-icon img {
+      width: 30px;
+    }
+
+    .map-flag {
+      position: relative;
+      width: 28px;
+      height: 30px;
+      background: url(/static/img/flagInMap.png);
+      background-size: 28px 30px;
+      text-align: center;
+    }
+    .map-flag-index{
+      position: absolute;
+      display: inline-block;
+      top: 0px;
+      left: 5px;
+      width: 18px;
+      color: white;
+      font-size: 15px;
+      font-weight: 500;
+      text-align: center;
+    }
+
+
+  </style>
 </head>
 <body>
 
 <div class="page">
-    <header class="bar bar-nav">
-        <a href="/discovery" class=" iconfont icon-arrow-left  external "></a>
-        <div class="searchbar">
-            <div class="search-input" id="searchbar">
-                <label class="search-icon iconfont icon-sousuo active "></label>
-                <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show' @input="typeSearch"
-                       @keypress="doSearch"/>
-            </div>
-            <a class="searchbar-cancel">取消</a>
-        </div>
-    </header>
-    <div class="content">
-        <div id="container"></div>
+  <header class="bar bar-nav">
+    <a href="/discovery" class=" iconfont icon-arrow-left  external "></a>
+    <div class="searchbar">
+      <div class="search-input" id="searchbar">
+        <label class="search-icon iconfont icon-sousuo active "></label>
+        <input type="search" id='search' class="search" placeholder='过山车  黑暗骑士  show' @input="typeSearch"
+               @keypress="doSearch"/>
+      </div>
+      <a class="searchbar-cancel">取消</a>
     </div>
-    <div class="nearby-car" :class="{display:display}" id="nearby-car">
-        <div class="iconfont icon-arrow-top" @click=toggleDisplay></div>
-        <div class="name" @click=toggleDisplay>附近的车</div>
-        <div class="item-list">
-            <div v-for="carItem in nearbyCars " @click="displayDetail($event)">
-                <div class="item">
-                    <div class="item-content">
-                        <img class="poster" :src="carItem.poster" alt="">
-                        <div class="text-content">
-                            <div class="car-title">{$ carItem.title$}</div>
-                            <div class="price-distance">
-                                <span class="price">价格: 50 / 人</span>
-                                <span class="distance">距离: {$ carItem.distance $} km</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!--<hr>-->
-                </div>
-                <div class="item-detail">
-                    <div class="detail-border">
-                        <template v-for="(detailItem,index) in getItemDetail(carItem)">
-                            <span class="detail-key">{$ detailItem.key $}:</span>
-                            <span v-if="index==7&&detailItem.value==null"
-                                  class="detial-value">-</span>
-                            <span v-else class="detial-value">{$ detailItem.value $}</span>
-                        </template>
-                    </div>
+  </header>
+  <div class="content">
+    <div id="container"></div>
+  </div>
+  <div class="nearby-car" :class="{display:display}" id="nearby-car">
+    <div class="iconfont icon-arrow-top" @click=toggleDisplay></div>
+    <div class="name" @click=toggleDisplay>附近的车</div>
+    <div class="item-list">
+      <div v-for="carItem in nearbyCars " @click="displayDetail($event)">
+        <div class="item">
+          <div class="item-content">
+            <img class="poster" :src="carItem.poster" alt="">
+            <div class="text-content">
+              <div class="car-title">{$ carItem.title$}</div>
+              <div class="price-distance">
+                <span class="price">价格: 50 / 人</span>
+                <span class="distance">距离: {$ carItem.distance $} km</span>
+              </div>
+            </div>
+          </div>
+          <!--<hr>-->
+        </div>
+        <div class="item-detail">
+          <div class="detail-border">
+            <template v-for="(detailItem,index) in getItemDetail(carItem)">
+              <span class="detail-key">{$ detailItem.key $}:</span>
+              <span v-if="index==7&&detailItem.value==null"
+                    class="detial-value">-</span>
+              <span v-else class="detial-value">{$ detailItem.value $}</span>
+            </template>
+          </div>
 
-                </div>
-                <div class="detail-hr"></div>
-            </div>
         </div>
+        <div class="detail-hr"></div>
+      </div>
     </div>
+  </div>
 </div>
 
 
@@ -317,7 +343,7 @@
         updated: function () {
             if (this.nearbyCars.length === 1) {
                 $('.item-detail').css({
-                    height: '12rem',
+                    height: '13.8rem',
                 })
             }
         },
@@ -398,6 +424,7 @@
 
     function onComplete(data) {
         let longitude = data.position.getLng(), latitude = data.position.getLat();
+        console.log('lng' + longitude + ',lat' + latitude);
         $.ajax({
             url: '/discovery/nearbycars',
             method: 'GET',
@@ -409,12 +436,19 @@
                 if (res.errno === 0) {
                     $vm.nearbyCars = res.data;
                     let infoWindow = new AMap.AdvancedInfoWindow();
-                    for (let item of res.data) {
+                    let icon = new AMap.Icon({
+                        image: '/static/img/flagInMap.png',//24px*24px
+                        size: new AMap.Size(30, 30)
+                    });
+                    for (let index = 0; index < res.data.length; index++) {
+                        let item = res.data[index];
                         let marker = new AMap.Marker({
                             position: [item.longitude, item.latitude],
                             title: item.title,
                             map: map,
-                            offset: new AMap.Pixel(-5, -2),
+                            offset: new AMap.Pixel(-14, 3),
+                            icon: icon,
+                            content: `<div class="map-flag"><span class="map-flag-index">${index+1}</span></div>`
                         })
                         let lnglat = new AMap.LngLat(item.longitude, item.latitude);
                         item.distance = (lnglat.distance([longitude, latitude]) / 1000).toFixed(2);
