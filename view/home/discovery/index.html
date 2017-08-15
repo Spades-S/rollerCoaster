@@ -360,7 +360,7 @@
                                     价格：{$ item.price || '0' $}
                                 </div>
                                 <div class="facility-distance" :data-position="item.geolocation">
-                                    距离：{$ convertToKilometers(item.geolocation) $}
+                                    距离：{$ convertToKilometers(item.geolocation) $} km
                                 </div>
                             </div>
                         </div>
@@ -483,7 +483,7 @@
                     },
                     success: function (ret) {
                         if (ret.errno === 0) {
-                        	console.log(ret)
+//                        	console.log(ret)
                         	if (ret.data !== 'no more') {
                         		self.nomoreTimes = 0
 		                        let list = ret.data.data

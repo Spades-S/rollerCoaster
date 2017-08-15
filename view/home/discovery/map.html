@@ -422,13 +422,13 @@
         geocoder = new AMap.Geocoder();
         map.addControl(geolocation);
         geolocation.getCurrentPosition(function (status, result) {
-            if (GEO) {
+
+            if (status == 'complete' && GEO) {
                 result.position.M = Number(GEO.split(',')[1]);
                 result.position.O = Number(GEO.split(',')[0]);
                 result.position.lng = Number(GEO.split(',')[1]);
                 result.position.lat = Number(GEO.split(',')[0]);
             }
-
         });
         AMap.event.addListener(geolocation, 'complete', onComplete);//返回定位信息
         AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
