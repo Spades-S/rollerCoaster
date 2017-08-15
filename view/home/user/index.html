@@ -147,9 +147,9 @@
             </div>
             <div class="content-middle content-padded" v-if="userInfo">
                 <a class="likes md external" href="/user/like"><span class="iconfont icon-xihuan"></span>喜欢</a>
-                <a class="achieve md"><span class="iconfont icon-jiangbei"></span>成就</a>
+                <a class="achieve md" @click="loadingTip"><span class="iconfont icon-jiangbei"></span>成就</a>
                 <a class="activity md external" href="/user/activity"><span class="iconfont icon-qizhi"></span>活动</a>
-                <a class="log md"><span class="iconfont icon-iconset0116"></span>刷车日志</a>
+                <a class="log md" @click="loadingTip"><span class="iconfont icon-iconset0116"></span>刷车日志</a>
             </div>
             <div class="content-bottom content-padded" v-if="userInfo">
                 <a href="/user/feedback" class="external">
@@ -218,8 +218,16 @@
                 let avatarSubAddr = this.userInfo.avatar || '/systemAvatar.jpeg';
                 return '/static/img' + avatarSubAddr;
             }
+        },
+        methods: {
+            loadingTip: function (e) {
+//                e.preventDefault()
+                $.toast('功能尚未上线，请期待~')
+            }
         }
     }).$mount('#content')
+
+
 </script>
 </body>
 </html>

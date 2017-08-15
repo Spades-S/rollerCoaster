@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
-    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="mobile-web-app-status-bar-style" content="black">
     <link rel="stylesheet" href="/static/light7/css/light7.min.css">
@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="/static/css/index.css">
     <link rel="stylesheet" href="/static/iconfont/iconfont.css">
     <style>
-        .icon-sousuo{
+        .icon-sousuo {
             line-height: 2.8rem;
             right: 1rem;
             font-size: 1rem;
@@ -50,7 +50,7 @@
             <div class="button-container">
                 <div class="button-row margintop">
                     <a href="#" class="button daily">每日一车</a>
-                    <a href="/score" class="button score external">成就排名</a>
+                    <a href="#" class="button score external">成就排名</a>
                 </div>
                 <div class="button-row marginbottom">
                     <a href="/group" class="button group external">我的小组</a>
@@ -61,7 +61,8 @@
             </div>
             <div class="article-list" id="article-list">
                 <template v-for="item, index in articles">
-                    <div :class="'article-item ' + item.readClass" :data-index="index" :data-articleid="item.id"> <!-- getClass(item.id, greyList) -->
+                    <div :class="'article-item ' + item.readClass" :data-index="index" :data-articleid="item.id">
+                        <!-- getClass(item.id, greyList) -->
                         <div class="article-content padded">
                             <img :src="'/static/img'+item.poster " class="article-firstimg ">
                             <div class="article-title ">{$ escape(item.title) $}</div>
@@ -128,9 +129,10 @@
             greyList: [],
         },
         methods: {
-        	escape: function (str) {
+            escape: function (str) {
                 return str.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&apos;/g, "'")
-	        }
+            },
+
         }
     })
     let articleLoading = false;
@@ -147,9 +149,9 @@
 
     $(document).on('click', '.article-item', (e) => {
         let articleid = e.currentTarget.getAttribute('data-articleid');
-	    let index = e.currentTarget.getAttribute('data-index');
+        let index = e.currentTarget.getAttribute('data-index');
 
-	    $vm.articles[index].readClass = "readed"
+        $vm.articles[index].readClass = "readed"
         e.currentTarget.setAttribute('class', 'article-item readed');
 
         window.location.href = "/article/detail?articleid=" + articleid;
@@ -173,6 +175,11 @@
         }
     });
 
+    $('.daily, .score').on('click',function(e){
+        e.preventDefault();
+        $.toast('功能尚未上线，请期待~')
+    })
+
 
     function getSomeArticles(number, firstFlag, articleList) {
         if (firstFlag == true) {
@@ -189,15 +196,15 @@
                 articleList: articleList
             },
             success: function (data) {
-            	console.log(data)
+                console.log(data)
                 if (data.errno == 0) {
                     // $vm.greyList = data.data.greyList;
                     for (let item of data.data.data) {
-                    	if(readList.indexOf(String(item.id))>=0){
-                    		item.readClass += ' readed'
+                        if (readList.indexOf(String(item.id)) >= 0) {
+                            item.readClass += ' readed'
                         }
                         $vm.articles.push(item);
-                    	console.log($vm.articles)
+                        console.log($vm.articles)
                     }
                     articleLoading = false;
                     if (data.data.currentPage == data.data.totalPages || data.data.totalPages == 0) {
