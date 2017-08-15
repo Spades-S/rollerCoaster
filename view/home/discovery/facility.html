@@ -241,7 +241,8 @@
             <div class="info-rows">
                 <div class="row" v-for="item in infos" v-if="facilityInfo[item.en]">
                     <div class="col-33">{$ item.item $}</div>
-                    <div class="col-66">{$ escape(facilityInfo[item.en]) $}</div>
+                    <div class="col-66" v-if="item.en !== 'park'">{$ escape(facilityInfo[item.en]) $}</div>
+                    <a class="col-66 external" :href="'/discovery/parkdetail?id='+facilityInfo.parkId" v-if="item.en==='park'&&facilityInfo.parkId">{$ escape(facilityInfo[item.en]) $}</a>
                 </div>
             </div>
             <div class="statistics">
@@ -318,7 +319,8 @@
             neg: '/static/star/images/star-off-big.png',
             act: '/static/star/images/star-on-big.png',
         },
-        size: 0.8 //单位rem
+        size: 0.7, //单位rem
+        marginRight: 0.2
     }
     let star = new raty('.star', starConfig);
     let smallStar = new raty('.small-star', smallStarConfig);
@@ -421,8 +423,6 @@
             star.init();
             smallStar.init();
             self.getFacilityInfo();
-
-
         },
         updated: function () {
             let self = this;
@@ -434,7 +434,6 @@
                 this.buttonsTabIndex = e.target.dataset.tabIndex
                 if (e.target.dataset.tabIndex === '1') {
                     if (!this.reviewInfo) {
-                        this.getFacilityInfo();
                         return this.getReview(this.page, this.perpageReview)
                     }
                 } else {
