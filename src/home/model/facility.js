@@ -32,7 +32,7 @@ class Facility extends think.model.base {
             category: 1,
             longitude: {'>': lng - dGeo.lng, '<': lng + dGeo.lng},
             latitude: {'>': lat - dGeo.lat, '<': lat + dGeo.lat}
-        }).select();
+        }).limit(0,99).select();
         return res;
     }
 

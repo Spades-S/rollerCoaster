@@ -21,7 +21,7 @@ class Company extends think.model.base {
 	}
 
     async getCompanyDetailById(id) {
-        let res = await this.field('title, location, openTime, status, phoneNumber, website, owner, poster').where({id: id}).find();
+        let res = await this.field('title, location, openTime, status, phoneNumber, website, owner, poster,geolocation').where({id: id}).find();
         return res;
 
     }

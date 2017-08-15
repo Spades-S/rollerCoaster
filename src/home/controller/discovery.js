@@ -26,6 +26,7 @@ export default class extends base {
     }
 
     async mapAction() {
+        this.assign('geo', this.get('geo'))
         return this.display('discovery/map.html')
     }
 
@@ -75,7 +76,7 @@ export default class extends base {
     }
 
 
-    async addreviewAction(){
+    async addreviewAction() {
         console.log('test');
         let reviewModel = this.model('review')
         let userModel = this.model('user')
@@ -92,7 +93,7 @@ export default class extends base {
             content: this.post('content'),
             facilityId: this.post('facilityId')
         })
-        let line = await facilityModel.updateRatingById(Number(this.post('facilityId')),Number(this.post('stars')));
+        let line = await facilityModel.updateRatingById(Number(this.post('facilityId')), Number(this.post('stars')));
 
         return this.success(res)
     }
@@ -127,22 +128,6 @@ export default class extends base {
         let res = await this.model('facility').getFacilityByCompanyId(id)
         return this.success(res)
     }
-
-
-    indexAction() {
-
-        return this.display('discovery/index.html')
-    }
-
-    mapAction() {
-        return this.display('discovery/map.html')
-    }
-
-    facilityAction() {
-        this.assign('id', Number(this.get('id')));
-        this.display('discovery/facility.html');
-    }
-
     parklistAction() {
         return this.display('discovery/parklist.html')
     }

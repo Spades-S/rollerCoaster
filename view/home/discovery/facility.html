@@ -82,6 +82,7 @@
         }
 
         .row {
+            position: relative;
             padding: .4rem 0;
             font-size: .7rem;
             word-break: normal;
@@ -215,6 +216,21 @@
         .small-star {
             margin-top: 0.3rem;
         }
+
+        .icon-dingwei {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 2rem;
+            height: 100%;
+            text-align: center;
+            color: #2b70ab;
+        }
+
+        .col-padding {
+            width: calc(62% - 2rem) !important;
+            word-break: break-word;
+        }
     </style>
 </head>
 <body>
@@ -239,9 +255,13 @@
         </div>
         <div class="info" v-if="buttonsTabIndex == 0">
             <div class="info-rows">
-                <div class="row" v-for="item in infos" v-if="facilityInfo[item.en]">
+                <div class="row" v-for="item, index in infos" v-if="facilityInfo[item.en]">
                     <div class="col-33">{$ item.item $}</div>
-                    <div class="col-66">{$ escape(facilityInfo[item.en]) $}</div>
+                    <div class="col-66 col-padding" v-if="index==0&&facilityInfo.geolocation">{$
+                        escape(facilityInfo[item.en])$}
+                    </div>
+                    <div class="col-66 " v-else>{$ escape(facilityInfo[item.en]) $}</div>
+                    <div class="iconfont icon-dingwei" v-if="index==0&&facilityInfo.geolocation" @click="goToMap"></div>
                 </div>
             </div>
             <div class="statistics">
@@ -324,7 +344,7 @@
     let smallStar = new raty('.small-star', smallStarConfig);
 
 
-    new Vue({
+    let vm = new Vue({
         delimiters: ['{$', '$}'],
         data () {
             return {
@@ -517,6 +537,10 @@
                         self.createSwiper(self.facilityInfo.poster)
                     }
                 })
+            },
+            goToMap: function () {
+
+                window.location.href = '/discovery/map?geo=' + this.facilityInfo.geolocation;
             }
         }
     }).$mount('#page')

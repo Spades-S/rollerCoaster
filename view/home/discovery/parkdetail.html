@@ -87,12 +87,19 @@
 
         .park-info {
             margin-top: 1rem;
+            position: relative;
         }
 
         .park-title {
+            padding:0 2rem;
             text-align: center;
             font-size: 19px;
             font-weight: 500;
+        }
+
+        .title-padding {
+            padding-right: 3rem;
+            word-break:break-word;
         }
 
         .park-info-detail {
@@ -124,6 +131,7 @@
         .pid-value {
             width: calc(100% - 4.5rem);
             padding-left: 0.5rem;
+            white-space: nowrap;
         }
 
         .facility-list {
@@ -240,6 +248,15 @@
             font-weight: 300;
         }
 
+        .icon-dingwei {
+            position: absolute;
+            height: 2rem;
+            width: 3rem;
+            right: 0;
+            text-align: center;
+            color: #2b70ab;
+        }
+
     </style>
 
 </head>
@@ -270,7 +287,8 @@
                 </div>
             </div>
             <div class="park-info" id="park-info">
-                <div class="park-title">{$ parkInfo.title $}</div>
+                <div class="iconfont icon-dingwei" v-if="parkInfo.geolocation" @click="goToMap"></div>
+                <div class="park-title" :class="{'title-padding':parkInfo.geolocation}">{$ parkInfo.title $}</div>
                 <div class="park-info-detail">
                     <template v-for="item in textDetail">
                         <span class="pid-key">{$ item.key $}:</span>
@@ -403,6 +421,9 @@
                     }
                 })
             },
+            goToMap:function(){
+                window.location.href = window.location.href = '/discovery/map?geo=' + this.parkInfo.geolocation;
+            }
         }
 
     })
