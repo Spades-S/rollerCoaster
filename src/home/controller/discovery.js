@@ -147,12 +147,14 @@ export default class extends base {
         let cat = this.get('cat')
         let count = this.get('count')
         let page = this.get('page')
+        console.log(this.get('readList'))
+        let readList = JSON.parse(this.get('readList'))
         let position = JSON.parse(this.get('position'))
         let facilityModel = this.model('facility')
         let radius = this.get('radius')
-        let res = await facilityModel.getFacility(cat, count, page, position, radius)
+        let res = await facilityModel.getFacility(cat, count, page, position, radius, readList)
         if (think.isEmpty(res.data)) {
-            return this.fail('no more')
+            return this.success('no more')
         }
         return this.success(res)
     }

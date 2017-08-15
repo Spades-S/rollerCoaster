@@ -14,6 +14,7 @@
     <style>
         .page {
             background: #fff;
+            -webkit-font-smoothing: antialiased;
         }
 
         .bar {
@@ -105,147 +106,56 @@
         .park-info-detail {
             font-size: 0;
             margin: 0.6rem 0.5rem 0 0.5rem;
-            border-right: 1px solid #dcdbdb;
-            border-top: 1px solid #dcdbdb;
+            border-right: 1px solid #ECECEC;
+            border-top: 1px solid #ECECEC;
 
         }
 
         .pid-key, .pid-value {
             display: inline-block;
             overflow: auto;
-            font-size: 14px;
-            line-height: 1.3rem;
-            border-left: 1px solid #dcdbdb;
-            border-bottom: 1px solid #dcdbdb;
+            font-size: .7rem;
+            padding: .3rem .5rem;
+            border-left: 1px solid #ECECEC;
+            border-bottom: 1px solid #ECECEC;
         }
 
         .pid-key {
-            width: 4.5rem;
+            width: 35%;
             padding-right: 0.5rem;
             text-align: right;
-            color: #808080;
-            background: #EEEEEE;
+            background: #F9F9F9;
 
         }
 
         .pid-value {
-            width: calc(100% - 4.5rem);
+            width: 65%;
             padding-left: 0.5rem;
             white-space: nowrap;
         }
 
         .facility-list {
             margin-top: 1rem;
-            font-size: 0rem;
-            font-weight: 300;
-
+            font-size: .7rem;
+            overflow-x: scroll;
         }
 
-        .fac-list-content {
-            overflow: auto;
-            border: 1px solid #dad5d5;
+        table{
+            overflow-x: scroll;
         }
 
-        .facility-list span {
-            display: inline-block;
-            padding: 0 0.4rem;
-            font-size: 0.74rem;
-
+        thead{
+            background-color: #EEE;
         }
-
-        .listItem-grey span {
-            background: #EEEEEE;
-        }
-
-        .fac-list-head {
-            height: 1.4rem;
-            /*width: 100%;*/
-            line-height: 1.4rem;
+        td{
+            padding: .2rem 1rem;
             white-space: nowrap;
         }
-
-        .fac-list-body {
-            white-space: nowrap;
+        .fc-link{
+            color: #0645AD;
         }
-
-        .fac-list-body span {
-            overflow: hidden;
-            -ms-text-overflow: ellipsis;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .fac-name {
-            width: 8rem;
-
-        }
-
-        .fac-type {
-            width: 4rem;
-        }
-
-        .fac-design {
-            width: 5rem;
-        }
-
-        .fac-runtime {
-            width: 6rem;
-        }
-
-        .fac-status {
-            width: 4rem;
-        }
-
-        .fac-closetime {
-            width: 6rem;
-
-        }
-
-        .rel-article-name {
-            margin-top: 1rem;
-            padding-left: 0.4rem;
-            background: #EEEEEE;
-            line-height: 2rem;
-            font-size: 0.74rem;
-        }
-
-        .article-item {
-            display: block;
-            height: 5rem;
-            padding: 0.5rem;
-        }
-
-        .article-poster {
-            width: 4rem;
-            height: 4rem;
-            float: right;
-            margin-left: 0.4rem;
-        }
-
-        .article-title {
-            height: 2rem;
-            padding-bottom: 0.3rem;
-            text-overflow: ellipsis;
-            font-size: 17px;
-            overflow: hidden;
-            line-height: 2rem;
-            white-space: nowrap;
-            color: #848484;
-            font-weight: 300;
-
-        }
-
-        .article-intro {
-            height: 2rem;
-            font-size: 14px;
-            color: #9e9c9c;
-            overflow: hidden;
-            line-height: 1rem;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            text-overflow: ellipsis;
-            font-weight: 300;
+        [v-cloak]{
+            display: none;
         }
 
         .icon-dingwei {
@@ -291,49 +201,32 @@
                 <div class="park-title" :class="{'title-padding':parkInfo.geolocation}">{$ parkInfo.title $}</div>
                 <div class="park-info-detail">
                     <template v-for="item in textDetail">
-                        <span class="pid-key">{$ item.key $}:</span>
+                        <span class="pid-key">{$ item.key $}</span>
                         <span class="pid-value">{$ item.value $}</span>
                     </template>
                 </div>
             </div>
-            <div class="facility-list" v-if="facilityList.length>0">
-                <template>
-                    <div class=fac-list-content>
-                        <div class="fac-list-head listItem-grey">
-                            <span class="fac-name">设备名称</span>
-                            <span class="fac-type">种类</span>
-                            <span class="fac-design">设计</span>
-                            <span class="fac-runtime">投入运行时间</span>
-                            <span class="fac-status">状态</span>
-                            <span class="fac-closetime">关闭时间</span>
-                        </div>
-                        <div class="fac-list-body">
-                            <template v-for="(facility, index) in facilityList">
-                                <div v-if="index%2!=0" class="listItem-grey">
-                                    <span class="fac-name">{$facility.title$}</span>
-                                    <span class="fac-type">{$facility.type$}</span>
-                                    <span class="fac-design">{$facility.style$}</span>
-                                    <span class="fac-runtime">{$facility.openTime$}</span>
-                                    <span class="fac-status">{$facility.status$}</span>
-                                    <span class="fac-closetime"
-                                          v-if="facility.closeTime!=null">{$facility.closeTime$}</span>
-                                    <span class="fac-closetime" v-else>-</span>
-                                </div>
-                                <div v-else>
-                                    <span class="fac-name">{$facility.title$}</span>
-                                    <span class="fac-type">{$facility.type$}</span>
-                                    <span class="fac-design">{$facility.style$}</span>
-                                    <span class="fac-runtime">{$facility.openTime$}</span>
-                                    <span class="fac-status">{$facility.status$}</span>
-                                    <span class="fac-closetime"
-                                          v-if="facility.closeTime!=null">{$facility.closeTime$}</span>
-                                    <span class="fac-closetime" v-else>-</span>
-                                </div>
-                            </template>
-                        </div>
-                    </div>
-                </template>
-
+            <div class="facility-list content-padded" v-cloak>
+                <table>
+                    <thead>
+                    <tr>
+                        <td>设备名称</td>
+                        <td>种类</td>
+                        <td>设计</td>
+                        <td>投入运营时间</td>
+                        <td>状态</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="facility, index in facilityList" :style="'background-color: ' + (index % 2 === 1 ? '#F9F9F9' : '')">
+                        <td><a class="fc-link external" :href="'/discovery/facility?id=' + facility.id">{$ facility.title $}</a></td>
+                        <td>{$ facility.type $}</td>
+                        <td>{$ facility.style $}</td>
+                        <td>{$ facility.openTime $}</td>
+                        <td>{$ facility.status $}</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
