@@ -81,6 +81,9 @@
         td{
             padding: .2rem 1rem;
         }
+        .fc-link{
+            color: #0645AD;
+        }
     </style>
 </head>
 <body>
@@ -112,7 +115,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="facility, index in facilities" :style="'background-color: ' + (index % 2 === 1 ? '#F9F9F9' : '')">
-                    <td>{$ facility.title $}</td>
+                    <td><a class="fc-link external" :href="'/discovery/facility?id=' + facility.id">{$ facility.title $}</a></td>
                     <td>{$ facility.type $}</td>
                     <td>{$ facility.style $}</td>
                     <td>{$ facility.openTime $}</td>

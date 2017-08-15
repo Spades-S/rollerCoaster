@@ -26,7 +26,7 @@ function raty(className, config) {
             }
             $(item).find('.raty-container').css({
                 display: 'inline-block',
-                'margin-right': '0.6rem',
+                'margin-right': config.marginRight ? config.marginRight + 'rem' : '0.6rem',
                 width: config.size + 'rem',
                 height: config.size + 'rem',
                 background: 'url(' + config.imgPath.neg + ') no-repeat',

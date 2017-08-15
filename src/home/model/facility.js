@@ -11,14 +11,15 @@ class Facility extends think.model.base {
         this.tableName = 'facility'
     }
 
-    async getFacility(cat, count, page, position, radius) {
+    async getFacility(cat, count, page, position, radius, readList) {
         radius = parseInt(radius)
         let latitudeRange = [parseFloat(position.latitude) - radius, parseFloat(position.latitude) + radius]
         let longitudeRange = [parseFloat(position.longitude) - radius, parseFloat(position.longitude) + radius]
         let res = await this.field('id, title, poster, rating, price, geolocation').where({
             category: cat,
             latitude: {'>': latitudeRange[0], '<': latitudeRange[1]},
-            longitude: {'>': longitudeRange[0], '<': longitudeRange[1]}
+            longitude: {'>': longitudeRange[0], '<': longitudeRange[1]},
+            id: ['NOT IN', readList]
         }).page(page, count).countSelect()
         return res
     }
@@ -50,7 +51,7 @@ class Facility extends think.model.base {
     }
 
     async getFacilityListByParkID(parkID) {
-        let res = await this.field('title, type, style, openTime, status, closeTime').where({parkId: parkID}).select();
+        let res = await this.field('id, title, type, style, openTime, status, closeTime').where({parkId: parkID}).select();
         return res;
     }
 

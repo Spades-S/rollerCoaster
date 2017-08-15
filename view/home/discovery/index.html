@@ -343,7 +343,7 @@
                 <div class="content-list">
                     <div class="content-list-item" v-for="item in facilityList" :data-id="item.id" @click="toFacility">
                         <div class="facility-poster">
-                            <img :src="item.poster.split(',')[0]" class="facility-poster-img">
+                            <img :src="item.poster.split(',')[0] || '/static/img/facility-default.png'" class="facility-poster-img">
                         </div>
                         <div class="content-list-item-right">
                             <div class="facility-title">
@@ -444,8 +444,9 @@
                 page: 1,
                 disappear: false,
                 radius: 1,
-                keyword: ''
-
+                keyword: '',
+                readList: [0],
+                nomoreTimes: 0
             }
         },
         created: function () {
@@ -459,50 +460,52 @@
             activeIndex: function (newVal) {
                 this.page = 1
                 this.facilityList = []
-
+                this.readList = [0]
+                this.radius = 1
+                this.nomoreTimes = 0
                 this.getFacility(this.perPageItems, this.page, position)
             }
         },
         methods: {
-            getFacility: function (perPageItems, page, position) {
+            getFacility: function (perPageItems, page, pos) {
                 $('.infinite-scroll-preloader').show();
                 let self = this
-
                 $.ajax({
                     url: '/discovery/getfacility',
                     data: {
                         cat: Number(self.activeIndex) + 1,
                         count: perPageItems,
                         page: page,
-                        position: JSON.stringify(position),
-                        radius: self.radius
+                        position: JSON.stringify(pos),
+                        radius: self.radius,
+                        readList: JSON.stringify(self.readList)
                     },
                     success: function (ret) {
                         if (ret.errno === 0) {
-                            let list = ret.data.data
-                            for (let i in list) {
-                                list[i].distance = self.convertToKilometers(list[i].geolocation)
-                            }
-                            list.sort((a, b) => {
-                                return a.distance - b.distance
-                            })
-
-                            self.facilityList = self.facilityList.concat(list)
-                            self.page++
-                            if (ret.data.totalPages === 1) {
-                                self.radius++
-                                self.getFacility(self.perPageItems, self.page, position, self.radius)
-                            }
-                            return
-                        }
-                        if (ret.errmsg === 'no more') {
-                            if (self.activeIndex === 0) {
-                                self.radius++
-                                self.getFacility(self.perPageItems, self.page, position, self.radius)
+                        	console.log(ret)
+                        	if (ret.data !== 'no more') {
+                        		self.nomoreTimes = 0
+		                        let list = ret.data.data
+		                        for (let i in list) {
+			                        list[i].distance = self.convertToKilometers(list[i].geolocation)
+			                        self.readList.push(list[i].id)
+		                        }
+		                        list.sort((a, b) => {
+			                        return a.distance - b.distance
+		                        })
+		                        self.facilityList = self.facilityList.concat(list)
+		                        self.page++
                                 return
+                            } else {
+                        		self.nomoreTimes ++
+                                self.radius++
+                                self.page = 0
+                                if(self.nomoreTimes>1){
+                        			$('.infinite-scroll-preloader').hide()
+                                    return $.toast('没有更多了，向我们反馈吧')
+                                }
+                                self.getFacility(self.perPageItems, self.page, position)
                             }
-                            $.toast('没有更多了，向我们反馈吧')
-                            $.detachInfiniteScroll($('.infinite-scroll'))
                             return
                         }
                         $.toast('出了点小问题，请重试')
@@ -510,11 +513,9 @@
                     },
                     error: function (err) {
                         return $.toast('获取失败，请刷新重试')
-
                     },
                     complete: function (ret) {
                         loading = false
-                        $('.infinite-scroll-preloader').hide();
                     }
                 })
             },
@@ -592,8 +593,6 @@
         $(this).addClass('active')
         vm.activeIndex = parseInt($(this).data('index'))
     })
-
-
 </script>
 
 </body>
