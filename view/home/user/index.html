@@ -181,8 +181,8 @@
 </div>
 
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 <script>
@@ -198,7 +198,7 @@
         created: function () {
             $.ajax({
                 url: '/user/getuserinfo',
-                success: (res) => {
+                success: function (res) {
                     if (res.errno === 0) {
                         this.userInfo = res.data
                     } else {
@@ -208,14 +208,14 @@
                         }, 1000)
                     }
                 },
-                error: (err) => {
+                error: function (err) {
                     $.toast('出了点小问题，请重试')
                 }
             })
         },
         computed: {
             getAvatar: function () {
-                let avatarSubAddr = this.userInfo.avatar || '/systemAvatar.jpeg';
+                var avatarSubAddr = this.userInfo.avatar || '/systemAvatar.jpeg';
                 return '/static/img' + avatarSubAddr;
             }
         },

@@ -126,8 +126,8 @@
     </div>
 </div>
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 <script>
@@ -156,9 +156,9 @@
                 this.holder = e.currentTarget.dataset.value
             },
 	        submitFeedback: function () {
-                let type = this.holder
-                let content = $('#feedback-input').val()
-                let contact = $('.contact-input').val()
+                var type = this.holder
+                var content = $('#feedback-input').val()
+                var contact = $('.contact-input').val()
                 if (type === '请选择您要反馈的问题类型') {
                 	return $.toast('请选择您反馈的问题类型')
                 }

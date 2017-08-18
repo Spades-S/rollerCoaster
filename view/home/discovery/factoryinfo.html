@@ -128,8 +128,8 @@
 </div>
 
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script>
     $.init();
@@ -164,13 +164,13 @@
             }
         },
         created: function () {
-        	let id = "{{ id }}"
+        	var id = "{{ id }}"
         	this.getFactoryInfo(id)
             this.getFacilities(id)
         },
         methods: {
         	getFactoryInfo: function (id) {
-		        let self = this
+		        var self = this
 		        $.ajax({
 			        url: '/discovery/getfactoryinfo',
 			        data: {
@@ -189,7 +189,7 @@
 		        })
             },
             getFacilities: function (id) {
-                let self = this
+                var self = this
 	            $.ajax({
 		            url: '/discovery/getfacilitybycompanyid',
 		            data: {

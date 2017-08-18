@@ -203,14 +203,14 @@
 </div>
 
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 
 <script>
     $.init();
-    let $vm = new Vue({
+    var $vm = new Vue({
         delimiters: ['{$', '$}'],
         el: '#article-list',
         data: {
@@ -230,12 +230,12 @@
                 }
             },
             getTime: function (time) {
-                let timeDisplay = new Date(time).Format("yyyy-MM-dd hh:mm:ss");
+                var timeDisplay = new Date(time).Format("yyyy-MM-dd hh:mm:ss");
                 return timeDisplay;
             },
             cancleLike: function (e) {
-                let articleid = e.target.getAttribute('data-id');
-                let itemid = 'item' + articleid;
+                var articleid = e.target.getAttribute('data-id');
+                var itemid = 'item' + articleid;
                 $('#' + itemid).css({
                     "height": '0',
                     "padding": '0',
@@ -263,12 +263,11 @@
             }
         }
     })
-    let perPageItems = 10;
-    let pageLoading = false;
+    var perPageItems = 10;
+    var pageLoading = false;
     getLikesofOnePage(perPageItems, true);
 
     $(document).on('infinite', '.likes', function () {
-        console.log('infinite');
         if (pageLoading) return;
         pageLoading = true;
         getLikesofOnePage(perPageItems, false);
@@ -287,7 +286,7 @@
             },
             success: function (res) {
                 if (res.errno === 0) {
-                    for (let item of res.data.data) {
+                    for (var item of res.data.data) {
                         $vm.likeArticles.push(item);
                     }
 

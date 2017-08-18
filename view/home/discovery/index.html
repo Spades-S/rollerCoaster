@@ -344,7 +344,8 @@
                 <div class="content-list">
                     <div class="content-list-item" v-for="item in facilityList" :data-id="item.id" @click="toFacility">
                         <div class="facility-poster">
-                            <img :src="item.poster.split(',')[0] || '/static/img/facility-default.png'" class="facility-poster-img">
+                            <img :src="item.poster.split(',')[0] || '/static/img/facility-default.png'"
+                                 class="facility-poster-img">
                         </div>
                         <div class="content-list-item-right">
                             <div class="facility-title">
@@ -391,16 +392,14 @@
         </a>
     </nav>
 </div>
-
-
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <!--<script src="/static/js/raty/jquery.raty.js"></script>-->
 <script type="text/javascript" src="/static/star/starlib.js"></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script>
     $.init();
-    let starConfig = {
+    var starConfig = {
         num: 5,
         readOnly: true,
         imgPath: {
@@ -409,10 +408,10 @@
         },
         size: 0.6 //单位rem
     }
-    let star = new raty('.star', starConfig);
-    let loading = false
+    var star = new raty('.star', starConfig);
+    var loading = false
 
-    let position = ''
+    var position = ''
     //每次触发infinite时，会触发定位服务
     //    window.navigator.geolocation.getCurrentPosition(function (pos) {
     //        position = pos
@@ -427,7 +426,7 @@
     var vm = new Vue({
         delimiters: ['{$', '$}'],
         el: '#content-list',
-        data () {
+        data() {
             return {
                 cats: [{
                     name: '过山车',
@@ -470,7 +469,7 @@
         methods: {
             getFacility: function (perPageItems, page, pos) {
                 $('.infinite-scroll-preloader').show();
-                let self = this
+                var self = this
                 $.ajax({
                     url: '/discovery/getfacility',
                     data: {
@@ -483,26 +482,25 @@
                     },
                     success: function (ret) {
                         if (ret.errno === 0) {
-//                        	console.log(ret)
-                        	if (ret.data !== 'no more') {
-                        		self.nomoreTimes = 0
-		                        let list = ret.data.data
-		                        for (let i in list) {
-			                        list[i].distance = self.convertToKilometers(list[i].geolocation)
-			                        self.readList.push(list[i].id)
-		                        }
-		                        list.sort((a, b) => {
-			                        return a.distance - b.distance
-		                        })
-		                        self.facilityList = self.facilityList.concat(list)
-		                        self.page++
+                            if (ret.data !== 'no more') {
+                                self.nomoreTimes = 0
+                                var list = ret.data.data
+                                for (var i in list) {
+                                    list[i].distance = self.convertToKilometers(list[i].geolocation)
+                                    self.readList.push(list[i].id)
+                                }
+                                list.sort(function (a, b) {
+                                    return a.distance - b.distance
+                                })
+                                self.facilityList = self.facilityList.concat(list)
+                                self.page++
                                 return
                             } else {
-                        		self.nomoreTimes ++
+                                self.nomoreTimes++
                                 self.radius++
                                 self.page = 0
-                                if(self.nomoreTimes>1){
-                        			$('.infinite-scroll-preloader').hide()
+                                if (self.nomoreTimes > 1) {
+                                    $('.infinite-scroll-preloader').hide()
                                     return $.toast('没有更多了，向我们反馈吧')
                                 }
                                 self.getFacility(self.perPageItems, self.page, position)
@@ -563,7 +561,7 @@
 
 
     new Vue({
-        data () {
+        data() {
             return {
                 keyword: ''
             }

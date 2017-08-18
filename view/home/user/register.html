@@ -125,14 +125,14 @@
         </div>
     </div>
 </div>
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 <script>
     $.init();
 
-    let vm = new Vue({
+    var vm = new Vue({
         delimiters: ['{$', '$}'],
         el: '#content',
         data: {
@@ -157,7 +157,7 @@
                 }
             },
             retryAfter: function () {
-                let _this = this
+                var _this = this
                 if (!(/^1[34578]\d{9}$/).test(_this.value)) {
                     return $.toast('手机号格式不正确，请重新输入')
                 }
@@ -176,8 +176,8 @@
                         _this.codeButtonClass = 'disabled'
                         $.toast("验证码已发送")
                         this.codetext = '60秒后重试'
-                        let i = 60
-                        let interval = setInterval(function () {
+                        var i = 60
+                        var interval = setInterval(function () {
                             i--
                             _this.codetext = i + '秒后重试'
                             if (i == 0) {
@@ -202,7 +202,6 @@
                     }
                 })
                     .success(function (res) {
-                        console.log(res)
                         if (res.errno != 0) {
                             $.toast('验证码错误，请重新输入')
                         } else {

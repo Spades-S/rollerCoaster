@@ -139,14 +139,14 @@
 </div>
 
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 <script type="text/javascript" src="/static/star/starlib.js"></script>
 <script>
     $.init();
-    let starConfig = {
+    var starConfig = {
         num: 5,
         readOnly: false,
         imgPath: {
@@ -160,7 +160,7 @@
     star.init();
 
 
-    let id = "{{ id }}"
+    var id = "{{ id }}"
     if (!id) {
         window.history.go(-1)
     }
@@ -182,7 +182,7 @@
     })
 
     $('textarea').on('input', debounce(function () {
-        let event = Array.from(arguments).shift()
+        var event = Array.from(arguments).shift()
         if (event.currentTarget.value != '') {
             $('.button-big').removeClass('disabled')
             $('.button-big').removeAttr('disabled')
@@ -193,7 +193,7 @@
     }, 200))
 
     $('.options').on('click', '.option', function (e) {
-        let positionOption = $('.position-option')
+        var positionOption = $('.position-option')
         $(positionOption).text(e.currentTarget.innerText)
         $('.options').css({
             'display': 'none'

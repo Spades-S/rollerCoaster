@@ -130,8 +130,8 @@
 </div>
 
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 
@@ -151,13 +151,13 @@
         },
         methods: {
             getUserDetail: function () {
-                let self = this;
-                let gender = [null, '女', '男'];
+                var self = this;
+                var gender = [null, '女', '男'];
                 $.ajax({
                     url: '/user/getuserdetail',
                     success: function (ret) {
                         if (ret.errno === 0) {
-                            let data = ret.data
+                            var data = ret.data
                             self.details = [{
                                 title: '性别',
                                 value: gender[data.gender]
@@ -176,7 +176,6 @@
                                 value: data.introduction
                             }]
                             self.userDetail = ret.data
-                            console.log(ret)
                         } else {
                             $.toast('登录失败，请重新登录')
                             setTimeout(function () {
@@ -192,7 +191,7 @@
         },
         computed: {
             getAvatar: function () {
-                let avatarSubAddr = this.userDetail.avatar || '/systemAvatar.jpeg';
+                var avatarSubAddr = this.userDetail.avatar || '/systemAvatar.jpeg';
                 return '/static/img' + avatarSubAddr;
             }
         }

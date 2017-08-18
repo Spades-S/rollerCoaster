@@ -128,6 +128,7 @@ export default class extends base {
         let res = await this.model('facility').getFacilityByCompanyId(id)
         return this.success(res)
     }
+
     parklistAction() {
         return this.display('discovery/parklist.html')
     }

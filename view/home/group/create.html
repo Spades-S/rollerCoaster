@@ -187,8 +187,8 @@
     </div>
 </div>
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type="text/javascript" src="/static/cropper/cropper.min.js"></script>
 
@@ -280,7 +280,7 @@
                         return $.toast('请填写活动地点')
                     }
                 }
-                let data = {
+                var data = {
                     cover: $('.cover img')[0].src,
                     title: this.title,
                     theme: this.theme || 0,
@@ -317,29 +317,28 @@
             display: 'none',
         })
         $('.cover-input').val(null);
-        console.log('close crop');
     })
 
     $('.cover-input').on('change', function () {
         if (!(window.File && window.FileReader && window.FileList && window.Blob )) {
             $.toast('当前浏览器不支持图片上传');
         }
-        let file = this.files[0];
-        let allowTypeList = ['jpg', 'jpeg', 'png'];
-        let lowerFileType = file.name.split('.').pop().toLowerCase();
+        var file = this.files[0];
+        var allowTypeList = ['jpg', 'jpeg', 'png'];
+        var lowerFileType = file.name.split('.').pop().toLowerCase();
         if (allowTypeList.indexOf(lowerFileType) < 0) {
             return $.toast('图片格式不正确!');
         }
         $('#crop-box').height(window.innerWidth + 'px');
-        let reader = new FileReader();
+        var reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = function (event) {
-            let options = {
+            var options = {
                 aspectRatio: 1 / 1,
                 dragMode: 'move',
                 movable: true,
             }
-            let dataUrl = event.target.result;
+            var dataUrl = event.target.result;
             $('#crop-image').attr('src', dataUrl);
             $('.cropperContainer').css({
                 display: 'block',
@@ -347,10 +346,7 @@
             $('#crop-image').cropper(options).cropper('replace', dataUrl);
             $('#crop-image').on('ready', function () {
                 $('.cover-confirm').off().on('click', function () {
-                    console.log($('#crop-image').cropper('getCroppedCanvas'));
-                    let coverCropped = $('#crop-image').cropper('getCroppedCanvas').toDataURL();
-                    console.log(typeof coverCropped);
-
+                    var coverCropped = $('#crop-image').cropper('getCroppedCanvas').toDataURL();
                     vm.cover = coverCropped;
                     $('.cover img').attr('src', coverCropped);
                     $('.cropperContainer').css({

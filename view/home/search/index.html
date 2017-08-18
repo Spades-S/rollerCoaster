@@ -300,15 +300,15 @@
     </div>
 </div>
 
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
-<script type="text/javascript" src="/static/vue/vue.js"></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="/static/vue/vue.min.js"></script>
 <script src="/static/js/raty/jquery.raty.js"></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 <script>
     $.init();
-    let perPageNum = 10;
-    let loading = false;
+    var perPageNum = 10;
+    var loading = false;
 
     var vm = new Vue({
         delimiters: ['{$', '$}'],
@@ -345,7 +345,7 @@
         created: function () {
             $('#search').val();
             $('.infinite-scroll-preloader').hide();
-            let search = window.location.search
+            var search = window.location.search
             if (/(\?|\&)t=/.test(search)) {
                 this.tabIndex = parseInt(search.match(/(\?|\&)t=\d+/)[0].replace(/(\?|\&)t=/, ''))
             }
@@ -358,7 +358,7 @@
         },
         methods: {
             getPerPageItems: function (currentPage, num) {
-                let self = this
+                var self = this
                 $.ajax({
                     url: '/search/searchbykeyword',
                     data: {
@@ -400,7 +400,7 @@
                     return $.toast('请输入关键词')
                 }
                 $('.infinite-scroll-preloader').show();
-                let self = this;
+                var self = this;
                 self.getPerPageItems(self.currentPage, perPageNum)
 
             },

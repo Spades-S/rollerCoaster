@@ -233,12 +233,12 @@
     </div>
 </div>
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script>
     $.init();
-    let $vm = new Vue({
+    var $vm = new Vue({
         delimiters: ['{$', '$}'],
         el: '#page',
         data(){
@@ -264,7 +264,7 @@
         },
         methods: {
             getParkDetail: function () {
-                let _this = this;
+                var _this = this;
                 $.ajax({
                     url: '/discovery/getparkdetailinfo',
                     data: {
@@ -281,12 +281,12 @@
                 })
             },
             getDetail: function () {
-                let result = [];
-                let keyArray = ['地址', '状态', '电话', '网址', '所有者', '开放时间'];
-                let indexArray = ['location', 'status', 'phoneNumber', 'website', 'owner', 'openTime'];
-                for (let i = 0; i < keyArray.length; i++) {
+                var result = [];
+                var keyArray = ['地址', '状态', '电话', '网址', '所有者', '开放时间'];
+                var indexArray = ['location', 'status', 'phoneNumber', 'website', 'owner', 'openTime'];
+                for (var i = 0; i < keyArray.length; i++) {
                     this.parkInfo[indexArray[i]] = this.parkInfo[indexArray[i]] || '——';
-                    let item = {
+                    var item = {
                         key: keyArray[i],
                         value: this.parkInfo[indexArray[i]],
                     }
@@ -294,12 +294,12 @@
                 }
                 this.textDetail = result;
                 if (this.parkInfo.poster != '') {
-                    let posterArr = this.parkInfo.poster.split(',');
+                    var posterArr = this.parkInfo.poster.split(',');
                     this.poster = posterArr.splice(0, 5)
                 }
             },
             getFacilityList: function () {
-                let _this = this;
+                var _this = this;
                 $.ajax({
                     url: '/discovery/getfacilitylist',
                     data: {
@@ -326,21 +326,21 @@
         $('.image-box').css({
             width: '100%'
         });
-        let imageBox = $('.show-box').children('.image-box')[0];
-        let dotBox = $('.show-box').children('.dot-box')[0];
-        let dotArray = $(dotBox).children('span');
+        var imageBox = $('.show-box').children('.image-box')[0];
+        var dotBox = $('.show-box').children('.dot-box')[0];
+        var dotArray = $(dotBox).children('span');
         $(dotArray[0]).addClass('active');
-        let imgNum = $(imageBox).children().length;
-//            let activeId = parseInt($(dotBox).children('.active').attr('rel'));
-        let nextId = 0;
-        let activeId = 0;
-        let delayDuartion = 3000;
-        let animateDuration = 800;
-        let imageWidthSum = $(imageBox).width() * imgNum;
-        let imageBoxWidth = $(imageBox).width();
+        var imgNum = $(imageBox).children().length;
+//            var activeId = parseInt($(dotBox).children('.active').attr('rel'));
+        var nextId = 0;
+        var activeId = 0;
+        var delayDuartion = 3000;
+        var animateDuration = 800;
+        var imageWidthSum = $(imageBox).width() * imgNum;
+        var imageBoxWidth = $(imageBox).width();
         $('.image-box img').width(imageBoxWidth);
         $(imageBox).width(imageWidthSum);
-        let intervalId = setInterval(rotate, delayDuartion);
+        var intervalId = setInterval(rotate, delayDuartion);
 
         function rotate() {
             nextId = (activeId + 1) % imgNum;

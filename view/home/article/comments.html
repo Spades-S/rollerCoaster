@@ -47,16 +47,14 @@
 
   </div>
 </div>
-
-
-<script type="text/javascript" src="/static/vue/vue.js"></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript" src="/static/vue/vue.min.js"></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script>
     $.init();
-    let commentLoading = false;
-    let perPageNum = 10;
-    let $vm = new Vue({
+    var commentLoading = false;
+    var perPageNum = 10;
+    var $vm = new Vue({
         el: '#comments-list',
         delimiters: ["{$", "$}"],
         data: {
@@ -65,7 +63,7 @@
         },
         methods: {
             getTime: function (time) {
-                let result = new Date(time).Format("yyyy-MM-dd hh:mm");
+                var result = new Date(time).Format("yyyy-MM-dd hh:mm");
                 return result;
             }
 
@@ -96,7 +94,7 @@
             },
             success: function (data) {
                 if (data.errno == 0) {
-                    for (let item of data.data.data) {
+                    for (var item of data.data.data) {
                         $vm.comments.push(item);
                     }
                     commentLoading = false;

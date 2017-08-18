@@ -82,8 +82,8 @@
     </div>
 </div>
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script>
     $.init()
@@ -97,14 +97,14 @@
             }
         },
         created: function () {
-        	let self = this
+        	var self = this
 	        $.ajax({
 		        url: '/discovery/getfactorylist',
 		        success: function (ret) {
 		        	if (ret.errno !== 0) {
 				        return $.toast('获取失败，请刷新重试')
                     }
-			        let list = ret.data.sort((a, b) => {
+			        var list = ret.data.sort(function(a, b){
 				        return a.title.localeCompare(b.title)
 			        })
 			        self.factoryList = list
@@ -129,7 +129,7 @@
     }).$mount('#content')
 
     $('.scrollbar').on('click', '.lower.letter', function (e) {
-        let letter = e.currentTarget.dataset.letter.toUpperCase()
+        var letter = e.currentTarget.dataset.letter.toUpperCase()
 	    $('#content').scrollTop($('.' + letter)[0].offsetTop)
     })
 </script>

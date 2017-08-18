@@ -273,14 +273,14 @@
     </nav>
 </div>
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script>
     $.init();
 
-    let cookies = {}
-    document.cookie.split(';').forEach((el) => {
+    var cookies = {}
+    document.cookie.split(';').forEach(function(el){
         cookies[el.split('=')[0].trim()] = el.split('=')[1]
     })
     new Vue({
@@ -298,13 +298,13 @@
             }
         },
         created: function () {
-            let self = this
+            var self = this
             $.ajax({
                 url: '/group/getgroups',
                 success: function (ret) {
                     if (ret.errno === 0) {
                         ret.data.forEach(function (item) {
-                            let theme = Number(item.theme);
+                            var theme = Number(item.theme);
                             self.groupsArray[theme].push(item);
                         })
                     }
@@ -326,7 +326,7 @@
         methods: {
 
             getMyGroup: function () {
-                let self = this
+                var self = this
                 $.ajax({
                     url: '/group/getmygroup',
                     success: function (ret) {
@@ -337,7 +337,7 @@
                 })
             },
             getActivity: function () {
-                let self = this
+                var self = this
                 $.ajax({
                     url: '/group/getactivity',
                     success: function (ret) {
@@ -348,8 +348,8 @@
                 })
             },
             getMoreGroups: function (e) {
-                let self = this;
-                let grouptype = e.currentTarget.dataset.grouptype;
+                var self = this;
+                var grouptype = e.currentTarget.dataset.grouptype;
                 $.ajax({
                     url: "/group/getmoregroups",
                     data: {
@@ -374,7 +374,7 @@
                                     self.myGroup = self.myGroup.concat(res.data.data);
 
                                 } else {
-                                    let tempArray = self.groupsArray[grouptype];
+                                    var tempArray = self.groupsArray[grouptype];
                                     tempArray = tempArray.concat(res.data.data)
                                     self.groupsArray.splice(grouptype, 1, tempArray);
                                 }
@@ -406,7 +406,6 @@
         methods: {
             typeSearch: function (e) {
                 this.keyword = e.target.value
-                console.log(this.keyword)
             },
             doSearch: function (e) {
                 if (this.keyword && e.keyCode === 13) {

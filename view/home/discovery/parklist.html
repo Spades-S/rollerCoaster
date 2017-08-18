@@ -186,16 +186,16 @@
 </div>
 
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script>
     $.init();
 
 
-    let loading = false
+    var loading = false
 
-    let position = ''
+    var position = ''
     //每次触发infinite时，会触发定位服务
     //    window.navigator.geolocation.getCurrentPosition(function (pos) {
     //        position = pos
@@ -210,7 +210,7 @@
     var vm = new Vue({
         delimiters: ['{$', '$}'],
         el: '#content-list',
-        data () {
+        data() {
             return {
                 parkList: [],
                 perPageItems: 10,
@@ -223,7 +223,7 @@
         methods: {
             getFacility: function (perPageItems, page, position) {
                 $('.infinite-scroll-preloader').show();
-                let self = this
+                var self = this
                 $.ajax({
                     url: '/discovery/getparklist',
                     data: {
@@ -234,10 +234,10 @@
                     success: function (ret) {
                         if (ret.errno === 0) {
                             self.parkList = self.parkList.concat(ret.data.data)
-                            for (let item of self.parkList) {
+                            for (var item of self.parkList) {
                                 item.distance = self.convertToKilometers(item.geolocation);
                             }
-                            self.parkList.sort((a, b) => {
+                            self.parkList.sort(function (a, b) {
                                 return a.distance - b.distance
                             })
                             self.page++
@@ -301,7 +301,6 @@
         $('.infinite-scroll-preloader').show()
         if (loading) return;
         loading = true
-        console.log(position);
         vm.getFacility(vm.perPageItems, vm.page, position)
     })
 

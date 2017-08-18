@@ -107,31 +107,31 @@
     </div>
 </div>
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type="text/javascript" src="/static/share/js/jquery.share.min.js"></script>
 <script type="text/javascript" src="/static/js/clipboard.min.js"></script>
 <script>
     $.init();
 
-    let readList = window.localStorage.getItem('readList') || ''
+    var readList = window.localStorage.getItem('readList') || ''
     readList += (',' + (window.location.search.match(/\d+/)[0]))
     window.localStorage.setItem('readList', readList)
 
-    let $vm = new Vue({
+    var $vm = new Vue({
         delimiters: ['{$', '$}'],
         el: '#article',
         data: {
             article: {
-                title:'',
-                authorName:'',
-                authorAvatar:'',
-                col:'',
-                content:'',
-                likes:'',
-                poster:'',
-                updateTime:''
+                title: '',
+                authorName: '',
+                authorAvatar: '',
+                col: '',
+                content: '',
+                likes: '',
+                poster: '',
+                updateTime: ''
             },
             relativeArticles: [],
             comment: {},
@@ -140,14 +140,14 @@
         },
         methods: {
             getTime: function (time) {
-                let timeDisplay = new Date(time).Format("yyyy-MM-dd hh:mm");
+                var timeDisplay = new Date(time).Format("yyyy-MM-dd hh:mm");
                 return timeDisplay;
             }
         }
 
 
     });
-    let $vm_comment = new Vue({
+    var $vm_comment = new Vue({
         delimiters: ['{$', '$}'],
         el: '#commentinfo',
         data: {
@@ -164,7 +164,7 @@
         success: function (data) {
             if (data.errno == 0) {
                 data.data[0].updateTime = new Date(data.data[0].updateTime).Format("yyyy-MM-dd hh:mm");
-                let content = escape2Html(data.data[0].content)
+                var content = escape2Html(data.data[0].content)
                 $vm.article.content = content.replace(/(<a [^>]+>)|(<img[^>]+>)/g, function (el) {
                     if (/<img/.test(el)) {
                         return el.replace(/style="[^"]+"/, ' ').replace(/ src=[^\s]+/, ' ').replace('data-src="', 'src="/static/img')
@@ -173,13 +173,12 @@
                     }
                 })
 
-                for (let i in data.data[0]) {
+                for (var i in data.data[0]) {
                     if (i !== 'content') {
                         $vm.article[i] = data.data[0][i]
                     }
                 }
                 $vm.article.title = escape2Html($vm.article.title)
-                console.log($vm)
 
 
                 /*data.data[0].updateTime = new Date(data.data[0].updateTime).Format("yyyy-MM-dd hh:mm");
@@ -207,7 +206,7 @@
             slice: 1,
         },
         method: 'GET',
-        success: data => {
+        success: function (data) {
             if (data.errno == 0) {
                 $vm.comment = data.data;
                 $vm_comment.commentNum = data.data.commentLength;
@@ -233,7 +232,7 @@
             type: 0,
         },
         method: 'GET',
-        success: data => {
+        success: function (data) {
             if (data.errno == 0) {
                 $vm.relativeArticles = data.data;
             }
@@ -241,12 +240,13 @@
     })
 
 
-    let $config = {
+    var $config = {
         sites: ['qzone', 'qq', 'weibo', 'wechat', 'douban'],
     }
     $('.social-share').share($config);
     $('.social-share a').addClass('external');
     $('.social-share a').removeAttr('target');
+
     function shareShow() {
         $('#overlay-share').css({
             display: 'block',
@@ -255,6 +255,7 @@
             'overflow-y': 'hidden',
         })
     }
+
     function shareHide() {
         $('#overlay-share').css({
             display: 'none',
@@ -264,18 +265,18 @@
             'overflow-y': 'auto',
         })
     }
+
     $('#sharebtn').on('click', function () {
         shareShow();
     })
     $('#overlay-share').on('click', function (e) {
-        console.log(e.target.id);
         if (e.target.id === 'overlay-share') {
             shareHide();
         }
     })
     $('.icon-wechat').on('click', function (e) {
         $('.icon-wechat').attr('data-clipboard-text', window.location.href);
-        let clipboard = new Clipboard('.icon-wechat');
+        var clipboard = new Clipboard('.icon-wechat');
         clipboard.on('success', function (e) {
             $.toast("链接已复制，请前往微信分享");
         });
@@ -284,13 +285,13 @@
     })
 
 
-    $(document).on('click', '.relative-article', (e) => {
-        let articleid = e.currentTarget.getAttribute('data-articleid');
+    $(document).on('click', '.relative-article', function (e) {
+        var articleid = e.currentTarget.getAttribute('data-articleid');
 
         window.location.href = "/article/detail?articleid=" + articleid;
     });
 
-    $(document).on('click', '.icon-pinglun', () => {
+    $(document).on('click', '.icon-pinglun', function () {
         window.location.href = " /comments?articleid=" + "{{articleid}}";
     })
 
@@ -335,21 +336,22 @@
             'overflow-y': 'auto',
         })
     }
-    $(document).on('focus', '#comment-input', () => {
+
+    $(document).on('focus', '#comment-input', function () {
         overlayShow();
         $('#commentcontent').focus();
     })
-    $(document).on('click', '.overlay', (event) => {
+    $(document).on('click', '.overlay', function (event) {
         if (event.target.id === 'overlay') {
             overlayHide();
         }
     });
 
-    $(document).on('click', '#submitComment', () => {
+    $(document).on('click', '#submitComment', function () {
         if ($('textarea')[0].value == "") {
             $.toast("评论不可为空!");
         } else {
-            let formData = new FormData();
+            var formData = new FormData();
             formData.append('articleid', '{{articleid}}');
             formData.append('content', $('textarea')[0].value);
             $.ajax({
@@ -358,7 +360,7 @@
                 method: "POST",
                 contentType: false,
                 processData: false,
-                success: (data) => {
+                success: function (data) {
                     if (data.errno == 0) {
                         $.toast("评论发表成功!");
                         setTimeout(function () {

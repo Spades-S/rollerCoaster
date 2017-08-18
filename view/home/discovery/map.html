@@ -307,8 +307,8 @@
 </div>
 
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script src="/static/js/raty/jquery.raty.js"></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=521f8907ee9a1459f01a4d66d2a36b99"></script>
@@ -316,7 +316,7 @@
 <script>
     $.init();
     new Vue({
-        data () {
+        data() {
             return {
                 keyword: ''
             }
@@ -324,7 +324,6 @@
         methods: {
             typeSearch: function (e) {
                 this.keyword = e.target.value
-                console.log(this.keyword)
             },
             doSearch: function (e) {
 
@@ -334,7 +333,7 @@
             }
         }
     }).$mount('#searchbar')
-    let $vm = new Vue({
+    var $vm = new Vue({
         delimiters: ['{$', '$}'],
         el: '#nearby-car',
         data: {
@@ -369,11 +368,11 @@
 
             },
             getItemDetail: function (detail) {
-                let result = [];
-                let keyArray = ['地点', '乐园', '类型', '状态', '模型', '制作', '开放时间', '关闭时间'];
-                let indexArray = ['location', 'park', 'style', 'status', 'model', 'make', 'openTime', 'closeTime'];
-                for (let i = 0; i < keyArray.length; i++) {
-                    let detailItem = {
+                var result = [];
+                var keyArray = ['地点', '乐园', '类型', '状态', '模型', '制作', '开放时间', '关闭时间'];
+                var indexArray = ['location', 'park', 'style', 'status', 'model', 'make', 'openTime', 'closeTime'];
+                for (var i = 0; i < keyArray.length; i++) {
+                    var detailItem = {
                         key: keyArray[i],
                         value: detail[indexArray[i]],
                     }
@@ -383,7 +382,7 @@
             },
             displayDetail: function (e) {
                 if (this.nearbyCars.length > 1) {
-                    let itemDetail = e.currentTarget.childNodes[2];
+                    var itemDetail = e.currentTarget.childNodes[2];
                     if ($(itemDetail).height() === 0) {
                         $(itemDetail).css({
                             height: '13.8rem',
@@ -404,9 +403,7 @@
     });
     var map, geolocation;
 
-    let GEO = "{{geo}}";
-
-
+    var GEO = "{{geo}}";
     map = new AMap.Map('container', {
         resizeEnable: true,
         zoom: 11,
@@ -435,8 +432,7 @@
     });
 
     function onComplete(data) {
-        console.log(data.position);
-        let longitude = data.position.getLng(), latitude = data.position.getLat();
+        var longitude = data.position.getLng(), latitude = data.position.getLat();
         console.log('lng' + longitude + ',lat' + latitude);
         $.ajax({
             url: '/discovery/nearbycars',
@@ -448,21 +444,21 @@
             success: function (res) {
                 if (res.errno === 0) {
                     $vm.nearbyCars = res.data;
-                    let infoWindow = new AMap.AdvancedInfoWindow();
-                    let icon = new AMap.Icon({
+                    var infoWindow = new AMap.AdvancedInfoWindow();
+                    var icon = new AMap.Icon({
                         image: '/static/img/flagInMap.png',//24px*24px
                         size: new AMap.Size(30, 30)
                     });
-                    for (let item of res.data) {
-                        let lnglat = new AMap.LngLat(item.longitude, item.latitude);
+                    for (var item of res.data) {
+                        var lnglat = new AMap.LngLat(item.longitude, item.latitude);
                         item.distance = (lnglat.distance([longitude, latitude]) / 1000).toFixed(2);
                     }
-                    res.data.sort((a, b) => {
+                    res.data.sort(function (a, b) {
                         return a.distance - b.distance
                     })
-                    for (let index = 0; index < res.data.length; index++) {
-                        let item = res.data[index];
-                        let marker = new AMap.Marker({
+                    for (var index = 0; index < res.data.length; index++) {
+                        var item = res.data[index];
+                        var marker = new AMap.Marker({
                             position: [item.longitude, item.latitude],
                             title: item.title,
                             map: map,
@@ -473,6 +469,7 @@
                         marker.content = "<div class='map-info-title'>🎢 " + item.title + " 过山车</div></div><img style='width:2rem;height:2rem;float:left'src=" + item.poster + "><div class='map-info-location'>" + item.location + "</div>";
                         marker.on('click', markerClick);
                     }
+
 //                    map.setFitView();
                     function markerClick(e) {
                         infoWindow.setContent(e.target.content);

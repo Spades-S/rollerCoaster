@@ -257,7 +257,9 @@
             <div class="info-rows">
                 <div class="row" v-for="item, index in infos" v-if="facilityInfo[item.en]">
                     <div class="col-33">{$ item.item $}</div>
-                    <div class="col-66 col-padding" v-if="index==0&&facilityInfo.geolocation">{$escape(facilityInfo[item.en])$}</div>
+                    <div class="col-66 col-padding" v-if="index==0&&facilityInfo.geolocation">
+                        {$escape(facilityInfo[item.en])$}
+                    </div>
                     <div class="col-66 " v-else>{$ escape(facilityInfo[item.en]) $}</div>
                     <div class="iconfont icon-dingwei" v-if="index==0&&facilityInfo.geolocation" @click="goToMap"></div>
                 </div>
@@ -312,15 +314,15 @@
     </div>
 </div>
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 <script type="text/javascript" src="/static/star/starlib.js"></script>
 
 <script>
     $.init();
-    let starConfig = {
+    var starConfig = {
         num: 5,
         readOnly: true,
         imgPath: {
@@ -329,7 +331,7 @@
         },
         size: 1.2 //单位rem
     }
-    let smallStarConfig = {
+    var smallStarConfig = {
         num: 5,
         readOnly: true,
         imgPath: {
@@ -339,13 +341,13 @@
         size: 0.7, //单位rem
         marginRight: 0.2
     }
-    let star = new raty('.star', starConfig);
-    let smallStar = new raty('.small-star', smallStarConfig);
+    var star = new raty('.star', starConfig);
+    var smallStar = new raty('.small-star', smallStarConfig);
 
 
-    let vm = new Vue({
+    var vm = new Vue({
         delimiters: ['{$', '$}'],
-        data () {
+        data() {
             return {
                 facilityInfo: {},
                 reviewInfo: undefined,
@@ -436,13 +438,13 @@
             }
         },
         created: function () {
-            let self = this
+            var self = this
             star.init();
             smallStar.init();
             self.getFacilityInfo();
         },
         updated: function () {
-            let self = this;
+            var self = this;
             star.set();
             smallStar.set();
         },
@@ -459,7 +461,7 @@
             },
             createSwiper: function () {
                 var wrapper = document.querySelector('.swiper-wrapper')
-                this.facilityInfo.poster.forEach((el) => {
+                this.facilityInfo.poster.forEach(function(el){
                     if (el) {
                         var slide = document.createElement('DIV')
                         slide.className = 'swiper-slide'
@@ -479,7 +481,7 @@
                 })
             },
             getReview: function (page, count) {
-                let self = this
+                var self = this
                 $.ajax({
                     url: '/discovery/getreview',
                     data: {
@@ -505,7 +507,7 @@
                 return str.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&#xB0;/g, '˚')
             },
             toReview: function () {
-                let self = this
+                var self = this
                 $.ajax({
                     url: '/discovery/review',
                     data: {
@@ -521,7 +523,7 @@
                 return new Date(time).Format("yyyy-MM-dd hh:mm")
             },
             getFacilityInfo: function () {
-                let self = this;
+                var self = this;
                 $.ajax({
                     url: '/discovery/getfacilityinfo',
                     data: {
@@ -535,7 +537,6 @@
                 })
             },
             goToMap: function () {
-
                 window.location.href = '/discovery/map?geo=' + this.facilityInfo.geolocation;
             }
         }

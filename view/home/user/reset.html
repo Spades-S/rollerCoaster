@@ -100,8 +100,8 @@
 
 
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 <script>
@@ -121,7 +121,7 @@
 				this.psdCopy = e.currentTarget.value
 			},
 			submitInfo: function () {
-				let psd = this.psd, psdCopy = this.psdCopy
+				var psd = this.psd, psdCopy = this.psdCopy
                 if(psd !== psdCopy){
                     return $.toast('两次输入的密码不一致')
                 }
@@ -140,7 +140,6 @@
 						psd: psd
 					}
 				}).success(function (res) {
-					console.log(res)
 					if(res.errno === 0){
 						$.toast('修改成功')
 						setTimeout(function () {

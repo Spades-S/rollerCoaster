@@ -370,12 +370,12 @@
     </div>
 </div>
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script>
     $.init();
-    let vm = new Vue({
+    var vm = new Vue({
         delimiters: ['{$', '$}'],
         el: '#page',
         data: {
@@ -395,7 +395,7 @@
         },
         methods: {
             getPostContent: function () {
-                let _this = this;
+                var _this = this;
                 $.ajax({
                     url: "/group/getpostcontent",
                     data: {
@@ -435,7 +435,7 @@
                     mothod: "GET",
                     success: function (data) {
                         if (data.errno === 0) {
-                            for (let item of data.data) {
+                            for (var item of data.data) {
                                 if (JSON.parse(item.poster).length > 0) {
                                     item.poster = JSON.parse(item.poster)[0];
                                 } else {
@@ -469,7 +469,7 @@
 
             },
             addComment: function () {
-                let formData = new FormData();
+                var formData = new FormData();
                 if (vm.reply) {
                     formData.append('replyId', vm.reply.id)
                     formData.append('replyName', vm.reply.name);
@@ -482,7 +482,7 @@
                     method: "POST",
                     contentType: false,
                     processData: false,
-                    success: (data) => {
+                    success: function(data){
                         vm.reply = undefined;
                         if (data.errno == 0) {
                             $.toast("评论发表成功!");

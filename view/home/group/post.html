@@ -127,13 +127,13 @@
 </div>
 
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script>
     $.init();
 
-    let vm = new Vue({
+    var vm = new Vue({
         delimiters: ['{$', '$}'],
         data: {
             title: '',
@@ -151,7 +151,7 @@
                 this.content = e.target.value
             },
             post: function () {
-                let self = this
+                var self = this
                 $.ajax({
                     url: '/group/submitpost',
                     method: 'POST',
@@ -197,17 +197,17 @@
         if (!(window.FileReader && window.File && window.FileList && window.Blob )) {
             return $.toast('当前浏览器不支持图片上传');
         }
-        let file = this.files[0];
-        let allowTypeList = ['jpg', 'jpeg', 'png'];
-        let lowerFileType = file.name.split('.').pop().toLowerCase();
+        var file = this.files[0];
+        var allowTypeList = ['jpg', 'jpeg', 'png'];
+        var lowerFileType = file.name.split('.').pop().toLowerCase();
         if (allowTypeList.indexOf(lowerFileType) < 0) {
             return $.toast('图片格式不正确!');
         }
-        let reader = new FileReader();
+        var reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = function (event) {
-            let dataUrl = event.target.result;
-//            let imageItem = {
+            var dataUrl = event.target.result;
+//            var imageItem = {
 //                src: dataUrl
 //            }
             vm.dataUrls.push(dataUrl);

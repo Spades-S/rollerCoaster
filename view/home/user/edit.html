@@ -301,8 +301,8 @@
 </div>
 
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script type="text/javascript" src="/static/light7/js/light7-city-picker.min.js"></script>
 <script type='text/javascript' src='/static/light7/js/light7-swiper.min.js' charset='utf-8'></script>
@@ -311,7 +311,7 @@
 <script>
     $.init();
     $.fn.cropper;
-    let vm = new Vue({
+    var vm = new Vue({
         delimiters: ['{$', '$}'],
         data() {
             return {
@@ -323,7 +323,7 @@
         },
         methods: {
             getUserDetail: function () {
-                let self = this
+                var self = this
                 $.ajax({
                     url: '/user/getuserdetail',
                     success: function (ret) {
@@ -344,7 +344,7 @@
         },
         computed: {
             getAvatar: function () {
-                let avatarSubAddr = this.userDetail.avatar || '/systemAvatar.jpeg';
+                var avatarSubAddr = this.userDetail.avatar || '/systemAvatar.jpeg';
                 return '/static/img' + avatarSubAddr;
             }
         }
@@ -366,9 +366,9 @@
         if (!(window.File &&  window.FileReader && window.FileList && window.Blob)) {
             return $.toast('当前浏览器不支持上传头像')
         }
-        let file = this.files[0];
-        let allowTypeList = ['jpg', 'jpeg', 'png'];
-        let lowerFileType = file.name.split('.').pop().toLowerCase();
+        var file = this.files[0];
+        var allowTypeList = ['jpg', 'jpeg', 'png'];
+        var lowerFileType = file.name.split('.').pop().toLowerCase();
         if (allowTypeList.indexOf(lowerFileType) < 0) {
             return $.toast('图片格式不正确!');
         }
@@ -377,16 +377,16 @@
             'height': window.innerWidth + 'px'
         })
 
-        let reader = new FileReader()
+        var reader = new FileReader()
 
         reader.readAsDataURL(file)
         reader.onload = function (evt) {
-            let options = {
+            var options = {
                 aspectRatio: 1 / 1,
                 dragMode: 'move',
                 movable: true,
             };
-            let dataUrl = evt.target.result;
+            var dataUrl = evt.target.result;
             $('#crop-image').attr('src', dataUrl);
             $('.cropContainer').css('display', 'block');
 
@@ -395,7 +395,7 @@
 
             $('#crop-image').on('ready', function () {
                 $('.avatar-confirm').off().on('click', function () {
-                    let avatarCropped = $('#crop-image').cropper('getCroppedCanvas').toDataURL();
+                    var avatarCropped = $('#crop-image').cropper('getCroppedCanvas').toDataURL();
                     vm.userDetail.avatarCropped = avatarCropped;
                     $('.edit-avatar img').attr('src', avatarCropped);
                     $('.cropContainer').css('display', 'none');
@@ -408,15 +408,13 @@
     })
 
     document.querySelector('.save').addEventListener('click', function () {
-        let userDetail = vm.userDetail;
+        var userDetail = vm.userDetail;
         userDetail.city = $('#city-picker').val()
-        console.log(userDetail)
         $.ajax({
             url: '/user/updateuserdetail',
             data: userDetail,
             method: 'POST',
             success: function (ret) {
-                console.log(ret)
                 if (ret.errno === 0) {
                     $.toast('修改成功')
                     setTimeout(function () {

@@ -366,15 +366,15 @@
 </div>
 
 
-<script type="text/javascript " src="/static/vue/vue.js "></script>
-<script type='text/javascript' src='/static/js/jquery.js' charset='utf-8'></script>
+<script type="text/javascript " src="/static/vue/vue.min.js "></script>
+<script type='text/javascript' src='/static/js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='/static/light7/js/light7.min.js' charset='utf-8'></script>
 <script>
     $.init()
-    let loading = false;
-    let num = 10;
+    var loading = false;
+    var num = 10;
 
-    let vm = new Vue({
+    var vm = new Vue({
         delimiters: ['{$', '$}'],
         data () {
             return {
@@ -419,7 +419,7 @@
             }
         },
         created: function () {
-            let self = this
+            var self = this
             $.ajax({
                 url: '/group/getgroupinfo',
                 data: {
@@ -434,12 +434,12 @@
         },
         methods: {
             getPosts: function () {
-                let self = this
+                var self = this
                 self.getPerpageItems(this.currentPage, num)
 
             },
             getPerpageItems: function (currentPage, num) {
-                let self = this
+                var self = this
                 $.ajax({
                     url: '/group/getposts',
                     data: {
@@ -450,7 +450,7 @@
                     success: function (ret) {
                         loading = false;
                         if (ret.errno === 0) {
-                            self.posts = self.posts.concat(ret.data.data.sort((a, b) => {
+                            self.posts = self.posts.concat(ret.data.data.sort(function(a, b){
                                 return new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime()
                             }))
                             self.currentPage++;
@@ -467,7 +467,6 @@
                 })
             },
             showDetail: function () {
-                console.log('show');
                 this.groupDetailShow = true;
             },
             hideDetail: function () {
@@ -500,7 +499,7 @@
                     }, 1000)
                     return
                 }
-                let self = this
+                var self = this
                 $.ajax({
                     url: '/group/joingroup',
                     method: 'POST',
@@ -515,7 +514,7 @@
                 })
             },
             quitGroup: function () {
-                let self = this
+                var self = this
                 $.ajax({
                     url: '/group/quitgroup',
                     method: 'POST',
