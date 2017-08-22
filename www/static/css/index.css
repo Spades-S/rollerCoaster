@@ -176,7 +176,8 @@ body {
     height: 8rem;
     /*border: 1px solid;*/
 }
-.readed{
+
+.readed {
     opacity: .6;
 }
 
@@ -221,8 +222,21 @@ body {
     margin-top: -0.5rem;
 }
 
+.article-author {
+    display: inline-block;
+    max-width: 45%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .article-category {
     float: right;
+    display: inline-block;
+    max-width: 45%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .infinite-scroll-preloader {
@@ -354,7 +368,8 @@ label.pull-left {
     height: 1px;
     border-top: 1px solid #d4d4d4;
 }
-.bar.bar-tab{
+
+.bar.bar-tab {
     display: flex;
     flex-direction: row;
 }

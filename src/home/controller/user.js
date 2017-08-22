@@ -1,5 +1,6 @@
 import base from './base.js';
 import fs from 'fs';
+
 export default class extends base {
     indexAction() {
         if (checkLogin(this)) {
@@ -66,7 +67,7 @@ export default class extends base {
             return this.success(true)
             // this.success(send_res)
 
-        }catch (err) {
+        } catch (err) {
             return this.fail(err, this.errors())
         }
     }
@@ -187,15 +188,13 @@ export default class extends base {
             let userRowData = await userModel.getUserInfo(uid);
             let basePath = this.config('avatarBasePath');
             let detailPath = '/avatar/' + userRowData.id + '.png';
-            fs.writeFile(basePath + detailPath, avatarBinary, 'binary', function (err) {
-                console.log(err);
-            });
+            fs.writeFileSync(basePath + detailPath, avatarBinary, 'binary');
             userDetail.avatar = detailPath;
         }
 
 
         console.log(userDetail)
-        
+
 
         let updateRes = await userModel.updateUserDetail(userDetail, uid)
         if (!think.isEmpty(updateRes)) {
@@ -260,11 +259,11 @@ export default class extends base {
             return this.fail('feedback error')
         }
     }
-    
+
     async activityAction() {
         return this.display('user/activity.html')
     }
-    
+
     async getmyactivityAction() {
         let userGroups = await this.model('user').getUserGroups(this.cookie('uid'))
         let userGroup = JSON.parse(userGroups.groups)
