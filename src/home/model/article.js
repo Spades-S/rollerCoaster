@@ -83,7 +83,6 @@ class Article extends think.model.base {
     async updateCommentNum(id) {
         let data = await this.field('comments').where({id: id}).find();
         let line = await this.where({id: id}).update({comments: Number(data.comments) + 1});
-        console.log('update:' + line)
         return line;
     }
 
