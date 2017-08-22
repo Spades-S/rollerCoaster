@@ -1,6 +1,5 @@
 import base from './base.js';
 import fs from 'fs';
-
 export default class extends base {
     indexAction() {
         if (checkLogin(this)) {
@@ -67,7 +66,7 @@ export default class extends base {
             return this.success(true)
             // this.success(send_res)
 
-        } catch (err) {
+        }catch (err) {
             return this.fail(err, this.errors())
         }
     }
@@ -188,7 +187,9 @@ export default class extends base {
             let userRowData = await userModel.getUserInfo(uid);
             let basePath = this.config('avatarBasePath');
             let detailPath = '/avatar/' + userRowData.id + '.png';
-            fs.writeFileSync(basePath + detailPath, avatarBinary, 'binary');
+            fs.writeFile(basePath + detailPath, avatarBinary, 'binary', function (err) {
+                console.log(err);
+            });
             userDetail.avatar = detailPath;
         }
 
